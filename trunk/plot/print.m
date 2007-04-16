@@ -128,11 +128,13 @@
 
 ## PKG_ADD mark_as_command('print')
 
+## 2007-04-13
+## * tell gnuplot to cd to synchronize current working directory
 ## 2006-11-01
-## * teminal pdf に enhanced を追加
+## * add enhanced for teminal pdf
 
 function print(varargin)
-  
+  __gnuplot_raw__(sprintf("cd '%s'\n",pwd)); #2007-04-13 tkurita
   ## take care of the settings we had before
   origterm = gget("terminal");
   origout = gget("output");
