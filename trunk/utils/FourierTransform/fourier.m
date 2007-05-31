@@ -3,11 +3,11 @@
 ## = Paramerters
 ## * fftRec must have following data
 ##  .data
-##  .interval
+##  .interval : time interval between data points [sec]
 ##
 ## * result
 ##  .fftResult
-##  .ampllitude
+##  .amplitude
 ##  .frequency
 
 function fftRec = fourier(fftRec)
@@ -18,5 +18,5 @@ function fftRec = fourier(fftRec)
   amplitude = amplitude(1:halfN);
   delf = 1/(fftRec.interval * nsample);
   frequency = 0:delf:((halfN-1)*delf);
-  fftRec = appendFields(fftRec, fftResult, amplitude, frequency);
+  fftRec = append_fields(fftRec, fftResult, amplitude, frequency);
 endfunction

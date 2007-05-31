@@ -1,10 +1,10 @@
 ## usage : momentumForVelocity(velocity, particle)
 ##
-##=Parameters
+##= Parameters
 ## * f_rev -- revolution frequency [MHz]
 ## * particle -- "proton" or "carbon"
 ##
-##=Result
+##= Result
 ## 運動量 [MeV/c]
 
 function result = momentumForVelocity(velocity, particle)

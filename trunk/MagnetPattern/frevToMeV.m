@@ -1,20 +1,21 @@
-## usage : result = protonFrevToMeV(frev)
+## usage : result = frevToMeV(frev, "particle")
 ##
-## ü‰ñü”g” ‚©‚ç proton ‚ÌƒGƒlƒ‹ƒM[‚ğŒvZ‚·‚é
+## å‘¨å›å‘¨æ³¢æ•°ã‹ã‚‰ã‚¨ãƒãƒ«ã‚®ãƒ¼ã‚’è¨ˆç®—ã™ã‚‹
 ##
 ##= Parameters
-## * frev -- ü‰ñü”g” (revolution frequency) [Hz]
+## * frev -- å‘¨å›å‘¨æ³¢æ•° (revolution frequency) [Hz]
+## * particle -- "proton" or "carbon"
 ##
 ##= Results
-## ƒGƒlƒ‹ƒM[ [MeV]
+## ã‚¨ãƒãƒ«ã‚®ãƒ¼ [MeV]
 
-function result = protonFrevToMeV(frev)
-  global lv;
-  global proton_MeV
-  v = frev * 33.2; #[m/s]
+function result = frevToMeV(frev, particle)
+  mass_e = mass_energy(particle);
+  v = frev * 33.201; #[m/s]
+  lv = physicalConstant("light velocity");
   b = v/lv;
-  g = 1/sqrt(1-b^2)
-  result = proton_MeV*(g - 1)
+  g = 1/sqrt(1-b^2);
+  result = mass_e*(g - 1);
 endfunction
 
 #frev = 5106250; #[Hz]

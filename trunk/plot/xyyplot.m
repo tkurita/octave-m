@@ -3,6 +3,11 @@
 ## accept column wise 2 dimensional matrix as X-Y data
 
 function xyyplot(xyarg, xy2arg)
+  if (strcmp(OCTAVE_VERSION, "2.9.9"))
+    xyyplot2(xyarg, xy2arg)
+    return
+  endif
+  
   buildPlotCommand()
   buildPlotCommand(xyarg)
   [gp_cmd, data] = buildPlotCommand(xy2arg, "axes x1y2");

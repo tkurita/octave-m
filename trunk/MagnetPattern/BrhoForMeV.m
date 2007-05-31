@@ -1,9 +1,10 @@
 ## usage : BrhoForMeV(energy, particle)
 ##
-##=Parameters
-## * energy -- 運動エネルギー [MeV]
+##= Parameters
+## * energy -- Kinetic Energy [MeV]
 ## * paticle -- "proton" or "carbon"
-##=Result
+##
+##= Result
 ## Bρ [T * m]
 
 function result =  BrhoForMeV(energy, particle)

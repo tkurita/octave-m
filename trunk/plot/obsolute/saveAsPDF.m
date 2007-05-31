@@ -1,6 +1,6 @@
 ## obsolute
 ## 2006-11-01
-## * print(filename, "-dpdf") ‚ğg‚¤
+## * print(filename, "-dpdf") ã‚’ä½¿ã†
 
 function saveAsPDF(filename)
   namelen = length(filename);

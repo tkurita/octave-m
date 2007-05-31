@@ -1,10 +1,10 @@
 ## usage : momentumForMeV(energy, particle)
 ##
-##=Parameters
+##= Parameters
 ## * energy -- 運動エネルギー [MeV]
 ## * particle -- "proton" or "carbon"
 ##
-##=Result
+##= Result
 ## 運動量 [MeV/c]
 
 function result = momentumForMeV(energy, particle)
