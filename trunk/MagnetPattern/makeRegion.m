@@ -1,3 +1,6 @@
+## usage : regionStruct = makeRegion(tlist,blist,fname)
+##
+
 function regionStruct = makeRegion(tlist,blist,fname)
 #   tlist
 #   blist
