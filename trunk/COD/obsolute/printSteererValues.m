@@ -11,6 +11,10 @@ function printSteererValues(varargin)
     steererNames = varargin{1}.steererNames;
     if (length(varargin) > 1)
       steererValues = varargin{1}.(varargin{2});
+    else
+      steererValues = varargin{1}.steererValues;
+    endif
+    
   elseif (iscell(varargin{1}))
     steererNames = varargin{1};
     steererValues = varargin{2};
