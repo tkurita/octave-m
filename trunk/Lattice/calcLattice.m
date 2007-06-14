@@ -151,7 +151,7 @@ function [varargout] = calcLattice(allElements, varargin)
     tune.v = totalPhase.v/(2*pi);
     tune.h = totalPhase.h/(2*pi);
     lattice = allElements;
-    varargout = {tar(lattice, totalPhase, tune)};
+    varargout = {build_struct(lattice, totalPhase, tune)};
   endif
   
 endfunction

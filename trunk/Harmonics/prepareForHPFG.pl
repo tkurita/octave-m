@@ -1,12 +1,14 @@
 #!/usr/bin/perl -w
 #interactive perl -d -e 1
 #escapeChars {return}
-#output > '/Users/tkurita/WorkSpace/シンクロトロン/2倍高調波/特性データ/HP FG用データ/C660_10_200-200-400-50/PhaseCtrl_forSUMINV.txt'
+#output > '/Users/tkurita/WorkSpace/繧ｷ繝ｳ繧ｯ繝ｭ繝医Ο繝ｳ/2蛟埼ｫ倩ｪｿ豕｢/迚ｹ諤ｧ繝�繝ｼ繧ｿ/HP FG逕ｨ繝�繝ｼ繧ｿ/C660_10_200-200-400-50/PhaseCtrl_forSUMINV.txt'
 
 use strict;
 use warnings;
-use Data::Dumper;
 use File::Spec;
+use Cwd;
+use Data::Dumper;
+
 
 sub strip_headspaces {
 	my $string = shift @_;
@@ -18,6 +20,7 @@ sub strip_headspaces {
 
 {
 	foreach my $input_file (@ARGV){
+        #warn cwd()."\n";
 		open(my $in, "<$input_file") or die "I cant't open $input_file";
 		while (defined(my $line = <$in>)) {
 			chomp($line);

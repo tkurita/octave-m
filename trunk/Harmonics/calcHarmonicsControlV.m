@@ -1,34 +1,37 @@
-##useOwnTerm
+
+##shareTerm /Users/tkurita/WorkSpace/ã‚·ãƒ³ã‚¯ãƒ­ãƒˆãƒ­ãƒ³/2å€é«˜èª¿æ³¢/ç‰¹æ€§ãƒ‡ãƒ¼ã‚¿/HP FGç”¨ãƒ‡ãƒ¼ã‚¿/9200_10_180-280-400/HarmonicsControlV4.m
+
 function [phaseCtrlV, ampCtrlV] =\
   calcHarmonicsControlV(bmPattern, vPattern, captureFreq, timmings)
-  
-  ##= ƒ^ƒCƒ~ƒ“ƒOƒf[ƒ^‚ğƒCƒ“ƒfƒbƒNƒX‚É•ÏŠ·
+  # bmPattern = BMPattern;
+  # vPattern = rfPattern_9_200_1;
+  ##= ã‚¿ã‚¤ãƒŸãƒ³ã‚°ãƒ‡ãƒ¼ã‚¿ã‚’ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«å¤‰æ›
   tStep = timmings.tStep;
-  startCapIndex = timmings.startCaptureTime/tStep+1; # ‰Á‘¬“dˆ³‚ª”­¶‚µ‚Í‚¶‚ß‚éÅ‰‚ÌŒn—ñƒf[ƒ^‚Ìindex
+  startCapIndex = timmings.startCaptureTime/tStep+1; # åŠ é€Ÿé›»åœ§ãŒç™ºç”Ÿã—ã¯ã˜ã‚ã‚‹æœ€åˆã®æ™‚ç³»åˆ—ãƒ‡ãƒ¼ã‚¿ã®index
   stopRFIndex = timmings.stopSecondRFTime/tStep+1;
   stopAmpIndex = timmings.stopAmpTime/tStep+1;
   #stopPhaseIndex = stopPhaseTime/tStep+1;
   
-  ##= ’è”
-  C = 33.201; #[m] ü’·
+  ##= å®šæ•°
+  C = 33.201; #[m] å‘¨é•·
   lv = physicalConstant("light velocity");
   proton_eV = physicalConstant("proton [eV]");
   
-  ##= •ÎŒü“d¥Îƒpƒ^[ƒ“ dBL/dt ‚Ì\’z
+  ##= åå‘é›»ç£çŸ³ãƒ‘ã‚¿ãƒ¼ãƒ³ dBL/dt ã®æ§‹ç¯‰
   [bLine, msecList] = BValuesForTimes(bmPattern, tStep, 0, timmings.endDataTime);
   #plot(msecList,bLine)
   secList = msecList/1000;
-  dBLdtList = gradient(bLine, secList);
+  dBLdtList = gradient(bLine)./gradient(secList);
   #plot(secList,dBLdtList,";dBLdt;");
   
-  ##= ‰Á‘¬“dˆ³ƒpƒ^[ƒ“‚Ì\’z
+  ##= åŠ é€Ÿé›»åœ§ãƒ‘ã‚¿ãƒ¼ãƒ³ã®æ§‹ç¯‰
   for n = 2:length(vPattern)
     vPattern(1,n) += vPattern(1, n-1);
   end
-  vList=interp1(vPattern(1,:), vPattern(2,:), msecList, "linear"); #‰Á‘¬RF“dˆ³
+  vList=interp1(vPattern(1,:), vPattern(2,:), msecList, "linear"); #åŠ é€ŸRFé›»åœ§
   #plot(msecList,vList);
   
-  ##= ‰Á‘¬RFü”g”‚ÌŒvZ--•ÎŒü“d¥Î‚Ì¥ê•Ï‰»—Ê‚©‚ç
+  ##= åŠ é€ŸRFå‘¨æ³¢æ•°ã®è¨ˆç®—--åå‘é›»ç£çŸ³ã®ç£å ´å¤‰åŒ–é‡ã‹ã‚‰
   preVelocity = C*captureFreq;
   velocityList = [];
   dvdtList = [];
@@ -48,59 +51,44 @@ function [phaseCtrlV, ampCtrlV] =\
   rfHzList = velocityList./C;
   #plot(msecList,rfHzList,";RF [Hz];")
   
-  ##= ‰Á‘¬ˆÊ‘Š‚ÌŒvZ
+  ##= åŠ é€Ÿä½ç›¸ã®è¨ˆç®—
   sinphi = (C.*dBLdtList'./(pi/4))./vList';
-  sinphi(1:startCapIndex) = zeros(startCapIndex,1); # “dˆ³‚ª”­¶‚³‚ê‚é‚Ü‚Å‚ğ‹­§“I‚É 0 ‚É‚·‚éB
+  sinphi(1:startCapIndex) = zeros(startCapIndex,1); # é›»åœ§ãŒç™ºç”Ÿã•ã‚Œã‚‹ã¾ã§ã‚’å¼·åˆ¶çš„ã« 0 ã«ã™ã‚‹ã€‚
   phiList=asin(sinphi);
   
   #plot(tList,phiList*306/(2*pi),"")
   #plot(degreeToControlV(phiList*306/(2*pi)))
   
   ############################################
-  ##=‚Q”{‚’²”g§Œä‘•’u‚Ì“Á«‚ğŒvZ‚·‚éƒ‰ƒCƒuƒ‰ƒŠ
+  ##=ï¼’å€é«˜èª¿æ³¢åˆ¶å¾¡è£…ç½®ã®ç‰¹æ€§ã‚’è¨ˆç®—ã™ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒª
   #polyfit_A2_PM2
   
-  ##= 2”{‚’²”gˆÊ‘Š‚ÌŒvZ
+  ##= 2å€é«˜èª¿æ³¢ä½ç›¸ã®è¨ˆç®—
   #PolyFit_PhaseShifter
   load(file_in_loadpath("A2_PM2.dat"))
   biasControlV = HzToPhaseControlV(rfHzList, A2_PM2);
   
-  phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #“Á«ƒf[ƒ^
+  phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #ç‰¹æ€§ãƒ‡ãƒ¼ã‚¿
   bias_rad = controlVToRad(biasControlV, phase_shifter);
   phaseCtrlV = radToControlV(bias_rad + phiList, phase_shifter);
   
-  ##== stopPhaseTimeˆÈ~‚ğˆê’è‚É‚·‚éB
+  ##== stopPhaseTimeä»¥é™ã‚’ä¸€å®šã«ã™ã‚‹ã€‚
   phaseCtrlV(stopRFIndex:length(phaseCtrlV)) = phaseCtrlV(stopRFIndex);
   
 #  plot(msecList,biasControlV,";biasControlV;", msecList,phaseCtrlV,";phaseCtrlV;")
   
-  
-  ##= HP FG —pƒf[ƒ^•Û‘¶
-  #  plot(phaseCtrlV)
-  ## 2 ”{‚’²”gˆÊ‘Šİ’è—p‚Ég‚í‚ê‚Ä‚¢‚é function generator ‚Íİ’è’Ê‚è‚Ì’l‚ª‚Å‚È‚¢B
-  ## İ’è : 150 mV ¨ o—Í : 176 mV
-  ## İ’è : 1.07V ¨ o—Í : 1.25 V
-  ## –ñ 1.17 ”{‚É‚È‚éB
-  ## 
-  ## SUM & INV ‚Ì“ü—Í‚É 50 ƒ¶ƒ^[ƒ~ƒl[ƒg‚ğ‚Â‚¯‚Ä
-  ## “ü—Í : 176 mV ¨ o—Í : 164 mV 
-  ## “ü—Í : 1.25V ¨ 1.19 V
-  #saveBuffer = phaseCtrlV*-1*(1.07/1.19);
-  #
-  #save PhaseCtrl.dat saveBuffer;
-  
-  ###########################################
-  ##= 2”{‚’²”g‚ÌU•‚Ì§Œä“dˆ³‚ğŒvZ
+
+  ##= 2å€é«˜èª¿æ³¢ã®æŒ¯å¹…ã®åˆ¶å¾¡é›»åœ§ã‚’è¨ˆç®—
   ampCtrlV = HzToAmpControlV(rfHzList, A2_PM2);
   
-  ##== —§‚¿ã‚ª‚è‚ğ0V‚©‚ç’¼ü‚Å—§‚¿ã‚°‚éB
+  ##== ç«‹ã¡ä¸ŠãŒã‚Šã‚’0Vã‹ã‚‰ç›´ç·šã§ç«‹ã¡ä¸Šã’ã‚‹ã€‚
   startingLineY = [0, ampCtrlV(startCapIndex)];
   startingLineX = [0, msecList(startCapIndex)];
   
   startingData = interp1(startingLineX,startingLineY,msecList(1:startCapIndex));
   ampCtrlV(1:startCapIndex) = startingData;
   
-  ##== —§‚¿‰º‚ª‚è•”•ª‚ğİ’è
+  ##== ç«‹ã¡ä¸‹ãŒã‚Šéƒ¨åˆ†ã‚’è¨­å®š
   endingLineY = [ampCtrlV(stopAmpIndex), 0];
   endingLineX = [msecList(stopAmpIndex), timmings.stopSecondRFTime];
   

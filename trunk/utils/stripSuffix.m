@@ -1,17 +1,23 @@
 ## Usage : result = stripSuffix(filename)
-##          filename ‚©‚çŠg’£q‚ğíœ‚·‚é
+##          filename ã‹ã‚‰æ‹¡å¼µå­ã‚’å‰Šé™¤ã™ã‚‹
 ##
-## = Example
+##= Example
 ## stripSuffix("/path1/name1.txt")
 ## > ans = /path1/name1
 
+##= History
+## 2007.06.01
+## * version 2.9 ç”¨ã«æ›¸ãæ›ãˆ
+
 function result = stripSuffix(filename)
   #filename = "hello.dataa"
-  match = regexp(".[A-Za-z0-9]*$", filename);
+  #match = regexp(".[A-Za-z0-9]*$", filename); v 2.1
+  match = regexp(filename,".[A-Za-z0-9]*$");
   if (length(match))
     filename = filename(1:match(1)-1);
   endif
   result = filename;
 endfunction
   
-  
+%!test
+% stripSuffix("hello.dat")

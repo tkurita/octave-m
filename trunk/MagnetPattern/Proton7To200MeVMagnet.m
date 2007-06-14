@@ -1,4 +1,4 @@
-## BM pattern of H+ 10MeV -> 200MeV H20E
+## BM pattern of H+ 7MeV -> 200MeV
 1; #script file
 
 function timeSet = timeRegion

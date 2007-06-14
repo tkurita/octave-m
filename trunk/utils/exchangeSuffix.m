@@ -1,5 +1,5 @@
 ## Usage : result = exchangeSuffix(filename)
-##          filename ‚ÌŠg’£q‚ğ•ÏX‚·‚é
+##          filename ã®æ‹¡å¼µå­ã‚’å¤‰æ›´ã™ã‚‹
 ##
 ## = Example
 ## exchangeSuffix("/path1/name1.txt", ".dat")

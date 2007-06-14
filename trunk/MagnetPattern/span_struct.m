@@ -5,10 +5,11 @@
 ## * tPoints -- [msec]
 ## * bPoints -- value of magnet at tPoints
 ## * funcType -- kind of function. must be "linear" or "spline"
+## * grad -- calculated gradient
 
 function a_span = span_struct(tPoints, bPoints,funcType)
   a_span.tPoints = tPoints;
   a_span.bPoints = bPoints;
   a_span.funcType = funcType;
-  a_span.grad = gradient(blist)./gradient(tlist);
+  a_span.grad = gradient(bPoints)./gradient(tPoints);
 endfunction

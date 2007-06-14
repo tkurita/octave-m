@@ -1,14 +1,17 @@
-## usage: targetRegion = setSplineGrad(targetRetion, preRegion, postRegion)
-## postRegion is optional
+## usage: target_span = setSplineGrad(target_span, pre_span, post_span)
 ## 
-function targetRegion = setSplineGrad(varargin)
-  targetRegion = varargin{1};
-  preRegion = varargin{2};
+##  post_span is optional.
+##  If post_span is ommited, gradient of end of span is assumed 0.
+##
+
+function target_span = setSplineGrad(varargin)
+  target_span = varargin{1};
+  pre_span = varargin{2};
   if (length(varargin) > 2)
-	endGrad = varargin{3}.grad(1);
+    endGrad = varargin{3}.grad(1);
   else
-	endGrad = 0;  
+    endGrad = 0;  
   endif
 
-  targetRegion.grad = [preRegion.grad(end),endGrad];
+  target_span.grad = [pre_span.grad(end),endGrad];
 end
