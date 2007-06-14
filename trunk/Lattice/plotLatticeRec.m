@@ -1,10 +1,11 @@
 ## usage : plotLatticeRec(latRec [, plot_title ,visible_labels])
-
+##
 function plotLatticeRec(latRec, varargin)
+  warning("obsolute, use plot_lattice");
   tuneText = printTune(latRec.tune);
   # horizontal ture:1.31562
   # vertial ture:1.18495
-  returnText = "\\\\n";
+  returnText = "\\n";
   insertComment = "";
   if (isfield(latRec, "qfk"))
     qfk_comment = sprintf("qfk:%g", latRec.qfk) # ans = -0.0062874
