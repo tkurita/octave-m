@@ -1,11 +1,12 @@
 ## usage : codRecord = calcCollectionValueAtTime2(codRecord, t)
 ##
-## COD ‚Ì‘ª’è’l‚©‚ç ƒXƒeƒAƒ‰‚Ì•â³’l‚ğŒvZ‚·‚éB
-## ‚±‚ê‚É•K—v‚È lattice ‚ÌŒvZ‚à‚·‚éB
+## COD ã®æ¸¬å®šå€¤ã‹ã‚‰ ã‚¹ãƒ†ã‚¢ãƒ©ã®è£œæ­£å€¤ã‚’è¨ˆç®—ã™ã‚‹ã€‚
+## ã“ã‚Œã«å¿…è¦ãª lattice ã®è¨ˆç®—ã‚‚ã™ã‚‹ã€‚
 ##
-## function BMPattern ‚ª‚ ‚ç‚©‚¶‚ß load ‚³‚ê‚Ä‚¢‚é‚±‚Æ‚ª•K—v
-## (Carbon660MeVMagnet.m ‚à‚µ‚­‚ÍAProton200MeVMagnet.m ‚É‚æ‚Á‚Ä’ñ‹Ÿ‚³‚ê‚é)
-## lFitCOD ‚ğg‚¤ -- üŒ`Å¬©æ–@‚ğg‚¤
+## function BMPattern ãŒã‚ã‚‰ã‹ã˜ã‚ load ã•ã‚Œã¦ã„ã‚‹ã“ã¨ãŒå¿…è¦
+## (Carbon660MeVMagnet.m ã‚‚ã—ãã¯ã€Proton200MeVMagnet.m ã«ã‚ˆã£ã¦æä¾›ã•ã‚Œã‚‹)
+## lFitCOD ã‚’ä½¿ã† -- ç·šå½¢æœ€å°è‡ªä¹—æ³•ã‚’ä½¿ã†
+##
 ##=== parameters
 ## codRecord
 ##  .steererNames
@@ -23,6 +24,7 @@
 ##   .pError
 
 function codRecord = calcCollectionValueAtTime2(codRecord, t)
+  warning("oboslute, use cod_correction_at_time");
   codRecord.time = t;
   codRecord = calcLatticeAtTime(codRecord);
   if (isfield(codRecord, "measured_tune"))
