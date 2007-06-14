@@ -3,6 +3,7 @@
 ##    Names of lattice elements shown on x-axis are assign by visibleLabes.
 
 function plotLattice(allElements,betaFunction,dispersion,visibleLabels,titleText,insertComment)
+  warning("obsolute, use plot_lattice");
   ##labels of name of elements on x axis
   #__gnuplot_raw__("unset label\n");
   text();
@@ -15,7 +16,11 @@ function plotLattice(allElements,betaFunction,dispersion,visibleLabels,titleText
       findAns = findstr(theElement.name,visibleName,0);
       if (length(findAns) && findAns(1)==1)
         #eval(sprintf("gset label \"%s\" at %f,0 rotate by 90 font \"Helvetica,10\"", theElement.name, xPosition));
-        eval(sprintf("__gnuplot_set__ label \"%s\" at %f,0 rotate by 90 font \"Helvetica\"", theElement.name, xPosition));
+        #eval(sprintf("__gnuplot_set__ label \"%s\" at %f,0 rotate by 90 font \"Helvetica\"", theElement.name, xPosition));
+        text("Position", [xPosition, 0]\
+          , "Rotation", 90\
+          , "String", theElement.name)
+        
         break;
       endif
     end
@@ -23,7 +28,11 @@ function plotLattice(allElements,betaFunction,dispersion,visibleLabels,titleText
   end
   
   ##plot
-  eval(sprintf("__gnuplot_set__ label \"%s\" at graph 0.05,0.95",insertComment));
+  #eval(sprintf("__gnuplot_set__ label \"%s\" at graph 0.05,0.95",insertComment));
+  text("Position", [0.05, 0.95]\
+    , "Units", "normalized"\
+    , "String", insertComment)
+  
   #eval(sprintf("gset title \"%s\"",titleText));
   title(titleText);
   ylabel("dispersion,beta [m]");
