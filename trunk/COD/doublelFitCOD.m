@@ -11,7 +11,7 @@
 ##= Results
 ##     .steererValues
 ##     .pError
-#shareTerm ../../../WorkSpace/ƒVƒ“ƒNƒƒgƒƒ“/2006.9-12 ‚’¼ COD/Check_PR12_1211/Check_PR12_1211.m
+#shareTerm ../../../WorkSpace/ã‚·ãƒ³ã‚¯ãƒ­ãƒˆãƒ­ãƒ³/2006.9-12 å‚ç›´ COD/Check_PR12_1211/Check_PR12_1211.m
 
 function [codRecord_FB, codRecord_FT] \
               = doublelFitCOD(codRecord_FB, codRecord_FT, variableKickers, varargin);

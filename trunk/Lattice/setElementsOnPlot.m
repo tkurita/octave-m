@@ -48,8 +48,7 @@ function setElementsOnPlot(names, lattice, varargin)
       findAns = findstr(lattice{n}.name, names{m}, 0);
       if (length(findAns) && findAns(1)==1)
         #eval(sprintf("__gnuplot_set__ label \"%s\" at %f,graph 0 rotate by 90 font \"Helvetica,10\""...
-        eval(sprintf("__gnuplot_set__ label \"%s\" at %f,%s rotate by 90"...
-          , lattice{n}.name, lattice{n}.centerPosition, yposition));
+        eval(sprintf("__gnuplot_raw__(\"set label \\\"%s\\\" at %f,%s rotate by 90;\");", lattice{n}.name, lattice{n}.centerPosition, yposition));
         #text(lattice{n}.centerPosition, yposition, lattice{n}.name\
         #, "Rotation", 90, "FontName", "Helvetica", "FontSize", 10);
         #text(lattice{n}.centerPosition, yposition, lattice{n}.name\

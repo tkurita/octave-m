@@ -13,7 +13,7 @@ function vline(x, lt)
     lttext = "";
   endif
   
-  eval (sprintf ("__gnuplot_set__ arrow from first %g,graph 0 to first %g,graph 1 nohead %s;"\
+  eval (sprintf ("__gnuplot_set__(\"arrow from first %g,graph 0 to first %g,graph 1 nohead %s;\")"\
     , x, x, lttext));
 
   if (automatic_replot)
