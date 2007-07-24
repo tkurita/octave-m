@@ -17,14 +17,19 @@
 ##     .mat -- product with kickAngles give COD
 ##     .dispersion -- dipersion at BPM
 ##     .kickers -- order of kickers, cell array of element structures
+##     .monitors -- cell array of names of monitor 
+##                  sorted with the order in lattice
 ##  with "full" option
 ##     .postions
 ##  without "full" option
 ##     .refCOD -- given when "full" is not specified.
 
 ##= History
+## 2007.07.12
+## * add .monitors field to result
+##
 ## 2006.08.18
-##  make
+## * make
 ##
 
 function result = buildCODMatrix(codRecord, varargin);
@@ -59,6 +64,7 @@ function result = buildCODMatrix(codRecord, varargin);
   refBetaList = []; # beta function at center position of reference elements
   refPhaseList = []; # phase advance at center position of reference elements
   refDispersionList = []; # dispersion at center positon of reference elements
+  refNameList = {};
   if (isFullRange)
     positions = [];
     for n = 1:length(lattice)
@@ -83,6 +89,7 @@ function result = buildCODMatrix(codRecord, varargin);
         refBetaList = [refBetaList, currentElement.centerBeta.(horv)];
         refDispersionList = [refDispersionList; currentElement.centerDispersion];
         refCODList = [refCODList; codRecord.codAtBPM.(elementName)];
+        refNameList{end+1} = elementName;
       endif
     endfor
     result.refCOD = refCODList;
@@ -94,4 +101,5 @@ function result = buildCODMatrix(codRecord, varargin);
   result.mat = X.*cosX/(2*sin(pi*tune.(horv)));
   result.dispersion = refDispersionList;
   result.kickers = kickers;
+  result.monitors = refNameList;
 endfunction

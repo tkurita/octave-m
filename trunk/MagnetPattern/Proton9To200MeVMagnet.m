@@ -23,10 +23,10 @@ function patternSet = QFPattern
   657.1 , 0.5635, "spline";
   669.6 , 0.5620, "" ;
   694.6 , 0.5465, "" ;
-  707.1 , 0.5449, 0};
+  707.1 , 0.5449, "linear";
+  1117.9, 0.5449, 0};
   
   patternSet = build_pattern(pattern_cells);
-
 endfunction
 
 function patternSet = QDPattern
@@ -38,7 +38,8 @@ function patternSet = QDPattern
   91    , 0.1388, "linear" ;
   607.1 , 0.5531, "spline" ;
   632.1 , 0.5696, "" ;
-  657.1 , 0.5729, 0};
+  657.1 , 0.5729, "linear";
+  1167.9, 0.5729, 0};
 
   patternSet = build_pattern(pattern_cells);
 endfunction
@@ -53,7 +54,8 @@ function patternSet = BMPattern
   85   , 0.4067, "linear";
   607.1, 1.6473, "spline";
   632.1, 1.6968, "";
-  657.1, 1.7067, 0};
+  657.1, 1.7067, "linear";
+  1167.9, 1.7067, 0 };
   
   patternSet = build_pattern(pattern_cells);  
 endfunction

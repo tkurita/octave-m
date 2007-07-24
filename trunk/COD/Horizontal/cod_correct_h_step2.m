@@ -1,7 +1,11 @@
 ## usage : cod_rec = cod_correct_h_step2(cod_rec, codAtBPM)
 ##  - evaluate COD correction by step1
-##  - factored value factored steererValues 
-##             with comparing result of step1 and expected COD
+##  - obtain factored steererValues 
+##    with comparing result of step1 and expected COD
+##
+##== Parameters
+## * cod_rec : result of step1
+## * codAtBPM : mesuared COD applying steerer values obtained by step1
 
 function cod_rec = cod_correct_h_step2(cod_rec, codAtBPM)
   

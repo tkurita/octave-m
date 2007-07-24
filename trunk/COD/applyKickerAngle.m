@@ -1,10 +1,11 @@
 ## Usage : result = applyKickerAngle(codMatStruct, codRecord [, "useSteererValues"] )
-##      * Calc COD using kick angles in codRecord.
-##      * Dispersion and momentum error are not processed.
-##      * When "useSteererValues" option is given, 
-##        kick angles are calculated from codRecord.steererValues
 ##
-## = Parameters
+##  * Calc COD using kick angles in codRecord.
+##  * Dispersion and momentum error are not processed.
+##  * When "useSteererValues" option is given, 
+##    kick angles are calculated from codRecord.steererValues
+##
+##== Parameters
 ## * codMatStruct
 ##      .mat
 ##      .kickers
@@ -15,11 +16,11 @@
 ##      .steererValues
 ##      .brho
 ##
-## = Result
+##== Result
 ##  codMatStruct.mat * kickAngles
 ##      kickAngles is orderd with order of kicker elements in a ring.
 
-## = History
+##== History
 ## 2006-12-08
 ##  * fix miscalculation when the order of steererNames doesn't follow the order in the ring.
 ## 2006-11-24

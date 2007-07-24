@@ -3,23 +3,25 @@
 ## calculate COD with given current of steerers (steerersValues [A])  
 ## and return the COD at specified position (s [m]) with linear interpolation.
 ##
-##= Parameters:
+##== Parameters:
 ## * s -- matrix of position at which wanted COD
 ## * steererValue -- matrix of current of steerers [A]
 ##
-##= Global variables :
+##== Global variables :
 ## * _fitCODInfo -- structure which have following members
 ##    .lattice
 ##    .brho
 ##    .tune
-##    .steererName : cell array of names of steerers which corresponding to steerersValues
+##    .steererName : cell array of names of steerers
+##                   which corresponding to steerersValues
 ##    .horv : horizontal or varticla. "h" is horizonntal. "v" is vertical.
 ## 
-##= Result
+##== Result
 ## * x -- COD[mm] at position s
 ##
-##= See Also
-## codWithInterpWithPerror can consider momentum error. This function mainly is for vertical COD.
+##== See Also
+## codWithInterpWithPerror can consider momentum error. 
+## This function mainly is for horizontal COD.
 
 function x = doubleCODWithInterpolate(s, inputValues)
   # inputValus -- STV1, QD2_FB QD2_FT QD3 ‚Æ‚·‚é

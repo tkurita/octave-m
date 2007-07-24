@@ -12,7 +12,10 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM)
   
   cod_rec = append_fields(cod_rec, codAtBPM, steererNames);
   cod_rec.horv = "h";
-
+  cod_rec.targetCOD = buildTargetCOD(cod_rec);
+  cod_rec = lFitCOD(cod_rec);
+  cod_rec.correctCOD = calcCODWithPerror(cod_rec);
+  
   cod_rec_BM = setfields(cod_rec, "steererNames", bm_names);
   cod_rec_BM = lFitCOD(cod_rec_BM);
   cod_rec_BM.correctCOD = calcCODWithPerror(cod_rec_BM);

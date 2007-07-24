@@ -20,6 +20,9 @@
 ##
 
 function qkValue = QKValueAtTime(glPattern, blPattern, t, varargin)
+  # blPattern = BMPattern;
+  # glPattern = QFPattern;
+  # t = 700;
   brho = BrhoAtTime(blPattern,t);
   gl = BValueAtTime(glPattern,t);
   

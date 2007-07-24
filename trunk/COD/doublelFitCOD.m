@@ -11,7 +11,12 @@
 ##= Results
 ##     .steererValues
 ##     .pError
+
 #shareTerm ../../../WorkSpace/シンクロトロン/2006.9-12 垂直 COD/Check_PR12_1211/Check_PR12_1211.m
+
+##= Hisotry
+## 2007.07.12
+## - add useWeight option
 
 function [codRecord_FB, codRecord_FT] \
               = doublelFitCOD(codRecord_FB, codRecord_FT, variableKickers, varargin);
@@ -20,11 +25,16 @@ function [codRecord_FB, codRecord_FT] \
   #  variableKickers = {"QD2"};
   
   use_kick_factors = false;
+  use_weight = false;
   for n = 1:length(varargin)
     if (strcmp(varargin{n}, "useKickFactors"))
       if (isfield(codRecord_FB, "kickFactors"))
         use_kick_factors = true;
       endif
+    endif
+    
+    if (strcmp(varargin{n}, "useWeight"))
+      use_weight = true;
     endif
   endfor
   
@@ -59,7 +69,7 @@ function [codRecord_FB, codRecord_FT] \
     row_vec = (row_vec(:))';
     kick_factor_mat_FT = repmat(row_vec, nrows_FT, 1);
     
-    mat_FB = mat_FB.*kick_factor_mat_FB
+    mat_FB = mat_FB.*kick_factor_mat_FB;
     mat_FT = mat_FT.*kick_factor_mat_FT;
   endif
   
@@ -84,7 +94,15 @@ function [codRecord_FB, codRecord_FT] \
   
   double_mat = [mat_FB; mat_FT];
   ref_cod = [codMatStruct_FB.refCOD; codMatStruct_FT.refCOD]/1000;
-  kick_angles = double_mat \ ref_cod;
+  if (use_weight)
+    dy = [];
+    dy = [dy; extract_dy(codRecord_FB, codMatStruct_FB)];
+    dy = [dy; extract_dy(codRecord_FT, codMatStruct_FT)];
+    dy = 1./dy;
+    [kick_angles, s] = wsolve(double_mat, ref_cod, dy);
+  else
+    kick_angles = double_mat \ ref_cod;
+  endif
   
   kick_angles_FT = kick_angles;
   kick_angles_FB = kick_angles;
@@ -129,3 +147,19 @@ function [codRecord_FB, codRecord_FT] \
 #    , codRecord_FT.targetCOD, "-@"\
 #    , codRecord_FT.correctCOD, "-")
 endfunction
+
+function dy = extract_dy(cod_rec, cod_mat_struct)
+  if (isfield(cod_rec, "weights"))
+    dy = [];
+    weights = cod_rec.weights;
+    for a_name = cod_mat_struct.monitors
+      if (isfield(weights, a_name{1}))
+        dy = [dy; weights.(a_name{1})];
+      else
+        dy = [dy; 1];
+      end
+    endfor
+  else
+    dy = ones(length(cod_mat_struct.monitors),1);
+  endif
+end

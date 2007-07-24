@@ -2,20 +2,20 @@
 ##
 ## fit COD with factor and momemtum error.
 ##
-##= Parameters
+##== Parameters
 ## * codRecord (structure) 
-##    .steererNames
-##    .horv
-##    .lattice
-##    .tune
-##    .kickAngles
+##   - .steererNames
+##   - .horv
+##   - .lattice
+##   - .tune
+##   - .kickAngles
 ##
-##= Results
+##== Results
 ## following fields are appended.
-##    .pError
-##    .kickFactor
+##   - .pError
+##   - .kickFactor
 
-##= History
+##== History
 ## 2006.07.17
 ##  fitCOD(using non-linear least square method) と同じ結果が得られることを確認
 ##

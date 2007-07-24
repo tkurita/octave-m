@@ -1,15 +1,18 @@
 ## Usage: printKickerValues(steererNames, steererValues)
-##        printKickerValues(codRecord [, "kickAngles" or "calcKickAngles"])
+##        printKickerValues(codRecord 
+##                              [, "kickAngles" or "calcKickAngles"])
 ##
-##  If codRecord is passed and no options, "steererValues" fields will be display.
+##  If codRecord is passed and no options, 
+##        "steererValues" fields will be display.
 ## 
-## = Parameters
+##== Parameters
 ## * codRecord -- a structure which have following fields
 ##       .steererNames
 ##       .steererValues
+##       .kickAngles (optional)
 ##
 ## * options -- following strings
-##  - "kickAngles" : display "kickAngles" field
+##  - "kickAngles" : display "kickAngles" field instead of "steererValues" field.
 ##  - "calcKickAngels" : calculate kick angles from steererValues field.
 ##  - "factoredKickAngles" : codRecord.kickAngles./codRecord.kickFactors
 
