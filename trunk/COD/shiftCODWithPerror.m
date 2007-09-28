@@ -2,9 +2,9 @@
 ##
 ##= Parameters
 ## * inStruct
-##  .lattice
-##  .pError
-##  .horv
+##    .lattice
+##    .pError
+##    .horv
 ## * inCODList -- [position; COD at position]
 ##
 ##= Result
