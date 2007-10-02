@@ -1,21 +1,25 @@
-## Usage : codList = cod_list_with_kickers(codRecord [, "useSteererValues"])
-##      Calculate COD with given kick angles of steerers
+## Usage : cod_list = cod_list_with_kickers(cod_rec 
+##                                [, "useSteererValues", "noKickFactor"])
+##      Calculate COD with given kick angles of steerers.
+##      If cod_rec has kickFactor field, kickFactor is applied.
 ##
 ## = Parameter
-## * codRecord -- structure which have following members
+## * cod_rec -- structure which have following members
 ##     .steererNames
 ##     .kickAngles
 ##     .pError -- momentum error
 ##     .lattice
 ##     .tune
 ##     .horv -- 水平方向と垂直方向のどちらを計算するか
+##     .kickFactor
 ##
 ## = Result
-## * codList -- matrix of COD at exit position of each element. 
+## * cod_list -- matrix of COD at exit position of each element. 
 ##     [position, COD]
 
 ##== History
 ## 2007.10.02
+## * add option "noKickFactor"
 ## * rename from calcCODWithPerror
 ##
 ## 2006.11.24
@@ -29,37 +33,48 @@
 ## * cod_list_with_kickers との違いは steererValues をサポートしない（いまのところは）
 ## * cod_list_with_kickers と同じ結果を与えることを確認
 
-function codList = cod_list_with_kickers(codRecord, varargin)
-  codMatStruct = buildCODMatrix(codRecord, "full");
-  
-  if (length(varargin) == 0) 
-    if (!isfield(codRecord, "kickAngles") )
-      if (isfield(codRecord, "steererValues") )
-        varargin{1} = "useSteererValues";
+function cod_list = cod_list_with_kickers(cod_rec, varargin)
+  codMatStruct = buildCODMatrix(cod_rec, "full");
+  use_kickfactor = true;
+  use_steerer_values = false;
+  if (length(varargin) > 0) 
+    for n = 1:length(varargin)
+      if strcmp(varargin{n}, "useSteererValues")
+        use_steerer_valuse = true;
+      elseif strcmp(varargin{n}, "noKickFactor")
+        use_kickfactor = false;
       else
-        error("codRecord don't have kickAngles field.");
+        warning([varargin{n}, " is unknown option\n"]);
       endif
+    endfor
+  endif
+  
+  if (!use_steerer_values )
+    if (isfield(cod_rec, "steererValues") )
+      varargin{end+1} = "useSteererValues";
+    else
+      error("cod_rec don't have kickAngles field.");
     endif
   endif
   
-  codList = applyKickerAngle(codMatStruct, codRecord, varargin{:});
+  cod_list = applyKickerAngle(codMatStruct, cod_rec, varargin{:});
   
-  if (strcmp(codRecord.horv,"h"))
-    codList = codList + codMatStruct.dispersion*codRecord.pError;
+  if (strcmp(cod_rec.horv,"h"))
+    cod_list = cod_list + codMatStruct.dispersion*cod_rec.pError;
   endif
-  codList = codList*1000;
+  cod_list = cod_list*1000;
   positionList = codMatStruct.positions;
-  if (isfield(codRecord, "range"))
-    begPos = codRecord.range(1);
-    endPos = codRecord.range(2);
+  if (isfield(cod_rec, "range"))
+    begPos = cod_rec.range(1);
+    endPos = cod_rec.range(2);
     
     for i = 1 : length(positionList)
       if ((positionList(i) <= begPos) || (endPos <= positionList(i)))
-        codList(i) = 0;
+        cod_list(i) = 0;
       endif
     endfor
     
   endif
   
-  codList = [positionList, codList];
+  cod_list = [positionList, cod_list];
 endfunction
