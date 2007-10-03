@@ -13,7 +13,7 @@
 
 
 function result = subtractCOD(cod1,cod2)
-  
+  warning("subtractCOD is obsolute, use subtract_cod");
   for [val, key] = cod2
     cod1.(key) -= val;
   endfor
