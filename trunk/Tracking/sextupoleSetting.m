@@ -3,7 +3,7 @@
 ## sx.
 ## 
 ##= Parameters
-## * option -- "thin" ‚ªİ’è‚³‚ê‚é‚Æ thin lens ‹ß—
+## * option -- "thin" ãŒè¨­å®šã•ã‚Œã‚‹ã¨ thin lens è¿‘ä¼¼
 
 function sx = sextupoleSetting(brho, current, name, varargin)
   if (length(varargin))
