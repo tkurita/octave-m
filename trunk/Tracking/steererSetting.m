@@ -1,7 +1,13 @@
 ## usage : steerer = steererSetting(latRec, name, value)
 ##
-##= Parameters
-## * 
+##== Parameters
+## *
+
+##== History
+## 2007-10-03
+## * should be obsolute
+## * kicker_with_angle is recommended
+
 function steerer = steererSetting(latRec, name, value)
   steerer = getElementWithName(latRec.lattice, name);
   kickAngle = calcSteerAngle(steerer, value, latRec.brho);
