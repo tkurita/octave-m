@@ -28,6 +28,7 @@
 ## * rename from buildcod_list
 
 function cod_list = cod_list_with_struct(varargin)
+  warning("cod_list_with_struct is obsolute, use cod_list_with_bpms");
   if nargin > 1
     cod_at_bpm = varargin{1};
     a_lattice = varargin{2};
