@@ -4,23 +4,25 @@
 ## or
 ## latticeRec = calcLattice(allElements [,fullCircleMat])
 ##
-## = Parameters
+##== Parameters
 ## * allElements   -- 全要素の matrix の配列
 ## * fullCircleMat -- allElements をすべて掛け合わせたもの。
 ##                    水平方向と垂直方向を別々にcalcFullCircle を使って計算する。
 ##              .h -- 水平方向 一周分の matrix
 ##              .v -- 垂直方向 一周分の matrix
 ##
-## = Results
+##== Results
 ## * betafunction -- beta function
 ## * dispersion -- 分散
 ##          allElements{n}.eater(1) のリスト n番目の要素の出口の dispersion
 ##
 ## * totalPhase -- 一周で進む beta function の位相を計算する。
 ##
-## * allElements -- following fields are added to each elements
-##    .twpar.h -- twiss parameter 水平
-##    .twpar.v -- twiss parameter 垂直
+## * allElements : following fields are added to each elements
+##    .twpar : twiss parameter at exit of the element.
+##        .h : horizontal
+##        .v : vertical
+##    .centerTwpar : twiss parameter at center of the element.
 ##    .exitDispersion -- dispersion at the exit of the element
 ##
 ##    .entranceBeta 
@@ -38,9 +40,13 @@
 ##  .tune.v
 
 
-## = History
-## 2006.10.12 -- fullCircleMat を与えなくてもいいようにした。
-##               nargout == 1 のとき、latticeRec を返すようにした。
+##== History
+## 2007-10-16
+## * centerTwpar field instead of centerTwpar 
+##
+## 2006.10.12
+## * fullCircleMat を与えなくてもいいようにした。
+## * nargout == 1 のとき、latticeRec を返すようにした。
 
 function [varargout] = calcLattice(allElements, varargin)
   if (length(varargin) > 1)
@@ -81,23 +87,24 @@ function [varargout] = calcLattice(allElements, varargin)
     ## (1) beta function
     ## (2) alpha
     ## (3) gamma
-    ##=== full
+    ##=== full, at exit
     theElement.twpar.h = theElement.twmat.h*pretwp.h;
     theElement.twpar.v = theElement.twmat.v*pretwp.v;
-    ##=== half
-    theElement.twpar_half.h = theElement.twmat_half.h*pretwp.h;
-    theElement.twpar_half.v = theElement.twmat_half.v*pretwp.v;
+    
+    ##=== half, at center
+    theElement.centerTwpar.h = theElement.twmat_half.h*pretwp.h;
+    theElement.centerTwpar.v = theElement.twmat_half.v*pretwp.v;
     
     ##== horizontal beta function
     theElement.entranceBeta.h = pretwp.h(1);
     theElement.exitBeta.h = theElement.twpar.h(1);
-    theElement.centerBeta.h = theElement.twpar_half.h(1);
-    theElement.meanBeta.h = (theElement.entranceBeta.h+theElement.exitBeta.h)/2; #obsolute
+    theElement.centerBeta.h = theElement.centerTwpar.h(1);
+    theElement.meanBeta.h = (theElement.entranceBeta.h+theElement.exitBeta.h)/2; #obsolete
     
     ##== vertical beta function
     theElement.entranceBeta.v = pretwp.v(1);
     theElement.exitBeta.v = theElement.twpar.v(1);
-    theElement.centerBeta.v = theElement.twpar_half.v(1);
+    theElement.centerBeta.v = theElement.centerTwpar.v(1);
     theElement.meanBeta.v = (theElement.entranceBeta.v+theElement.exitBeta.v)/2; #obsolute
     
     ##== dispersion
