@@ -54,6 +54,8 @@
 ## * nargout == 1 のとき、latticeRec を返すようにした。
 
 function [varargout] = calcLattice(allElements, varargin)
+  warning("calcLattice is obsolete. use process_lattice.");
+  
   if (length(varargin) > 1)
     fullCircleMat = varargin{1};
   else

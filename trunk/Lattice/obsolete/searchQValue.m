@@ -8,6 +8,8 @@
 ## * assume vedge : 0
 
 function [qfk, qdk] = searchQValue(tunex, tuney, varargin)
+  warning("searchQValue is obsolete. Use searck_qk");
+  
   stol=0.01; 
   #stol=0.0001; 
   niter=5;

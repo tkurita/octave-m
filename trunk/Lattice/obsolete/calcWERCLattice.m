@@ -11,7 +11,13 @@
 ## * lattice
 ## * tune
 
+##== History
+## 2007-10-18
+## * obsolete. use calc_lattice
+##
+
 function [lattice,tune] = calcWERCLattice(qfk, qdk, varargin)
+  warning("calcWERCLattice is obsolete. Use calc_lattice.");
   
   lattice = buildWERCMatrix(qfk, qdk, varargin{:});
   fullCircleMat.h = calcFullCircle(lattice,"h");
