@@ -13,8 +13,12 @@
 ##      .qdk
 
 ##= History
-## 2006.10.12 -- calcLatticeSimple ではなく、calcWERCLattice を使うように変更
-## 2006.09.28 -- vedge の値を 0にした。
+## 2007-10-18
+## * obsolete. use lattice_with_tune
+## 2006.10.12
+## * calcLatticeSimple ではなく、calcWERCLattice を使うように変更
+## 2006.09.28
+## * vedge の値を 0にした。
 
 function targetRec = calcLatticeForTune(targetRec)
   arguments = {targetRec.measured_tune.h, targetRec.measured_tune.v};
