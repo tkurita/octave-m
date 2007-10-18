@@ -1,5 +1,5 @@
 ## usage : outRec = calcLatticeForTune(targetRec)
-##
+## obsolete. Use lattice_with_tune
 ##= Parameters
 ## * targetRec
 ##      .measured_tune.h -- horizontal tune

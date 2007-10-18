@@ -1,14 +1,33 @@
-## usage: 
-## [betaFunction, dispersion, totalPhase, allElements] 
-##                        = calcLattice(allElements [,fullCircleMat])
-## or
-## latticeRec = calcLattice(allElements [,fullCircleMat])
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{lattice_rec} =} process_lattice(@var{lattice_rec} or @var{all_elements}, [@var{full_circle_mat}])
 ##
-## obsolute. Use process_lattice
+## @deftypefnx {Function File} {[@var{beta_function}, @var{dispersion}, @var{total_phase}, @var{all_elements} =} process_lattice(@var{lattice_rec} or @var{all_elements}, [@var{full_circle_mat}])
+## 
+## @var{all_elements} is a cell array consisted of element structures.
+##
+## Input @var{lattice_rec} must have following fields.
+##
+## @table @code
+## @item lattice
+## a cell array. same to all_elements
+## @end table
+## 
+## If @var{full_circle_mat} is ommited, it will be calculated internally with function 'calcFullCircle'.
+##
+## 
+## @seealso{calcFullCircle}
+## @end deftypefn
+
+## usage: 
+## [betaFunction, dispersion, totalPhase, all_elements] 
+##                        = process_lattice(all_elements [,fullCircleMat])
+## or
+## latticeRec = process_lattice(all_elements [,fullCircleMat])
+## 
 ##
 ##== Parameters
-## * allElements   -- 全要素の matrix の配列
-## * fullCircleMat -- allElements をすべて掛け合わせたもの。
+## * all_elements   -- 全要素の matrix の配列
+## * fullCircleMat -- all_elements をすべて掛け合わせたもの。
 ##                    水平方向と垂直方向を別々にcalcFullCircle を使って計算する。
 ##              .h -- 水平方向 一周分の matrix
 ##              .v -- 垂直方向 一周分の matrix
@@ -16,11 +35,11 @@
 ##== Results
 ## * betafunction -- beta function
 ## * dispersion -- 分散
-##          allElements{n}.eater(1) のリスト n番目の要素の出口の dispersion
+##          all_elements{n}.eater(1) のリスト n番目の要素の出口の dispersion
 ##
 ## * totalPhase -- 一周で進む beta function の位相を計算する。
 ##
-## * allElements : following fields are added to each elements
+## * all_elements : following fields are added to each elements
 ##    .twpar : twiss parameter at exit of the element.
 ##        .h : horizontal
 ##        .v : vertical
@@ -37,14 +56,15 @@
 ##
 ## if the number of out arguments is 1, latticeRec will be return, 
 ## which is a structure with following field.
-##  .lattice -- cell array, equivalent to allElements
+##  .lattice -- cell array, equivalent to all_elements
 ##  .tune.h
 ##  .tune.v
 
 
 ##== History
 ## 2007-10-18
-## * obsolete. Use process_lattice
+## * accept lattice_rec as an argument.
+## * renamed from calcLattice
 ##
 ## 2007-10-16
 ## * centerTwpar field instead of centerTwpar 
@@ -53,12 +73,19 @@
 ## * fullCircleMat を与えなくてもいいようにした。
 ## * nargout == 1 のとき、latticeRec を返すようにした。
 
-function [varargout] = calcLattice(allElements, varargin)
-  if (length(varargin) > 1)
-    fullCircleMat = varargin{1};
+function varargout = process_lattice(varargin)
+  if (isstruct(varargin{1}))
+    lattice_rec = varargin{1};
+    all_elements = lattice_rec.lattice;
   else
-    fullCircleMat.h = calcFullCircle(allElements, "h");
-    fullCircleMat.v = calcFullCircle(allElements, "v");
+    all_elements = varargin{1};
+  endif
+  
+  if (length(varargin) > 1)
+    fullCircleMat = varargin{2};
+  else
+    fullCircleMat.h = calcFullCircle(all_elements, "h");
+    fullCircleMat.v = calcFullCircle(all_elements, "v");
   endif
   
   ##== set initile twiss parameter of horizontal
@@ -85,8 +112,8 @@ function [varargout] = calcLattice(allElements, varargin)
   betaFunction.v = [thePosition,twp0.v(1)];
   dispersion = [thePosition,eater0(1)];
   
-  for n = 1:length(allElements)
-    theElement = allElements{n};
+  for n = 1:length(all_elements)
+    theElement = all_elements{n};
     
     ##== twpar.(h or v) : definition of twiss parameter
     ## (1) beta function
@@ -151,19 +178,20 @@ function [varargout] = calcLattice(allElements, varargin)
     #theElement.centerPhase.v = (theElement.entrancePhase.v + theElement.exitPhase.v)/2;
     
     ##== prepare next calculation
-    allElements{n} = theElement;
+    all_elements{n} = theElement;
     pretwp.h = theElement.twpar.h;
     pretwp.v = theElement.twpar.v;
     preeater = theElement.eater;
   endfor
   
   if (nargout > 1)
-    varargout = {betaFunction, dispersion, totalPhase, allElements};
+    varargout = {betaFunction, dispersion, totalPhase, all_elements};
   else
-    tune.v = totalPhase.v/(2*pi);
-    tune.h = totalPhase.h/(2*pi);
-    lattice = allElements;
-    varargout = {build_struct(lattice, totalPhase, tune)};
+    lattice_rec.tune.v = totalPhase.v/(2*pi);
+    lattice_rec.tune.h = totalPhase.h/(2*pi);
+    lattice_rec.lattice = all_elements;
+    lattice_rec.totalPahase = totalPhase;
+    varargout = {lattice_rec};
   endif
   
 endfunction

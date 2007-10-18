@@ -1,12 +1,12 @@
 function strDT = DT(dl,theName, varargin)
   ##== full
-  strDT.len = dl; # ’·‚³
+  strDT.len = dl; # é•·ã•
   strDT.k.h = 0;
   strDT.k.v = 0;
-  strDT.name = theName; # –¼‘O
-  strDT.mat.h = DTmat(dl); # ‰¡•ûŒü‚Ì matrix
+  strDT.name = theName; # åå‰
+  strDT.mat.h = DTmat(dl); # æ¨ªæ–¹å‘ã® matrix
   strDT.twmat.h = twpMatrix(strDT.mat.h);
-  strDT.mat.v = strDT.mat.h; # c•ûŒü‚Ì matrix
+  strDT.mat.v = strDT.mat.h; # ç¸¦æ–¹å‘ã® matrix
   strDT.twmat.v = strDT.twmat.h;
   
   ##== half

@@ -17,7 +17,32 @@
 ##  * .mat.v : 縦方向の matrix 3×3
 ##  * .twmat.v : 縦方向の twiss parameter を計算する matrix
 
-function allElements = buildWERCMatrix(qfk, qdk, varargin)
+##== History
+## 2007-10-18
+## * accept a structure as an argument
+
+#function allElements = buildWERCMatrix(qfk, qdk, varargin)
+function allElements = buildWERCMatrix(varargin)
+  if (isstruct(varargin{1}))
+    lattice_rec = varargin{1};
+    qfk = lattice_rec.qfk;
+    qdk = lattice_rec.qdk;
+    if (isfield(lattice_rec, "vedge"))
+      vedge = lattice_rec.vedge;
+    else
+      vedge = 0;
+    endif
+  else
+    qfk = varargin{1};
+    qdk = varargin{2};
+    if (length(varargin) > 2)
+      vedge = varargin{3};
+    else
+      #vedge = 0.24;
+      vedge = 0;
+    endif
+  endif
+      
   ##== properties of bending magnet
   bmangle = (45/360)*2*pi;
   efflen = 1.57395;
@@ -25,12 +50,6 @@ function allElements = buildWERCMatrix(qfk, qdk, varargin)
   radius = 1.91;
   #edgeangle = 0.75*2*pi/360;
   edgeangle = 1.5*pi/180;
-  if (length(varargin) > 0)
-    vedge = varargin{1};
-  else
-    #vedge = 0.24;
-    vedge = 0;
-  endif
   bmprop = build_struct(bmangle, radius, efflen, edgeangle, vedge);
    
   ##== properties of Q lens

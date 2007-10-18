@@ -1,5 +1,7 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{lattice}, @var{tune}] =} calc_lattice(@var{qfk}, @var{qdf}, [@var{vedge}])
+## @deftypefn {Function File} {@var{lattice_rec} =} calc_lattice(@var{lattice_rec})
+##
+## @deftypefnx {Function File} {@var{lattice_rec} =} calc_lattice(@var{qfk}, @var{qdf}, [@var{vedge}])
 ##
 ## Return evaluated lattice and tune with given Q values.
 ## The lattice definition is given by function 'lattice_definition'
@@ -25,18 +27,24 @@
 ##
 ## @seealso{lattice_definition, process_lattice}
 ## @end deftypefn
+#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 
 ##== History
 ## 2007-10-18
 ## * defiverd from calcWERCLattice
 
-function [lattice,tune] = calc_lattice(qfk, qdk, varargin)
-  lattice_def = lattice_definition();
-  lattice = lattice_def(qfk, qdk, varargin{:});
-  fullCircleMat.h = calcFullCircle(lattice,"h");
-  fullCircleMat.v = calcFullCircle(lattice,"v");
-  [betaFunction, dispersion, totalPhase, lattice] = process_lattice(lattice, fullCircleMat);
+function lattice_rec = calc_lattice(varargin)
+  # varargin = {lattice_rec};
+  if (isstruct(varargin{1}))
+    lattice_rec = varargin{1};
+  else
+    lattice_rec = struct("qfk", varargin{1}, "qdk", varargin{2});
+    if (length(varargin) > 2)
+      lattice_rec.vedge = varargin{3};
+    endif
+  endif
   
-  tune.v = totalPhase.v/(2*pi);
-  tune.h = totalPhase.h/(2*pi);
+  lattice_def = lattice_definition();
+  lattice_rec.lattice = lattice_def(lattice_rec);
+  lattice_rec = process_lattice(lattice_rec);
 endfunction

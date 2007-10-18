@@ -1,8 +1,8 @@
-## usage:[lattice, tune] = calcLatticeSimple(qfk, qdk, [vedge])
-## 
-## Q の値をを与えて lattice と tune の結果だけを返す。
+## Usage:[lattice, tune] = calcLatticeSimple(qfk, qdk, [vedge])
+##    obsolute, use calcWERCLattice
+##    Q の値をを与えて lattice と tune の結果だけを返す。
 ##
-## = Parameters
+##== Parameters
 ## * qfk -- [(T/m) *m]
 ## * qdk
 ## * vedge
@@ -10,7 +10,7 @@
 ## * lattice
 ## * tune
 
-## = History
+##== History
 ## 2006.10.12 -- 今後は、calcWERCLattice を使う
 
 function [lattice,tune] = calcLatticeSimple(qfk, qdk, varargin)

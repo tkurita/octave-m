@@ -1,8 +1,11 @@
 ## usage : function [qfk, qdk] = searchQValue(tunex, tuney[, initial_qfk, initial_qdk])
 ##
 
-## = History
-## 2006.09.28 -- assume vedge : 0
+##== History
+## 2007-10-18
+## * should be obsolete. use search_qk
+## 2006-09-28
+## * assume vedge : 0
 
 function [qfk, qdk] = searchQValue(tunex, tuney, varargin)
   stol=0.01; 
@@ -33,9 +36,6 @@ endfunction
 
 function result = calcTune(dummy, qValues)
   allElements = buildWERCMatrix(qValues(1),qValues(2), 0);
-  ##  fullCircleMat.h = calcFullCircle(allElements,"h");
-  ##  fullCircleMat.v = calcFullCircle(allElements,"v");
-  ##  [betaFunction,dispersion,totalPhase,allElements] = calcLattice(allElements,fullCircleMat);
   latRec = calcLattice(allElements);
   result = [latRec.tune.h; latRec.tune.v];
 endfunction
