@@ -1,4 +1,5 @@
 ## usage : momentumForVelocity(velocity, particle)
+##  obsolete. use momentum_with_velocity
 ##
 ##= Parameters
 ## * f_rev -- revolution frequency [MHz]
@@ -9,7 +10,7 @@
 
 function result = momentumForVelocity(velocity, particle)
   #energy = 660 #[MeV]
-  
+  warning("momentumForVelocity is obsolete. use momentum_with_velocity.");
   lv = physicalConstant("light velocity");
   b = velocity/lv;
   g = 1/sqrt(1-b^2);
