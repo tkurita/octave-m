@@ -1,5 +1,5 @@
 ## usage : result = BrhoForFrev(f_rev, c_length, particle)
-##  obsolete. use brho_with_frev
+##
 ## =Parameters
 ## * f_rev -- revolution frequency [MHz]
 ## * c_length -- 周長 [m]
@@ -13,7 +13,7 @@ function result =  BrhoForFrev(f_rev, c_length, particle)
   #  charge = 6;
   #particle = "proton";
   #energy = 200;
-  warning("BrhoForFrev is obsolete. Use brho_with_frev");
+  
   switch particle
     case "proton"
       charge = 1;

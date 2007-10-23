@@ -18,7 +18,7 @@ function plotMagnetPattern(varargin)
       tPoints = [tPoints; patternSet{i}.tPoints(:)];
       bPoints = [bPoints; patternSet{i}.bPoints(:)];
     endfor
-    argPlot = {argPlot{:},tLine,bLine,"",tPoints,bPoints,"*"};
+    argPlot = {argPlot{:},tLine,bLine,"",tPoints,bPoints,"@"};
   endfor
   xlabel("[msec]");
   ylabel(varargin{end});
