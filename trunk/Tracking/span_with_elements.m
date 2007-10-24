@@ -1,4 +1,4 @@
-## Usage : mat_rec = mat_for_tracking(elements)
+## Usage : mat_rec = span_with_elements(elements)
 ##
 ##== Parameters
 ## * elements : a cell array of elements of a lattice
@@ -10,13 +10,13 @@
 ## * derived from totalMatForTrack
 ## * add support dispersion 
 
-function mat_rec = mat_for_tracking(elements)
-  if isstruct(elements)
-    a_mat = mat_with_elememnt(elements)
+function mat_rec = span_with_elements(elements)
+  if (isstruct(elements))
+    a_mat = mat_with_element(elements);
   else
     a_mat = eye(6);
     for n = 1:length(elements)
-      a_mat = a_mat * mat_with_elememnt(elements{n})
+      a_mat = mat_with_element(elements{n}) * a_mat;
     endfor
   endif
   
