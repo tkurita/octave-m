@@ -3,7 +3,7 @@
 ## * obsolute
 
 function result = sextupoleKickThin(sx, particles)
-  warning("oboslute. use sx_thin_kick.");
+  #warning("oboslute. use sx_thin_kick.");
   #printf("sextupoleKickThin\n");
   particles = sx.premat * particles;
   x = particles(1,:);
