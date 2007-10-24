@@ -21,7 +21,6 @@
 ## 2007-10-18
 ## * accept a structure as an argument
 
-#function allElements = buildWERCMatrix(qfk, qdk, varargin)
 function allElements = buildWERCMatrix(varargin)
   if (isstruct(varargin{1}))
     lattice_rec = varargin{1};

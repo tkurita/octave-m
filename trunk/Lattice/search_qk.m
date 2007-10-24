@@ -1,17 +1,34 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{lattice_rec} =} search_qk(@var{lattice_rec})
+##
 ## @deftypefnx {Function File} {[@var{qfk}, @var{qdk}] =} search_qk(@var{tunex}, @var{tuney} [, @var{initial_qfk}, @var{initial_qdk}])
+##
+## Search and return qfk and qdk which cause tunes given as arguments.
+##
+## Arguemnt @var{lattice_rec} can have following fields.
+##
+## @table @code
+## @item measured_tune.h
+## @item measured_tune.v
+##
+## @item initial_qfk
+## optional
+## @item initial_qdk
+## optional
+## @end table
+## 
+## If nargout == 1, a structure is returned which have 'qfk' and 'qdk' as its fields.
 ##
 ## @end deftypefn
 
-## usage : function [qfk, qdk] = search_qk(tunex, tuney[, initial_qfk, initial_qdk])
-##
-
 ##== History
-## 2006-09-28 
+## 2007-10-18
+## * derived from searckQValue
+## * accept lattice structure
+##
+## 2006-09-28
 ## * assume vedge : 0
 
-#function [qfk, qdk] = search_qk(tunex, tuney, varargin)
 function varargout = search_qk(varargin)
   if (isstruct(varargin{1}))
     lattice_rec = varargin{1};

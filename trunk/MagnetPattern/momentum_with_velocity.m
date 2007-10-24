@@ -6,23 +6,14 @@
 ##
 ## @var{particle} can be accept a kind of particle "proton" or "carbon"
 ##
+## @seealso{momentum_with_frev}
+##
 ## @end deftypefn
-
-
-## usage : momentumForVelocity(velocity, particle)
-##
-##= Parameters
-## * f_rev -- revolution frequency [MHz]
-## * particle -- "proton" or "carbon"
-##
-##= Result
-## 運動量 [MeV/c]
 
 ##== History
 ## renamed from momentumForVelocity
 
-#function result = momentumForVelocity(velocity, particle)
-function momentum_with_velocity(velocity, particle)  
+function result = momentum_with_velocity(velocity, particle)  
   #energy = 660 #[MeV]
   
   lv = physicalConstant("light velocity");
@@ -41,7 +32,7 @@ function momentum_with_velocity(velocity, particle)
     if (particle > 1)
         amu = physicalConstant("amu");
         massE = amu *12;
-    else (particle == 1)
+    elseif (particle == 1)
       massE = physicalConstant("proton [MeV]");
     else
       error("a.m.u. must be greater than 1.");

@@ -307,15 +307,17 @@ function print (varargin)
       __gnuplot_raw__ (sprintf ("set terminal emf %s;\n", options));
 
     elseif (strcmp (dev, "pdf"))
+
       if (use_color >= 0)
-	options = " color";
+	options = "color";
       else
-	options = " mono";
+	options = "mono";
       endif
       options = strcat (options, " enhanced");
+
       if (force_solid > 0)
-	options = strcat (options, " solid");
-      else
+         options = strcat (options, " solid");
+      elseif (force_solid < 0)
 	options = strcat (options, " dashed");
       endif
       if ((! isempty (font)) || (! isempty(fontsize)) )

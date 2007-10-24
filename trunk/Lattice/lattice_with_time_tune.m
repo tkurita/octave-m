@@ -2,7 +2,7 @@
 ## @deftypefn {Function File} {@var{lattice_rec} =} lattice_with_time_tune(@var{lattice_rec})
 ##
 ## Calculate lattice at time spedified with 'time' field of @var{lattice_rec}.
-## If 'measured_tune' field is given, 'qfk' and 'qdk' is evaluate with 'calcLatticeForTune' to match with measured_tune.
+## If 'measured_tune' field is given, 'qfk' and 'qdk' is evaluate with 'lattice_with_tune' to match with measured_tune.
 ## 
 ## @var{lattice_rec} can have following fields
 ##
@@ -11,7 +11,7 @@
 ## time [msec] in Magnet pattern. brho is obtained from function 'BMPattern' at 'time'
 ##
 ## @item measured_tune
-## Optional. if this field exists, qfk and qdk is evaluated by function 'calcLatticeForTune'
+## Optional. if this field exists, qfk and qdk is evaluated by function 'lattice_with_tune'
 ## @end table
 ## 
 ## Following fields are append into @var{lattice_rec} as a result.
@@ -21,13 +21,13 @@
 ## @item tune
 ## @item brho
 ## @item qfk
+## [1/(m*m)]
 ## @item qdk
 ##
 ## @end table
 ## 
-## @seealso{calcLatticeForTune}
+## @seealso{lattice_with_tune}
 ## @end deftypefn
-#shareTerm /Users/tkurita/WorkSpace/ÉVÉìÉNÉçÉgÉçÉì/2007.10 Tracking/extraction_tracking.m
 
 ##== History
 ## 2007-10-18

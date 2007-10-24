@@ -10,8 +10,11 @@
 ##
 ## @table @code
 ## @item qfk
-## [(T/m) *m]
+## [1/(m*m)]
+##
 ## @item qdk
+## [1/(m*m)]
+##
 ## @item vedge
 ## optional
 ## @end table
@@ -25,9 +28,8 @@
 ## a structure. Fields 'h' and 'v' are horizontal and vertical tune respectively.
 ## @end table
 ##
-## @seealso{lattice_definition, process_lattice}
+## @seealso{lattice_definition, process_lattice, lattice_with_tune, lattice_with_time_tune}
 ## @end deftypefn
-#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 
 ##== History
 ## 2007-10-18

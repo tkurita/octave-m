@@ -1,10 +1,10 @@
 ## usage:array = value_for_keypath(struct or array of struct, 
-##                                 keypath [, output_as_cells]) 
+##                                 keypath [, as_cells]) 
 ##
 ##== Parameters
 ## * cellarray -- cell array which elements are structures.
 ## * keypath -- cell array of strings which are path of field of structure
-## * output_as_cells (optional) -- if true is given, cell array is output 
+## * as_cells (optional) -- if true is given, cell array is output 
 ##                                 instead of matrix
 ##
 ##== result

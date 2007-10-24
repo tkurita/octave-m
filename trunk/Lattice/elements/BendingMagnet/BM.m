@@ -2,6 +2,11 @@
 ##
 ## object of bending magnet
 
+##== History
+## 2007-10-24
+## * mat_half が間違っている。
+## * edge * BM/2 となっているが、BM/2 * edge となるべきじゃないか
+
 function strBM = BM(bmprop, theName, varargin)
   strBM = bmprop;
   strBM.name = theName;
@@ -30,9 +35,11 @@ function strBM = BM(bmprop, theName, varargin)
   strBM.k.v = 0;
   
   ##=== half
-  strBM.mat_half.h = BME_H(radius,edgeangle) * BMHmat(radius, bmangle/2, 0);
+  #strBM.mat_half.h = BME_H(radius,edgeangle) * BMHmat(radius, bmangle/2, 0);
+  strBM.mat_half.h = BMHmat(radius, bmangle/2, 0)*BME_H(radius,edgeangle);
   if (hasEfflen)
-    strBM.mat_half.h = DTmat(-dl)*strBM.mat_half.h;
+    #strBM.mat_half.h = DTmat(-dl)*strBM.mat_half.h;
+    strBM.mat_half.h = strBM.mat_half.h * DTmat(dl);
   endif
   strBM.twmat_half.h = twpMatrix(strBM.mat_half.h);
   
@@ -59,9 +66,11 @@ function strBM = BM(bmprop, theName, varargin)
   strBM.twmat.v = twpMatrix(strBM.mat.v);
   
   ##=== half
-  strBM.mat_half.v = edgematrix*DTmat(len/2);
+  #strBM.mat_half.v = edgematrix*DTmat(len/2);
+  strBM.mat_half.v = DTmat(len/2) * edgematrix;
   if (hasEfflen)
-    strBM.mat_half.v = DTmat(-dl) * strBM.mat_half.v;
+    #strBM.mat_half.v = DTmat(-dl) * strBM.mat_half.v;
+    strBM.mat_half.v = strBM.mat_half.v*DTmat(-dl);
   endif
   
   strBM.twmat_half.v = twpMatrix(strBM.mat_half.v);

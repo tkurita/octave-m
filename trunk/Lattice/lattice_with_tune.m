@@ -22,8 +22,10 @@
 ## @item qdk
 ## [1/(m*m)]
 ## @end table
+##
+## @seealso{calc_lattice, lattice_with_time_tune}
+##
 ## @end deftypefn
-#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 
 ##= History
 ## 2007-10-18

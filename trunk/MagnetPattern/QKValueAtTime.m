@@ -1,22 +1,32 @@
-## Useage : qkValue = QKValueAtTime(glPattern, blPattern, t [, "property", value, ...])
+## Usage : qkValue = QKValueAtTime(glPattern, blPattern, t [, "property", value, ...])
 ## 
-## = Parameters
+##== Parameters
 ## * glPattern -- a pattern of the Q magnet
 ## * blPattern -- a pattern of BL value of the Bending Magnet
 ## * t -- time [msec]
 ##
-## = Optional properties
+##== Optional properties
 ## * "porarity" -- if porarity is ommited, value is 1 ie. focusing Q is assumed.
 ##    * 1 : focusing Q
 ##    * -1 : defocusing Q
 ## * "qlength" -- efective length of Q magnet [m]
+##
+##== Result 
+## [1/(m*m)]
 
-## = History
-## * 2006.11.22
-##  optional arguments are given with "property"-value style.
-##  add an optional argument "qlength"
-## * 2006.08.22
-##  change qlength to 0.21 from 0.212
+##== To Do
+## 2007-10-23
+## * qlength を埋め込んでいるというのは汎用性が無い。
+## * qlength で割り算するのをやめるか・・・
+## * calc_lattice, process_lattice が 1/(m*m) を要求しているのが良くないか。
+
+##== History
+## 2006-11-22
+## * optional arguments are given with "property"-value style.
+## * add an optional argument "qlength"
+##
+## 2006-08-22
+## * change qlength to 0.21 from 0.212
 ##
 
 function qkValue = QKValueAtTime(glPattern, blPattern, t, varargin)
