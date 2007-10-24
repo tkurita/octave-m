@@ -38,7 +38,8 @@ function [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT, vararg
   ylabel("COD [mm]");
   grid on;
   visibleLabels = {"BM", "STV1", "QF", "QD", "SM"};
-  setElementsOnPlot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "first 0");
+  #setElementsOnPlot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "first 0");
+  setElementsOnPlot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
   setElementsOnPlot({"BPM3", "BPM6", "PR1","PR2"}, cod_rec_FB.lattice, "yposition", "graph 0.1");
   
   xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"\

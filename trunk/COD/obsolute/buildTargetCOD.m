@@ -1,4 +1,6 @@
 ## Usage : targetCOD = buildTargetCOD(codRecord)
+##  
+##  obsolute use cod_list_with_bpms
 ##
 ## BPM の名前を key とした COD のデータ codRecord.codAtBPM（structure）より、
 ## 位置とCODのリストに変換する。
@@ -12,7 +14,13 @@
 ## * targetCOD -- (:,1) postion of BPM
 ##                (:,2) COD given by the parameter codAtBPM
 
+##== History
+## * 2007.10.01
+## obsolute
+
 function targetCOD = buildTargetCOD(codRecord)
+  warning("buildTargetCOD is obsolete. Use cod_list_with_bpms.");
+  
   x = []; # COD
   s = []; # position
   for n = 1:length(codRecord.lattice)

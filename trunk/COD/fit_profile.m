@@ -1,5 +1,9 @@
-## Usage : mean_value = fit_profile(filepath, plot_title, horv)
-##  apply gaussian to Profile Hold Data and obtain mean value
+## Usage : [fit_center, gravity_point]
+##                  = fit_profile(filepath, plot_title, horv)
+##
+##  Apply gaussian to Profile Hold Data and obtain mean value
+##  (center of gaussian).
+##  Also calculate gravity point.
 ##
 ##= Parameters
 ##  * filepath -- path to Profile Hold data
@@ -9,7 +13,7 @@
 ##= Result 
 ##  mean value of gaussian fit
 
-function mean_value = fit_profile(filepath, plot_title, horv)
+function varargout = fit_profile(filepath, plot_title, horv)
   pr = loadProfileCVS(filepath);
   valid_limit = 3000;
   for n = 1:rows(pr.(horv))
@@ -17,7 +21,6 @@ function mean_value = fit_profile(filepath, plot_title, horv)
       pr.(horv)(n,2) = 0;
     endif
   endfor
-  
   title(plot_title);
   xlabel("Position [mm]")
   ylabel("")
@@ -29,4 +32,19 @@ function mean_value = fit_profile(filepath, plot_title, horv)
   mean_value = fit_result_pr(3);
   unsetarrow()
   vline(mean_value);
+  gp = gravity_point(pr.(horv))
+  vline(gp)
+  if (nargout > 0)
+    varargout{1} = mean_value;
+  endif
+  
+  if (nargout > 1)
+    varargout{2} = gp;
+  endif
 endfunction
+
+function gp = gravity_point(pr_data)
+  x = pr_data(:,1);
+  y = pr_data(:,2);
+  gp = sum(x.*y)/sum(y);
+end

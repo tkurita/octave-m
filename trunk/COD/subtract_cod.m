@@ -1,4 +1,4 @@
-## usage : result = subtractCOD(cod1,cod2)
+## usage : result = subtract_cod(cod1,cod2)
 ## 
 ## COD の 差分を計算する。
 ## cod1 - cod2
@@ -6,7 +6,11 @@
 ##= Parameters
 ## cod.BPM_name = positon [mm]
 
-function result = subtractCOD(cod1,cod2)
+##== History
+## * 2007.10.02
+## rename from subtractCOD
+
+function result = subtract_cod(cod1,cod2)
   
   for [val, key] = cod2
     cod1.(key) -= val;

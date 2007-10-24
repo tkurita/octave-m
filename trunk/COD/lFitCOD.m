@@ -1,14 +1,15 @@
-## usage : codRecord = lFitCOD(codRecord [,fixedKikerInfo]);
+## Usage : cod_rec = lFitCOD(cod_rec);
 ##
 ## using linear least square method
 ##
 ##= Parameters
-## * codRecord (structure) 
+## * cod_rec (structure) 
 ##    .steererNames
 ##    .horv
 ##    .lattice
 ##    .brho
 ##    .tune
+##    .codAtBPM
 ##    [.ignorePerror] -- 運動量誤差を fitting parameter に含めるかどうか。省略時 false
 ##
 ##= Results
@@ -22,13 +23,13 @@
 ##  fitCOD(using non-linear least square method) と同じ結果が得られることを確認
 ##
 
-function codRecord = lFitCOD(codRecord, varargin);
-  steererNames = codRecord.steererNames;
+function cod_rec = lFitCOD(cod_rec, varargin);
+  steererNames = cod_rec.steererNames;
   
-  allElements = codRecord.lattice;
-  brho = codRecord.brho;
-  tune = codRecord.tune;
-  horv = codRecord.horv;
+  allElements = cod_rec.lattice;
+  brho = cod_rec.brho;
+  tune = cod_rec.tune;
+  horv = cod_rec.horv;
   
   ##== pick up steerer parameters
   stBetaList = []; # beta function at center position of steerers
@@ -37,7 +38,7 @@ function codRecord = lFitCOD(codRecord, varargin);
   for m = 1:length(allElements)
     currentElement = allElements{m};
     for n = 1 : length(steererNames)
-      if (strcmp(allElements{m}.name, steererNames{n}))
+      if (strcmp(currentElement.name, steererNames{n}))
         stPhaseList = [stPhaseList, currentElement.centerPhase.(horv)];
         stBetaList = [stBetaList, currentElement.centerBeta.(horv)];
         stNameList = {stNameList{:}, steererNames{n}};
@@ -56,11 +57,11 @@ function codRecord = lFitCOD(codRecord, varargin);
   for n = 1:length(allElements)
     currentElement = allElements{n};
     elementName = currentElement.name;
-    if (isfield(codRecord.codAtBPM, elementName))
+    if (isfield(cod_rec.codAtBPM, elementName))
       refPhaseList = [refPhaseList, currentElement.centerPhase.(horv)];
       refBetaList = [refBetaList, currentElement.centerBeta.(horv)];
       refDispersionList = [refDispersionList, currentElement.centerDispersion];
-      refCODList = [refCODList; codRecord.codAtBPM.(elementName)];
+      refCODList = [refCODList; cod_rec.codAtBPM.(elementName)];
       refNameList = {refNameList{:}, elementName};
     endif
   endfor
@@ -69,20 +70,20 @@ function codRecord = lFitCOD(codRecord, varargin);
   X = repmat(sqrt(refBetaList'),1,nst).* repmat(sqrt(stBetaList), nref, 1);
   cosX = cos(pi*tune.(horv) - abs(repmat(refPhaseList',1,nst) - repmat(stPhaseList,nref,1)));
   
-  switch (codRecord.horv)
+  switch (cod_rec.horv)
     case "h"
       X = [X.*cosX/(2*sin(pi*tune.(horv))), refDispersionList'];
     case "v"
       X = X.*cosX/(2*sin(pi*tune.(horv)));
     otherwise
-      error("codRecord.horv must be \"h\" or \"v\"");
+      error("cod_rec.horv must be \"h\" or \"v\"");
   endswitch
   
   refCODList = refCODList/1000; # convert unit from [m] to [mm]
   
-  if isfield(codRecord, "weights")
+  if isfield(cod_rec, "weights")
     dy = [];
-    weights = codRecord.weights;
+    weights = cod_rec.weights;
     for theName = refNameList
       if (isfield(weights, theName{1}))
         dy = [dy; weights.(theName{1})];
@@ -106,21 +107,21 @@ function codRecord = lFitCOD(codRecord, varargin);
       if (strcmp(kickerName, stNameList{j}))
         kickAngleList = [kickAngleList; kickAngleResult(j)];
         steererValues = [steererValues; 
-        calcKickerValue(kickers.(kickerName), kickAngleResult(j), codRecord.brho)];
+        calcKickerValue(kickers.(kickerName), kickAngleResult(j), cod_rec.brho)];
       endif
     endfor
   endfor
-  codRecord.kickAngles = kickAngleList;
-  codRecord.steererValues = steererValues;
+  cod_rec.kickAngles = kickAngleList;
+  cod_rec.steererValues = steererValues;
   
   ##== setupt mommentum error
-  switch (codRecord.horv)
+  switch (cod_rec.horv)
     case "h"
-      codRecord.pError = kickAngleResult(end);
+      cod_rec.pError = kickAngleResult(end);
     case "v"
-      codRecord.pError = 0;
+      cod_rec.pError = 0;
     otherwise
-      error("codRecord.horv must be \"h\" or \"v\"");
+      error("cod_rec.horv must be \"h\" or \"v\"");
   endswitch
   
 endfunction

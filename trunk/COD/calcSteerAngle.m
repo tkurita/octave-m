@@ -1,7 +1,7 @@
-## Usage : kickAngle = calcSteerAngle(targetElement,iorB,brho)
+## Usage : kickAngle = calcSteerAngle(targetElement, iorB, brho)
 ##
 ## = Parameters
-## * targetElement : the element to calculate kick angle
+## * targetElement : a element structure to calculate kick angle
 ## * iorB : current of magnet or magnetic filed. depend on targetElement
 ## * brho
 

@@ -30,6 +30,8 @@
 ## * calcCODWithPerror と同じ結果を与えることを確認
 
 function codList = calcCODWithPerror(codRecord, varargin)
+  warning("calcCODWithPerror is obsolete. Use cod_list_with_kickers");
+  
   codMatStruct = buildCODMatrix(codRecord, "full");
   
   if (length(varargin) == 0) 

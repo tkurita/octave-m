@@ -1,16 +1,23 @@
-## usage : setBPandSHonXaxis(allElements,position)
+## Usage : setBPandSHonXaxis(allElements, position, [units])
 ##
-## SH と BP で始まる名前の element の名前をx軸上に表示されるようにする。
+## STH と BPM で始まる名前の element の名前をx軸上に表示されるようにする。
 ## 
-##= Parameters
+##== Parameters
 ## * position(1) -- BPM の位置
 ## * position(2) -- STH, BMPe の位置
 ## * position(3) -- 垂直ステアラの位置
+## * units -- optional, "data"(default) , "normalized" or "screnn"
+##
 
-function setBPandSHonXaxis(allElements, position)
-  __gnuplot_raw__("unset label\n");
+function setBPandSHonXaxis(allElements, position, varargin)
+  text();
   bmpes = {"BMPe1","BMPe2"};
   verticalSteerers = {"STV1","QD2","QD3","SM"};
+  units = "data";
+  if (length(varargin) > 0)
+    units = varargin{1};
+  endif
+  
   for n = 1:length(allElements)
     currentName = allElements{n}.name;
     
@@ -23,7 +30,7 @@ function setBPandSHonXaxis(allElements, position)
       #      'Units','data',
       #      'Rotation',90,
       #      'String',allElements{n}.name);
-      plottext(allElements{n}, position(1));
+      plottext(allElements{n}, position(1), units);
       continue;
     endif
     
@@ -46,7 +53,7 @@ function setBPandSHonXaxis(allElements, position)
       #eval(sprintf("__gnuplot_set__ label \"%s\" at %f,%f rotate by 90 font \"Helvetica,10\""...
       #      eval(sprintf("__gnuplot_set__ label \"%s\" at %f,%f rotate by 90 "...
       #        , currentName, allElements{n}.centerPosition,position(2)));
-      plottext(allElements{n}, position(2));
+      plottext(allElements{n}, position(2), units);
       continue;
     endif
     
@@ -60,7 +67,7 @@ function setBPandSHonXaxis(allElements, position)
       endif
     endfor
     if (length(findAns) && findAns(1)==1)
-      plottext(allElements{n}, position(3));
+      plottext(allElements{n}, position(3), units);
       continue;
     endif
   endfor
@@ -69,9 +76,9 @@ function setBPandSHonXaxis(allElements, position)
   endif  
 endfunction
 
-function plottext(theElement, position)
+function plottext(theElement, position, units)
   text("Position", [theElement.centerPosition, position]...
-    , "Units", "data"...
+    , "Units", units...
     , "Rotation", 90 ...
     , "String",theElement.name);
 endfunction  

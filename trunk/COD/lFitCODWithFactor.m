@@ -1,54 +1,74 @@
-## usage : codRecord = lFitCODWithFactor(codRecord);
+## usage : cod_rec = lFitCODWithFactor(cod_rec, ["useSteererValues"]);
 ##
 ## fit COD with factor and momemtum error.
 ##
 ##== Parameters
-## * codRecord (structure) 
+## * cod_rec (structure) 
 ##   - .steererNames
 ##   - .horv
 ##   - .lattice
 ##   - .tune
-##   - .kickAngles
-##
+##   - .kickAngles or .steererValues
+##   
 ##== Results
 ## following fields are appended.
 ##   - .pError
 ##   - .kickFactor
 
 ##== History
-## 2006.07.17
-##  fitCOD(using non-linear least square method) と同じ結果が得られることを確認
+## 
 ##
 
-function codRecord = lFitCODWithFactor(codRecord, varargin);
-  if (isfield(codRecord, "kickFactor"))
-    codRecord = rmfield(codRecord, "kickFactor");
+function cod_rec = lFitCODWithFactor(cod_rec, varargin);
+  if (isfield(cod_rec, "kickFactor"))
+    cod_rec = rmfield(cod_rec, "kickFactor");
   endif
-
-  codMatStruct = buildCODMatrix(codRecord);
-  codList = applyKickerAngle(codMatStruct, codRecord);
+  
+  if (length(varargin) > 0)
+    for n = 1:length(varargin)
+      if (strcmp(varargin{n}, "useSteererValues"))
+        cod_rec = steerer_valus_to_kick_angles(cod_rec);
+      end
+    end
+  end
+  
+  codMatStruct = buildCODMatrix(cod_rec);
+  codList = applyKickerAngle(codMatStruct, cod_rec);
  
-  switch (codRecord.horv)
+  switch (cod_rec.horv)
     case "h"
       X = [codList, codMatStruct.dispersion];
     case "v"
       X = codList;
     otherwise
-      error("codRecord.horv must be \"h\" or \"v\"");
+      error("cod_rec.horv must be \"h\" or \"v\"");
   endswitch
   
   refCODList = codMatStruct.refCOD/1000; # convert unit from [mm] to [m]
   kickFactorResult = X \ refCODList;
   
-  switch (codRecord.horv)
+  switch (cod_rec.horv)
     case "h"
-      codRecord.kickFactor = kickFactorResult(1);
-      codRecord.pError = kickFactorResult(end);
+      cod_rec.kickFactor = kickFactorResult(1);
+      cod_rec.pError = kickFactorResult(end);
     case "v"
-      codRecord.kickFactor = kickFactorResult;
-      codRecord.pError = 0;
+      cod_rec.kickFactor = kickFactorResult;
+      cod_rec.pError = 0;
     otherwise
-      error("codRecord.horv must be \"h\" or \"v\"");
+      error("cod_rec.horv must be \"h\" or \"v\"");
   endswitch
   
 endfunction
+
+function cod_rec = steerer_valus_to_kick_angles(cod_rec)
+  cod_rec.kickAngles = [];
+  for n = 1:length(cod_rec.steererNames)
+    target_element = element_with_name(cod_rec.lattice, cod_rec.steererNames{n});
+    cod_rec.kickAngles(end+1) = ...
+    calcSteerAngle(target_element, cod_rec.steererValues(n), cod_rec.brho);
+  end
+end
+
+
+
+  
