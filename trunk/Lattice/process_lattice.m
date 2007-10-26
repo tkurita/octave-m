@@ -1,21 +1,32 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{lattice_rec} =} process_lattice(@var{lattice_rec} or @var{all_elements}, [@var{full_circle_mat}])
+## @deftypefn {Function File} {@var{lattice_rec} =} 
+##    process_lattice(@var{lattice_rec}, [@var{full_circle_mat}])
 ##
-## @deftypefnx {Function File} {[@var{beta_function}, @var{dispersion}, @var{total_phase}, @var{all_elements} =} process_lattice(@var{lattice_rec} or @var{all_elements}, [@var{full_circle_mat}])
+## @deftypefnx {Function File} {[@var{beta_function}, @var{dispersion},@var{total_phase}, @var{all_elements}] =} 
+##                process_lattice(@var{lattice_rec}, [@var{full_circle_mat}])
 ## 
-## @var{all_elements} is a cell array consisted of element structures.
-##
-## Input @var{lattice_rec} must have following fields.
-##
-## @table @code
-## @item lattice
-## a cell array. same to all_elements
-## @end table
+## The argument @var{lattice_rec} is a cell array consisted of element structures or a structure which have field 'lattice' of a cell array.
 ## 
 ## If @var{full_circle_mat} is ommited, it will be calculated internally with function 'calcFullCircle'.
 ##
+## Follwing fields are append each element structure in @var{all_elements}.
+##
+## @table @code
+## @item entranceTwpar.h and .v
+## @item centerTwpar.h and .v
+## @item exitTwpar.h and .v
+## Twiss parameter at the exit of the element.
+## @item exitDispersion
+## @item entranceBeta.h and .v
+## @item centerBeta.h and .v
+## @item exitBeta.h and .v
+## @item entrancePosition
+## @item centerPosition
+## @item exitPosition
+## item descriptions
+## @end table
 ## 
-## @seealso{calcFullCircle}
+## @seealso{calcFullCircle, calc_lattice}
 ## @end deftypefn
 
 ## usage: 
@@ -62,6 +73,10 @@
 
 
 ##== History
+## 2007-10-25
+## * add entranceTwpar field
+## * rename twpar field into exitTwpar
+## 
 ## 2007-10-18
 ## * accept lattice_rec as an argument.
 ## * renamed from calcLattice
@@ -119,10 +134,13 @@ function varargout = process_lattice(varargin)
     ## (1) beta function
     ## (2) alpha
     ## (3) gamma
-    ##=== full, at exit
-    theElement.twpar.h = theElement.twmat.h*pretwp.h;
-    theElement.twpar.v = theElement.twmat.v*pretwp.v;
     
+    ##=== at entrance
+    theElement.entranceTwpar = pretwp;
+    ##=== full, at exit
+    theElement.exitTwpar.h = theElement.twmat.h*pretwp.h;
+    theElement.exitTwpar.v = theElement.twmat.v*pretwp.v;
+    theElement.twpar = theElement.exitTwpar; # obsolete
     ##=== half, at center
     theElement.centerTwpar.h = theElement.twmat_half.h*pretwp.h;
     theElement.centerTwpar.v = theElement.twmat_half.v*pretwp.v;

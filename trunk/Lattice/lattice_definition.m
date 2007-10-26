@@ -9,10 +9,15 @@
 ## @seealso{calc_lattice, lattice_with_tune, lattice_with_time_tune}
 ## @end deftypefn
 
+##== History
+## 2007-10-25
+## * claer laoded function when setiing of function name.
+
 function varargout = lattice_definition(varargin)
   persistent func_name;
   if (length(varargin) > 0)
     func_name = varargin{1};
+    eval(["clear ", func_name]);
   else
     varargout{1} = str2func(func_name);
   endif
