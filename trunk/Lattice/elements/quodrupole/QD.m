@@ -12,10 +12,10 @@ function strQD = QD(qk, ql, theName, varargin)
   strQD.k = qk;
   #strQD
   ##== horizontal
-  strQD = buildElementStruct(strQD, @QDmat, "h");
+  strQD = setup_element(strQD, @QDmat, "h");
   
   ##== vertical
-  strQD = buildElementStruct(strQD, @QFmat, "v");  
+  strQD = setup_element(strQD, @QFmat, "v");  
   
   if (length(varargin) != 0)
     strQD.duct = ductAperture(varargin{1});

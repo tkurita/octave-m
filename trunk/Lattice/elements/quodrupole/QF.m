@@ -11,10 +11,10 @@ function strQ = QF(qk, ql, theName, varargin)
   strQ.k = qk;
   
   ##== horizontal
-  strQ = buildElementStruct(strQ, @QFmat, "h");
+  strQ = setup_element(strQ, @QFmat, "h");
   
   ##== vertical
-  strQ = buildElementStruct(strQ, @QDmat, "v");  
+  strQ = setup_element(strQ, @QDmat, "v");  
   
   if (length(varargin) != 0)
     strQ.duct = ductAperture(varargin{1});

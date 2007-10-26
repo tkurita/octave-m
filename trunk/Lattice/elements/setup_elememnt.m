@@ -1,22 +1,37 @@
-## -- usage : inStr = buildElementStruct(inStr, matFunc, horv)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{new_element_rec} =} setup_element(@var{element_rec}, @var{mat_func}, @var{horv})
+## 
+## Append a matrix and twiss paramerter's matrix into @var{element_rec}. The matrix is obtaiened by a function handle @var{mat_func}.
+##
+## @var{horv} indicate horizontal "h" or vertical "v".
+##
+## @example
+## strQ = setup_element(strQ, @QFmat, "h");
+## @end example
+##
+## @end deftypefn
 
-function inStr = buildElementStruct(inStr, matFunc, horv)
-  [len, hasEfflen] = fieldLength(inStr);
+##== History
+## 2007-10-26
+## * renamed from buildElememntStruct
+
+function element_rec = setup_element(element_rec, mat_func, horv)
+  [len, hasEfflen] = fieldLength(element_rec);
   ## full
-  inStr.mat.(horv) = matFunc(inStr);
+  element_rec.mat.(horv) = mat_func(element_rec);
   
   if (hasEfflen)
-    dl = (inStr.efflen - inStr.len)/2;
+    dl = (element_rec.efflen - element_rec.len)/2;
     dlMat = DTmat(-dl);
-    inStr.mat.(horv) =  dlMat * inStr.mat.(horv) * dlMat;
+    element_rec.mat.(horv) =  dlMat * element_rec.mat.(horv) * dlMat;
   endif
   
-  inStr.twmat.(horv) = twpMatrix(inStr.mat.(horv));
+  element_rec.twmat.(horv) = twpMatrix(element_rec.mat.(horv));
   
   ## half
-  inStr.mat_half.(horv) = matFunc(setfield(inStr, "efflen", len/2));
+  element_rec.mat_half.(horv) = mat_func(setfield(element_rec, "efflen", len/2));
   if (hasEfflen)
-    inStr.mat_half.(horv) = dlMat * inStr.mat_half.(horv);
+    element_rec.mat_half.(horv) = dlMat * element_rec.mat_half.(horv);
   endif
-  inStr.twmat_half.(horv) = twpMatrix(inStr.mat_half.(horv));
+  element_rec.twmat_half.(horv) = twpMatrix(element_rec.mat_half.(horv));
 endfunction

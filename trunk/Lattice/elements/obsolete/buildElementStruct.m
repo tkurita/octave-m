@@ -1,6 +1,8 @@
 ## -- usage : inStr = buildElementStruct(inStr, matFunc, horv)
+## obsolete. Use setup_elememnt
 
 function inStr = buildElementStruct(inStr, matFunc, horv)
+  warning("buildElementStruct is obsolete. Use setup_element");
   [len, hasEfflen] = fieldLength(inStr);
   ## full
   inStr.mat.(horv) = matFunc(inStr);
