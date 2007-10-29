@@ -1,6 +1,9 @@
-## Usage : strBM = BM(bmprop, theName, varargin)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{bm_rec} =} BM(@var{bmprop}, @var{name}, [@var{apartue}, "pError", @var{p_error}])
 ##
-## object of bending magnet
+## Make a bending magnet object
+##
+## @end deftypefn
 
 ##== History
 ## 2007-10-24
@@ -8,6 +11,19 @@
 ## * edge * BM/2 となっているが、BM/2 * edge となるべきじゃないか
 
 function strBM = BM(bmprop, theName, varargin)
+  p_error = 0;
+  n = 1;
+  while (n <= length(varargin))
+    if (ismatrix(varargin{n}))
+      ##== apertue
+      strBM.duct = ductAperture(varargin{1});
+    elseif (strcmp(varargin{n}, "pError"))
+      n++;
+      p_error = varargin{n};
+    endif
+    n++;
+  endwhile
+  
   strBM = bmprop;
   strBM.name = theName;
   strBM.len = strBM.radius*strBM.bmangle;
@@ -23,9 +39,9 @@ function strBM = BM(bmprop, theName, varargin)
   else
     radius = strBM.radius;
   endif
-  strBM.edgeK.h = tan(edgeangle)/radius;
+  strBM.edgeK.h = (tan(edgeangle)/radius)/(1 + p_error);
   
-  strBM.mat.h = BMHmat(radius, bmangle, edgeangle);
+  strBM.mat.h = BMHmat(radius, bmangle, edgeangle, p_error);
   if (hasEfflen)
     strBM.mat.h = DTmat(-dl) * strBM.mat.h * DTmat(-dl);
   endif
@@ -36,19 +52,23 @@ function strBM = BM(bmprop, theName, varargin)
   
   ##=== half
   #strBM.mat_half.h = BME_H(radius,edgeangle) * BMHmat(radius, bmangle/2, 0);
-  strBM.mat_half.h = BMHmat(radius, bmangle/2, 0)*BME_H(radius,edgeangle);
+  edgemat_h = BME_H(radius,edgeangle,p_error);
+  mathalf_h = BMHmat(radius, bmangle/2, 0);
+  strBM.mat_half.h = mathalf_h * edgemat_h;
+  strBM.mat_rest.h = edgemat_h * mathalf_h;
   if (hasEfflen)
     #strBM.mat_half.h = DTmat(-dl)*strBM.mat_half.h;
-    strBM.mat_half.h = strBM.mat_half.h * DTmat(dl);
+    strBM.mat_half.h = strBM.mat_half.h * DTmat(-dl);
+    strBM.mat_rest.h = DTmat(-dl) * strBM.mat_rest.h;
   endif
   strBM.twmat_half.h = twpMatrix(strBM.mat_half.h);
   
   ##== vertical
   ##=== full
   if (isfield(strBM, "vedge"))
-    edgematrix = BME_V2(radius,edgeangle,strBM.vedge);
+    edgematrix = BME_V2(radius, edgeangle, strBM.vedge);
   else
-    edgematrix = BME_V(radius,edgeangle);
+    edgematrix = BME_V(radius, edgeangle, p_error);
   endif
   strBM.edgeK.v = edgematrix(2,1);
   
@@ -68,17 +88,14 @@ function strBM = BM(bmprop, theName, varargin)
   ##=== half
   #strBM.mat_half.v = edgematrix*DTmat(len/2);
   strBM.mat_half.v = DTmat(len/2) * edgematrix;
+  strBM.mat_rest.v = edgematrix * DTmat(len/2);
   if (hasEfflen)
     #strBM.mat_half.v = DTmat(-dl) * strBM.mat_half.v;
     strBM.mat_half.v = strBM.mat_half.v*DTmat(-dl);
+    strBM.mat_rest.v = strBM.mat_rest.v*DTmat(-dl);
   endif
   
   strBM.twmat_half.v = twpMatrix(strBM.mat_half.v);
-  
-  ##== apertue
-  if (length(varargin) != 0)
-    strBM.duct = ductAperture(varargin{1});
-  endif
   
   strBM.kind = "BM";
 endfunction
