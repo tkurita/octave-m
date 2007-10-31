@@ -1,1 +1,1 @@
-mark_as_command reveal
+mark_as_command("reveal")

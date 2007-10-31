@@ -1,4 +1,3 @@
-#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 ## Usage : [particles, last_particles, init_patricles] 
 ##                    = run_tracking(track_rec, particle_rec, n_loop)
 ## 
@@ -13,12 +12,6 @@
 ## * track_recs
 ##      .lattice
 ##      .brho
-##      .isx1 -- sx1 の電流値
-##      .isx2 -- sx2 の電流値
-##      .isx3
-##      .em.x -- x emittance 初期値 [m * rad]
-##      .em.y -- y emittance 初期値 [m * rad]
-##      .BMPeValues -- [BMPe1, BMPe2] の電流値
 ## * nParticles -- 粒子の数
 ## * n_loop -- 粒子をまわす回数
 
@@ -33,8 +26,10 @@ function varargout = run_tracking(track_rec, particle_rec, n_loop)
   ##== setup sextupole magnet
   if (isfield(track_rec, "sextupoles"))
     for n = 1:length(track_rec.sextupoles)
-      specials{end+1} = setup_sx(track_rec.sextupoles{n}, track_rec.brho);
-      #specials{end+1} = setup_sx(track_rec.sextupoles{n}, track_rec.brho, @sx_thin_kick_nocross);
+      sx_rec = track_rec.sextupoles{n};
+      an_elem = element_with_name(track_rec.lattice, sx_rec.name);
+      sx_rec = join_struct(an_elem, sx_rec);
+      specials{end+1} = setup_sx(sx_rec, track_rec.brho);
     endfor
     track_rec.sextupoles = specials;
   endif
@@ -88,7 +83,7 @@ function varargout = run_tracking(track_rec, particle_rec, n_loop)
   endif
   
   ##== start tracking
-  ini_particles = generate_particles(track_rec.lattice{end}, particle_rec);
+  ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
   
   particles = ini_particles;
   for n = 1:n_loop

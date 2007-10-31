@@ -65,11 +65,16 @@ function strBM = BM(bmprop, theName, varargin)
   
   ##== vertical
   ##=== full
+  options = {"pError", p_error};  
   if (isfield(strBM, "vedge"))
-    edgematrix = BME_V2(radius, edgeangle, strBM.vedge);
+    #edgematrix = BME_V2(radius, edgeangle, strBM.vedge);
+    options{end+1} = "vedge";
+    options{end+1} = strBM.vedge;
   else
-    edgematrix = BME_V(radius, edgeangle, p_error);
+    #edgematrix = BME_V(radius, edgeangle, p_error);
   endif
+  
+  edgematrix = BME_V(radius, edgeangle, options{:});
   strBM.edgeK.v = edgematrix(2,1);
   
   if (hasEfflen)

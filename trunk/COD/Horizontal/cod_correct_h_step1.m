@@ -27,12 +27,12 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM, varargin)
   cod_rec.horv = "h";
   cod_rec.targetCOD = cod_list_with_bpms(cod_rec);
   cod_rec = lFitCOD(cod_rec);
-  cod_rec.correctCOD = calcCODWithPerror(cod_rec);
+  cod_rec.correctCOD = cod_list_with_kickers(cod_rec);
   [positions, units] = get_properties(varargin\
     , {"positions", "units"}, {[0.5,-1,-2.5], "data"});
   cod_rec_BM = setfields(cod_rec, "steererNames", bm_names);
   cod_rec_BM = lFitCOD(cod_rec_BM);
-  cod_rec_BM.correctCOD = calcCODWithPerror(cod_rec_BM);
+  cod_rec_BM.correctCOD = cod_list_with_kickers(cod_rec_BM);
   cod_rec.prediction = cod_rec_BM;
   cod_rec.expectedCOD = [cod_rec_BM.correctCOD(:,1)\
     , cod_rec_BM.correctCOD(:,2) - cod_rec.correctCOD(:,2)];

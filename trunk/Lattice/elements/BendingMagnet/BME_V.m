@@ -20,7 +20,7 @@ function matrix = BME_V(radius, edgeangle, varargin)
 #  if (length(varargin) > 0)
 #    p_error = varargin{1};
 #  endif
-  [p_error, b] = get_properties(varargin, {"pError", "vedge"}, {0, 0})
+  [p_error, b] = get_properties(varargin, {"pError", "vedge"}, {0, 0});
   edge_k = (-tan(edgeangle)/radius + b/cos(edgeangle)/6/(radius^2))/(1+p_error);
   
   matrix = [1, 0, 0;

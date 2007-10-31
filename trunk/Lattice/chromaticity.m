@@ -1,11 +1,28 @@
-## usage : chrom = chromaticity(allElements)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{chrom_rec} =} chromaticity(@var{lattice_rec})
 ##
-##= Result
-## chrom have following fields.
-##    .v : vertical chromaticity
-##    .h : horizontal chromaticity
+## The output @var{chrom_rec} have following fields.
+## @table @code
+## @item h
+## horizontal chromaticity
+## @item v
+## vertical chromaticity
+## @end table
+##
+## @end deftypefn
 
-function chrom = chromaticity(allElements)
+##== History
+## 2007-10-26
+## * help with texinfo format
+## * accept lattice_rec structure
+
+function chrom = chromaticity(lattice_rec)
+  if (isstruct(lattice_rec))
+    allElements = lattice_rec.lattice;
+  else
+    allElements = lattice_rec;
+  endif
+    
 #  kList.h = [];
 #  kList.v = [];
 #  lengthList = [];

@@ -91,6 +91,8 @@
 ##   and 'SwitzerlandLight' for Corel. It can also be 'Times-Roman'.
 ##   @var{size} is given in points. @var{fontname} is ignored for the
 ##   fig device.
+## @item -LW@var{width}
+##   @var{width} set linewidth.
 ## @end table
 ##
 ## The filename and options can be given in any order.
@@ -137,7 +139,8 @@ function print (varargin)
   name = "";
   devopt = "";
   printer = "";
-
+  linewidth = "";
+  
   for i = 1:nargin
     arg = varargin{i};
     if (ischar (arg))
@@ -153,6 +156,8 @@ function print (varargin)
 	orientation = "portrait";
       elseif (strcmp (arg, "-landscape"))
 	orientation = "landscape";
+      elseif (length (arg) > 3 && arg(1:3) == "-LW")
+        linewidth = arg(4:length(arg));
       elseif (length (arg) > 2 && arg(1:2) == "-d")
 	devopt = arg(3:length(arg));
       elseif (length (arg) > 2 && arg(1:2) == "-P")
@@ -323,6 +328,10 @@ function print (varargin)
       if ((! isempty (font)) || (! isempty(fontsize)) )
 	options = strcat (options, " font \"", font,",",fontsize,"\"");
       endif
+      if (! isempty(linewidth))
+        options = strcat (options, " linewidth \"", linewidth, "\"");
+      endif
+        
       __gnuplot_raw__ ("set terminal push;\n");
       __gnuplot_raw__ (sprintf ("set terminal pdf %s;\n", options));
 

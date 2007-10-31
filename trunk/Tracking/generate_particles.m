@@ -1,36 +1,62 @@
-## usage result = generate_particles(an_elem, particle_rec)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{particles} =} generate_particles(@var{particle_rec}, @var{element_rec} [,@var{position}])
 ##
-##== Parameters
-## * an_elem : 出口の beta, alpha が使われる
-## * particle_rec
-##    .em  : a structure of emittance 
-##      .x : 横方向の emittance. 単位は? [rad * m]?
-##      .y : 縦方向の emittance
-##    .num : 粒子の数
-##    .filled
-##    .pError : delP/P
+## Generate a matrix of particles given by the emmintance, momentum error and the number of particles which is specified with @var{particle_rec}.
+## 
+## The result of matrix is
+## [x(n)  ;
+##  x'(n) ;
+##  delP/P(n);
+##  y(n)  ;
+##  y'(n) ;
+##  delP/P(n)]
 ##
-##== Result
-## [x  ;
-##  x' ;
-##  delP/P;
-##  y  ;
-##  y' ;
-##  delP/P]
+## @var{particle_rec} can have following fields.
+##
+## @table @code
+## @item em.x
+## Horizontal emittance [rad *m]
+##
+## @item em.y
+## Vertical emittance [rad * m]
+##
+## @item num
+## Number of particles.
+## 
+## @item filled
+## @item pError
+## momentum error. delta P/P
+## @end table
+## 
+## The eclipse of the generated particles are determined by the twiss parameters at @var{position} of @var{element_rec}. @var{position} should be "entrance", "center" or "exit". If @var{position} is omitted, "exit" is a default value.
+## 
+##
+## @end deftypefn
 
 ##== History
 ## 2007-10-03
 ## * add delP/P in result
 ## * derived from makeParticles
 
-function result = generate_particles(an_elem, particle_rec)
+#function result = generate_particles(an_elem, particle_rec)
+function result = generate_particles(varargin)
+  particle_rec = varargin{1};
+  an_elem = varargin{2};
+  if (length(varargin) > 2)
+    pos_in_elem = varargin{3};
+  else
+    pos_in_elem = "exit";
+  endif
+  
   n = particle_rec.num;
   emx = particle_rec.em.x;
   emy = particle_rec.em.y;
   
   randPhix = rand(1,n)*2*pi;
   randPhiy = rand(1,n)*2*pi;
-  beta_fun = an_elem.exitBeta;
+  twpar = an_elem.([pos_in_elem, "Twpar"]);
+  beta_fun.h = twpar.h(1);
+  beta_fun.v = twpar.v(1);
   alpha.h = an_elem.twpar.h(2);
   alpha.v = an_elem.twpar.v(2);
   if (isfield(particle_rec, "filled") && particle_rec.filled)
