@@ -118,6 +118,7 @@ function print (varargin)
   name = "";
   devopt = "";
   printer = "";
+  linewidth = "";
   debug = false;
   debug_file = "octave-print-commands.log";
 
@@ -141,6 +142,8 @@ function print (varargin)
 	if (length (arg) > 7)
 	  debug_file = arg(8:end);
 	endif
+      elseif (length (arg) > 3 && arg(1:3) == "-LW")
+        linewidth = arg(4:length(arg));
       elseif (length (arg) > 2 && arg(1:2) == "-d")
 	devopt = arg(3:end);
       elseif (length (arg) > 2 && arg(1:2) == "-P")
@@ -200,7 +203,7 @@ function print (varargin)
   dev_list = {"aifm", "corel", "fig", "png", "pbm", "dxf", "mf", ...
 	      "hpgl", "ps", "ps2", "psc", "psc2", "eps", "eps2", ...
 	      "epsc", "epsc2", "emf", "pstex", "pslatex", ...
-	      "epslatex", "epslatexstandalone"};
+	      "epslatex", "epslatexstandalone", "pdf"};
   convertname = "";
   [idx, errmsg] = cellidx (dev_list, dev);
   if (! idx)
@@ -314,6 +317,28 @@ function print (varargin)
     endif
 
     new_terminal = strcat ("emf ", options);
+  elseif (strcmp (dev, "pdf"))
+
+    if (use_color >= 0)
+      options = "color";
+    else
+      options = "mono";
+    endif
+    options = strcat (options, " enhanced");
+
+    if (force_solid > 0)
+       options = strcat (options, " solid");
+    elseif (force_solid < 0)
+      options = strcat (options, " dashed");
+    endif
+    if ((! isempty (font)) || (! isempty(fontsize)) )
+      options = strcat (options, " font \"", font,",",fontsize,"\"");
+    endif
+    if (! isempty(linewidth))
+      options = strcat (options, " linewidth \"", linewidth, "\"");
+    endif
+      
+    new_terminal = strcat ("pdf ", options);
 
   elseif (strcmp (dev, "png") || strcmp (dev, "pbm"))
     ## Portable network graphics, PBMplus
