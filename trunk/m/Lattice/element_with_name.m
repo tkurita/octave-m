@@ -18,13 +18,16 @@
 ## result is a cell array of elements
 
 ##== History
+## 2007-11-01
+## * If nargout > 1, indexes of elements are returned.
+##
 ## 2007-10-11
 ## * accept names
 ##
 ## 2007-10-02
 ## * accept lat_rec
 
-function output = element_with_name(all_elements, names)
+function varargout = element_with_name(all_elements, names)
   if (isstruct(all_elements))
     all_elements = all_elements.lattice;
   endif
@@ -36,11 +39,13 @@ function output = element_with_name(all_elements, names)
   endif
   
   output = {};
+  ind_elem = [];
   for k = 1:length(names)
     a_name = names{k};
     for n = 1:length(all_elements)
       if (strcmp (all_elements{n}.name, a_name))
         output{end+1} = all_elements{n};
+        ind_elem(end+1) = n;
         break;
       endif
     endfor
@@ -48,8 +53,12 @@ function output = element_with_name(all_elements, names)
   
   if (!cell_out)
     output = output{1};
+    ind_elem = ind_elem(1);
   endif
-  
+  varargout{1} = output;
+  if (nargout > 1)
+    varargout{2} = ind_elem;
+  endif
 endfunction
 
 %!test
