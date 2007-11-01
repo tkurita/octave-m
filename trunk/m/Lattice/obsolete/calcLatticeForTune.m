@@ -21,6 +21,7 @@
 ## * vedge の値を 0にした。
 
 function targetRec = calcLatticeForTune(targetRec)
+  warning("calcLatticeForTune is obsolete. Use lattice_with_tune");
   arguments = {targetRec.measured_tune.h, targetRec.measured_tune.v};
   if (isfield(targetRec, "initial_qfk"))
     arguments = {arguments{:}, targetRec.initial_qfk};
