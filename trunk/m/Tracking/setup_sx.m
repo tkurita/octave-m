@@ -61,5 +61,5 @@ function sx_rec = setup_sx(sx_rec, brho, varargin)
   a_mat = sx_rec.mat_half;
   sx_rec.premat = [a_mat.h, zeros(3); zeros(3), a_mat.v];  
   sx_rec.postmat = sx_rec.premat;
-  
+  sx_rec.track_info = "special";
 endfunction

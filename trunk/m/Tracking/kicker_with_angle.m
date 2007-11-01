@@ -22,6 +22,7 @@ function kicker_rec = kicker_with_angle(name, kick_angle, cod_rec)
     error("cod_rec.horv have invalid value");
   endif
   
+  kicker_rec.track_info = "special";
   kicker_rec.kickVector = a_vec;
   if (isBendingMagnet(kicker_rec))
     #kicker_rec
