@@ -2,7 +2,7 @@
 ##
 ## accept column wise 2 dimensional matrix as X-Y data
 
-function xyplot(varargin)
+function result = xyplot(varargin)
   plotarg = {};
   for i = 1:length(varargin)
     item = varargin{i};
@@ -17,5 +17,5 @@ function xyplot(varargin)
       endif
     endif
   endfor
-  plot(plotarg{:})
+  result = plot(plotarg{:});
 endfunction

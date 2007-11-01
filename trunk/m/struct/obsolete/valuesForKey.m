@@ -1,4 +1,6 @@
 ## usage:array = valuesForKey(cellArray, keyPath [, outputCellArray]) 
+## 
+## obsolete. Use value_for_keypath
 ##
 ##= Parameters 
 ## * cellArray -- cell array which elements are structures.
@@ -9,6 +11,7 @@
 ## row-wise matrix or cell array of cellArray{i}.(keyPath{1}).(keyPath{2})...
 
 function array = valuesForKey(cellArray, keyPath, varargin)
+  warning("valuesForKey is obsolete. Use value_for_keypath");
   #	cellArray = allElements
   isOutCells = (length(varargin) > 0);
   if (isOutCells)
