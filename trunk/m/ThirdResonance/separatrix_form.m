@@ -3,11 +3,13 @@
 ##
 ## Return fixed points of third sepatartix at the location specified with with @var{elem_name} and @var{pos_in_elem}. For the plotting, 4 xy-points is returnd where first xy-point is equal to last xy-point.
 ##
-## @var{track_rec} must have following fields.
+## @var{track_rec} can have following fields.
 ## @table @code
 ## @item sextupoles.strength
 ## @item lattice
 ## @item tune
+## @item bm_sx
+## optional.
 ## @end table
 ## 
 ## @var{elem_name} : name of the element.
@@ -15,8 +17,12 @@
 ## @var{pos_in_elem} : position in the element. "entrance", "center" or "exit"
 ##
 ## @end deftypefn
+#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking2/extraction_tracking2.m
 
 ##== History
+## 2007-11-02
+## * add support bm_sx
+##
 ## 2007-10-16
 ## * initial implementaion
 

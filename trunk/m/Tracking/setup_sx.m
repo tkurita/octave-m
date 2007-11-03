@@ -54,7 +54,7 @@ function sx_rec = setup_sx(sx_rec, brho, varargin)
   if (length(varargin) > 1)
     sx_rec.apply = varargin{1};
   else
-    sx_rec.apply = @sx_thin_kick;
+    sx_rec.apply = @through_sx;
   endif
   
   #a_mat = DTmat(al/2);

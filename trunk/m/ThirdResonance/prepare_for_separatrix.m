@@ -20,17 +20,46 @@
 ## @end deftypefn
 
 ##== History
+## 2007-11-02
+## * add support BM fringing sextupole
+##
 ## 2007-10-16
 ## * initial implementation
+
 function separatrix_info = prepare_for_separatrix(track_rec)
-  sx_names = value_for_keypath(track_rec.sextupoles, "name", true);
-  sx_strength = value_for_keypath(track_rec.sextupoles, "strength");
-  sx_array = element_with_name(track_rec, sx_names);
-  sx_positions = value_for_keypath(sx_array, "centerPosition");
+  sx_strength = [];
+  sx_positions = [];
+  sx_beta = [];
+  sx_phase = [];
+  
+  if (isfield(track_rec, "sextupoles"))
+    sx_names = value_for_keypath(track_rec.sextupoles, "name", "as_cells");
+    sx_strength = value_for_keypath(track_rec.sextupoles, "strength");
+    sx_array = element_with_name(track_rec, sx_names);
+    sx_positions = value_for_keypath(sx_array, "centerPosition");
+    sx_beta = value_for_keypath(sx_array, "centerBeta.h");
+    sx_phase = value_for_keypath(sx_array, "centerPhase.h");
+  endif
+  
+  if (isfield(track_rec, "bm_sx"))
+    for n = 1:length(track_rec.lattice)
+      if (is_BM(track_rec.lattice{n}))
+        a_bm = track_rec.lattice{n};
+        sx_beta(end+1) = a_bm.entranceBeta.h;
+        sx_positions(end+1) = a_bm.entrancePosition;
+        sx_phase(end+1) = a_bm.entrancePhase.h;
+        sx_strength(end+1) = track_rec.bm_sx;
+        sx_beta(end+1) = a_bm.exitBeta.h;
+        sx_positions(end+1) = a_bm.exitPosition;
+        sx_phase(end+1) = a_bm.exitPhase.h;
+        sx_strength(end+1) = track_rec.bm_sx;
+      endif
+    endfor
+  endif
+  
   circumference = circumference(track_rec);
   sx_theta = 2*pi.*sx_positions./circumference;
-  sx_beta = value_for_keypath(sx_array, "centerBeta.h");
-  sx_phase = value_for_keypath(sx_array, "centerPhase.h");
+  
   tune = track_rec.tune.h;
   n0 = find_n0(tune, 3);
   sx_beta_32 = sx_beta.^(3/2);

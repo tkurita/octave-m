@@ -1,18 +1,38 @@
-## useage: result = isBendingMagnet(theElement)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} is_BM(@var{elememt_rec})
 ## 
-## Bendig Magnet であるかどうかを判定する。
-## theElement.name が "BM"+"数字" でのとき、result = 1
+## Return 1(true) if @var{element_rec} is a bending magnet.
+## 
+## Following case mean thart @var{element_rec} is a bending magnet.
+## @itemize
+## @item @var{elememnt_rec}.kind is "BM"
+## @item @var{element_rec}.name is "BM"+number.
+## @end itemize
+## 
+## @seealso{BM}
+##
+## @end deftypefn
 
-function result = isBendingMagnet(theElement)
-  findAns = findstr(theElement.name,"BM",0);
+##== History
+## 2007-11-01
+## * use "kind" field
+## * deriverd from isBnedingManget
+
+function result = is_BM(a_element)
+  if (isfield(a_element, "kind"))
+    result = strcmp(a_element.kind, "BM");
+    return;
+  endif
+    
+  findAns = findstr(a_element.name,"BM",0);
   if (length(findAns) && findAns(1)==1)
-    isNumList = isdigit(theElement.name);
+    isNumList = isdigit(a_element.name);
     if ((length(isNumList) > 2) && (isNumList(3)==1))
-      result = 1;
+      result = true;
     else
-      result = 0;
+      result = false;
     endif
   else
-    result = 0;
+    result = false;
   endif
 endfunction
