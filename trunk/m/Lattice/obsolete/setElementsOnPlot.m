@@ -17,8 +17,12 @@
 ##                  "second 0"
 ##                  0 -- it mean "first 0"
 
+##= History
+## 2007-11-17
+## * obsolete. use elements_on_plot.m
 
 function setElementsOnPlot(names, lattice, varargin)
+  warning("setElementsOnPlot is obsolute. Use elements_on_plot")
   n_options = length(varargin);
   n = 1;
   yposition = "graph 0";
