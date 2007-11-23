@@ -1,6 +1,15 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} DTmat(@var{dl})
+## 
+## Return a matrix of a drift tube of which length is @var{dl} [m].
+##
+## @seealso{DT}
+##
+## @end deftypefn
+
 ##= drift tube
-## drift tube ‚Ì matrix
-## dl : drift tube ‚Ì’·‚³
+## drift tube ã® matrix
+## dl : drift tube ã®é•·ã•
 
 function matrix = DTmat(dl)
   matrix =...

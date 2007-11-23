@@ -1,3 +1,21 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} DT(@var{dl}, @var{name} [,@var{aparture}])
+##
+## Make a drift tube object.
+##
+## @table @code
+## @item @var{dl}
+## length of drift tube. [m]
+## @item @var{name}
+## name of the element
+## @item @var{aparture}
+## the apparture of the drift tube. Optional.
+## @end table
+##
+## @seealso{DTmat}
+## @end deftypefn
+
+
 function strDT = DT(dl,theName, varargin)
   ##== full
   strDT.len = dl; # 長さ

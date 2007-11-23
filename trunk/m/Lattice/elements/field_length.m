@@ -1,6 +1,10 @@
-## usage : [len, isEffective (optional) ] = fieldLength(inStr)
+## usage : [len, isEffective (optional) ] = field_length(inStr)
 
-function varargout = fieldLength(inStr)
+##== History
+## 2007-11-23
+## * renamed from fieldLength
+
+function varargout = field_length(inStr)
   hasEfflen = isfield(inStr, "efflen");
   if (hasEfflen)
     len = inStr.efflen;
