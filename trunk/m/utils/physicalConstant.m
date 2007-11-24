@@ -1,3 +1,4 @@
+## deprecated recent octave forge hanve a function "physical_constant"
 ##
 ## = Parameters
 ## 

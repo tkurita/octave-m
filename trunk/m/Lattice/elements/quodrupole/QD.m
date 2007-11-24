@@ -1,24 +1,49 @@
-## -- usage : strQD = QD(qk, ql, theName, varargin);
+## @deftypefn {Function File} {} QD(@var{property_struct})
+## @deftypefnx {Function File} {} QD(@var{qk}, @var{ql}, @var{name} [,@var{aparture}] )
+##
+## Make QD magnet object
+##
+## @end deftypefn
 
-function strQD = QD(qk, ql, theName, varargin)
-  hasEfflen = isstruct(ql);
-  if (hasEfflen)
-    strQD = ql;
+##== History
+## 2007-11-24
+## * accept a structure as an argument.
+
+#function q_struct = QD(qk, ql, theName, varargin)
+function q_struct = QD(varargin)
+  if (length(varargin) == 1)
+    if (isstruct(varargin{1}))
+      q_struct = varargin{1};
+    else
+      error("invalid argument");
+    endif
   else
-    strQD.len = ql;
+    qk = varargin{1};
+    ql = varargin{2};
+    a_name = varargin{3};
+    
+    if (isstruct(ql))
+      q_struct = ql;
+    else
+      q_struct.len = ql;
+    endif
+    q_struct.name = a_name;
+    q_struct.k = qk;
+    
+    if (length(varargin) > 4)
+      q_struct.duct = ductAperture(varargin{4});
+    endif
+    
   endif
-  
-  strQD.name = theName;
-  strQD.k = qk;
-  #strQD
+
   ##== horizontal
-  strQD = setup_element(strQD, @QDmat, "h");
+  q_struct = setup_element(q_struct, @QDmat, "h");
   
   ##== vertical
-  strQD = setup_element(strQD, @QFmat, "v");  
+  q_struct = setup_element(q_struct, @QFmat, "v");  
   
   if (length(varargin) != 0)
-    strQD.duct = ductAperture(varargin{1});
+    q_struct.duct = ductAperture(varargin{1});
   endif
-  strQD.kind = "QD";
+  q_struct.kind = "QD";
 endfunction

@@ -49,7 +49,7 @@ function allElements = buildWERCMatrix(varargin)
   radius = 1.91;
   #edgeangle = 0.75*2*pi/360;
   edgeangle = 1.5*pi/180;
-  bmprop = build_struct(bmangle, radius, efflen, edgeangle, vedge);
+  bmprop = tars(bmangle, radius, efflen, edgeangle, vedge);
    
   ##== properties of Q lens
   qlength.len = 0.15; #length of q magnet [m]

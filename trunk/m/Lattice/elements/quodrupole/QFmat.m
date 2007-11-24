@@ -8,7 +8,7 @@
 ##  .length or .efflen -- effective length of magnet
 
 function matrix = QFmat(strQ)
-  len = fieldLength(strQ);
+  len = field_length(strQ);
   sqk = sqrt(abs(strQ.k));
   matrix = [
   cos(sqk*len), (1/sqk)*sin(sqk*len), 0;
