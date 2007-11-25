@@ -6,6 +6,9 @@
 ## @end deftypefn
 
 ##== History
+## 2007-11-25
+## * accept one argument of a structure
+##
 ## 2007-10-24
 ## * mat_half が間違っている。
 ## * edge * BM/2 となっているが、BM/2 * edge となるべきじゃないか
@@ -16,41 +19,40 @@ function bm_struct = BM(varargin)
     if (isstruct(varargin{1}))
       bm_struct = varargin{1};
     else
-      
-  p_error = 0;
-  n = 1;
-  while (n <= length(varargin))
-    if (ismatrix(varargin{n}))
-      ##== apertue
-      bm_struct.duct = ductAperture(varargin{1});
-    elseif (strcmp(varargin{n}, "pError"))
-      n++;
-      p_error = varargin{n};
+      error("Invalid arguments");
     endif
-    n++;
-  endwhile
-  
-  bm_struct = setfields(bmprop, "name", theName ...
-                          , "len", bmprop.radius*bmprop.bmangle...
-                          , "pError", p_error);
-#  bm_struct = bmprop; # can be delete
-#  bm_struct.name = theName;
-#  bm_struct.len = bm_struct.radius*bm_struct.bmangle;
-  edgeangle = bm_struct.edgeangle;
+    
+  else
+    bmprop = varargin{1};
+    bm_struct = setfields(bmprop, "name", varargin{2} ...
+      , "len", bmprop.radius*bmprop.bmangle...
+      , "pError", 0);
+    n = 3;
+    while (n <= length(varargin))
+      if (ismatrix(varargin{n}))
+        ##== apertue
+        bm_struct.duct = ductAperture(varargin{1});
+      elseif (strcmp(varargin{n}, "pError"))
+        n++;
+        bm_struct.pError = varargin{n};
+      endif
+      n++;
+    endwhile
+  endif
   
   hasEfflen = isfield(bm_struct, "efflen"); #effective length info exists
   ##== horizontal
   ##=== full
-  bmangle = bm_struct.bmangle;
   if (hasEfflen)
-    radius = bm_struct.efflen/bmangle;
+    radius = bm_struct.efflen/bm_struct.bmangle;
     dl = (bm_struct.efflen - bm_struct.len)/2;
   else
     radius = bm_struct.radius;
   endif
-  bm_struct.edgeK.h = (tan(edgeangle)/radius)/(1 + p_error);
+  bm_struct.edgeK.h = (tan(bm_struct.edgeangle)/radius)/(1 + bm_struct.pError);
   
-  bm_struct.mat.h = BMHmat(radius, bmangle, edgeangle, p_error);
+  bm_struct.mat.h = BMHmat(radius, bm_struct.bmangle ...
+                         , bm_struct.edgeangle, bm_struct.pError);
   if (hasEfflen)
     bm_struct.mat.h = DTmat(-dl) * bm_struct.mat.h * DTmat(-dl);
   endif
@@ -60,13 +62,11 @@ function bm_struct = BM(varargin)
   bm_struct.k.v = 0;
   
   ##=== half
-  #bm_struct.mat_half.h = BME_H(radius,edgeangle) * BMHmat(radius, bmangle/2, 0);
-  edgemat_h = BME_H(radius,edgeangle,p_error);
-  mathalf_h = BMHmat(radius, bmangle/2, 0);
+  edgemat_h = BME_H(radius, bm_struct.edgeangle, bm_struct.pError);
+  mathalf_h = BMHmat(radius, bm_struct.bmangle/2, 0);
   bm_struct.mat_half.h = mathalf_h * edgemat_h;
   bm_struct.mat_rest.h = edgemat_h * mathalf_h;
   if (hasEfflen)
-    #bm_struct.mat_half.h = DTmat(-dl)*bm_struct.mat_half.h;
     bm_struct.mat_half.h = bm_struct.mat_half.h * DTmat(-dl);
     bm_struct.mat_rest.h = DTmat(-dl) * bm_struct.mat_rest.h;
   endif
@@ -74,7 +74,7 @@ function bm_struct = BM(varargin)
   
   ##== vertical
   ##=== full
-  options = {"pError", p_error};  
+  options = {"pError", bm_struct.pError};  
   if (isfield(bm_struct, "vedge"))
     #edgematrix = BME_V2(radius, edgeangle, bm_struct.vedge);
     options{end+1} = "vedge";
@@ -83,7 +83,7 @@ function bm_struct = BM(varargin)
     #edgematrix = BME_V(radius, edgeangle, p_error);
   endif
   
-  edgematrix = BME_V(radius, edgeangle, options{:});
+  edgematrix = BME_V(radius, bm_struct.edgeangle, options{:});
   bm_struct.edgeK.v = edgematrix(2,1);
   
   if (hasEfflen)
@@ -100,11 +100,9 @@ function bm_struct = BM(varargin)
   bm_struct.twmat.v = twpMatrix(bm_struct.mat.v);
   
   ##=== half
-  #bm_struct.mat_half.v = edgematrix*DTmat(len/2);
   bm_struct.mat_half.v = DTmat(len/2) * edgematrix;
   bm_struct.mat_rest.v = edgematrix * DTmat(len/2);
   if (hasEfflen)
-    #bm_struct.mat_half.v = DTmat(-dl) * bm_struct.mat_half.v;
     bm_struct.mat_half.v = bm_struct.mat_half.v*DTmat(-dl);
     bm_struct.mat_rest.v = bm_struct.mat_rest.v*DTmat(-dl);
   endif
