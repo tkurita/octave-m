@@ -1,5 +1,5 @@
 ## Usage : [particles, last_particles, init_patricles] 
-##                    = run_tracking(track_rec, particle_rec, n_loop)
+##                    = track_ring(track_rec, particle_rec, n_loop)
 ## 
 ##== Parameters
 ## * track_rec
@@ -21,7 +21,7 @@
 ## * separatrixTracking.m から派生。より一般化する。
 ## * thin lenz 近似だけをサポートする。
 
-function varargout = run_tracking(track_rec, particle_rec, n_loop)
+function varargout = track_ring(track_rec, particle_rec, n_loop)
   # n_loop = 250
   specials = {};
   all_elements = track_rec.lattice;

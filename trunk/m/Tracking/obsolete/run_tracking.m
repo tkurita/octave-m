@@ -1,6 +1,8 @@
 ## Usage : [particles, last_particles, init_patricles] 
 ##                    = run_tracking(track_rec, particle_rec, n_loop)
 ## 
+## obsolute. use track_ring
+##
 ##== Parameters
 ## * track_rec
 ##    .lattice
@@ -22,6 +24,7 @@
 ## * thin lenz 近似だけをサポートする。
 
 function varargout = run_tracking(track_rec, particle_rec, n_loop)
+  warning("run_tracking is obsolete. use track_ring");
   # n_loop = 250
   specials = {};
   all_elements = track_rec.lattice;
