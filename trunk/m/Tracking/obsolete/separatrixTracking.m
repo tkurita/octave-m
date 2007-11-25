@@ -1,3 +1,4 @@
+## Obsolete. Use track_ring
 ## 
 ##=Parameters
 ## * sxRecords
@@ -12,6 +13,7 @@
 ## * nParticles -- 粒子の数
 ## * nLoop -- 粒子をまわす回数
 function [particlesAtESD, lastParicle, initialParticles] =\
+  warning("Obsolete. Use track_ring");
   separatrixTracking(sxRecord, particleRecord, nLoop)
   ##== setup sextupole magnet
   if (isfield(sxRecord, "sxOption"))
