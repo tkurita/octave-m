@@ -2,6 +2,7 @@
 ## 2007-10-03
 ## * should be obsolete
 function targetParticles = particlesForTurns(particles, nParticle, turnRange, varargin)
+  warning("Obsolete. use particles_at_turns.");
   if (length(varargin) == 0)
     horv = "h";
   else
