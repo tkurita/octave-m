@@ -21,7 +21,7 @@ function esd_struct = ESD(varargin)
     esd_struct = setfields(varargin{1}, "name", varargin{2});  
     if (length(varargin) > 2)
       if (ismatrix(varargin{3}))
-        esd_struct.duct = varargin{3};
+        esd_struct.duct = duct_aperture(varargin{3});
       endif
     endif
     
