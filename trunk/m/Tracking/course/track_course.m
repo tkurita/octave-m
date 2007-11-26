@@ -1,22 +1,44 @@
 function particle_rec = track_course(a_course, initial_particles, step)
-  position_list = {0};
+  position_list = [0];
   particle_list = {initial_particles};
   total_len = 0;
+  global __shift_vector;
+  __shift_vector = zeros(size(initial_particles));
+  hit_flag = zeros(columns(initial_particles));
+  
+  particles_in = initial_particles;
   for n = 1:length(a_course)
-    s = 0;
-    particles_in = particle_list{end};
+    s = step;
     an_elem = a_course{n};
-    an_elem.len
     while (an_elem.len > s)
-      s += step
       a_tracker = tracker_at_position(an_elem, s);
-      particle_list{end+1} = a_tracker.apply(a_tracker, particles_in);
-      position_list{end+1} = total_len + s;
+      particles = a_tracker.apply(a_tracker, particles_in);
+      particle_list{end+1} = unshift_particles(particles, s);
+      position_list(end+1) = total_len + s;
+      s += step;
+      hit_flag = hit_flag | check_hit(particle_list{end}, an_elem);
     endwhile
     a_tracker = tracker_at_position(an_elem, an_elem.len);
-    particle_list{end+1} = a_tracker.apply(a_tracker, particles_in);
+    particles_in = a_tracker.apply(a_tracker, particles_in);
+    particle_list{end+1} = unshift_particles(particles_in, an_elem.len);
     total_len += an_elem.len;
-    position_list{end+1} = total_len
+    position_list(end+1) = total_len;
+    hit_flag = hit_flag | check_hit(particle_list{end}, an_elem);
   endfor
-  particle_rec = struct("postions", position_list, "particles", particle_list);
+  
+  particle_rec.positions = position_list;
+  particle_rec.particles = particle_list;
+  particle_rec.n = columns(initial_particles);
+  particle_rec.hit_flag = hit_flag;
 endfunction
+
+function out_particles = unshift_particles(in_particles, s)
+  global __shift_vector;
+  a_dt = DT(s, "");
+  out_particles = in_particles - (mat_with_element(a_dt) * __shift_vector);
+end 
+
+function hit_flag = check_hit(particles, an_elem)
+  x_list = particles(1,:);
+  hit_flag = (x_list > an_elem.duct.xmax) | (x_list < an_elem.duct.xmin);
+end

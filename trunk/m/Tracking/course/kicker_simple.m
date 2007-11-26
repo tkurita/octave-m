@@ -1,4 +1,6 @@
-function result = kickier_simple(kicker_prop)
-  result = setfields(offset, "apply", @add_vector, "kind", "Kicker");
+function result = kicker_simple(kicker_prop)
+  result = setfields(kicker_prop, "apply", @add_vector...
+                                , "len", 0 ...
+                                , "kind", "Kicker");
   result.vector = [0; kicker_prop.h; 0; 0; kicker_prop.v; 0];
 endfunction
