@@ -1,4 +1,3 @@
-#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 ## Usage : out_particles = through_monitor(mat_rec, in_particles)
 ##    out_particles = mat_rec.mat * in_particles;
 
