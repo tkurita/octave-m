@@ -1,3 +1,18 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} parallelogram_acceptance(@var{element})
+##
+## Return parallelogram object in phase space.
+##
+## The unit of returned value is [m] and [rad];
+##
+## @seealso{plot_parallerogram_acceptance}
+##
+## @end deftypefn
+
+##== History
+## 2007-11-27
+## * initial implementation
+
 function a_para = parallelogram_acceptance(an_elem)
   a_para = an_elem.duct;
   [a_para.xdash_max, a_para.xdash_min]...
