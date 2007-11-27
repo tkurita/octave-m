@@ -1,3 +1,7 @@
+##== History
+## 2007-11-27
+## * initial implementaion
+
 function particle_rec = track_course(a_course, initial_particles, step)
   position_list = [0];
   particle_list = {initial_particles};

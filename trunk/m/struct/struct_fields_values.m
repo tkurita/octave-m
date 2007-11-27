@@ -1,9 +1,17 @@
-## Usage : s = struct_fields_values({"foo","bar", ...}, [val1, val2, ...] ) 
-##              == struct ("foo",val1,"bar",val2,...)
+## -*- texinfo -*-
+## @deftypefn {Function File} {} struct_fields_values(fieldnames, values)
 ##
+## Make a structure with a list of field names and associated values.
+##
+## @end deftypefn
 
-function s = struct_fields_values(field_names, field_values)
-
-for n = 1:length(field_names)
-   s.(field_names(n)) = field_values(n);
+function s = struct_fields_values(names, fieldvalues)
+  if (ismatrix(fieldvalues))
+    fieldvalues = mat2cell(fieldvalues...
+      , columns(fieldvalues), ones(1, rows(fieldvalues)));
+  end
+  
+  for n = 1:length(names)
+     s.(names(n)) = fieldvalues{n};
+  end
 end

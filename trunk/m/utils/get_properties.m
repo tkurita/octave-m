@@ -13,9 +13,11 @@ function varargout = get_properties(prop_list, prop_names, default_values)
     for m = 1:n_prop
       if strcmp(a_name, prop_names{m})
         varargout{m} = a_value;
-      endif
-      
+      end
     end
-    
   end
-endfunction
+  
+  if (nargout == 1)
+    varargout{1} = struct_fields_values(prop_names, varargout);
+  end
+end

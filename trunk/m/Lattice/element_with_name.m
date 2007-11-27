@@ -18,6 +18,9 @@
 ## result is a cell array of elements
 
 ##== History
+## 2007-11-27
+## * avoid error when no name field elements are inclued in all_elements
+##
 ## 2007-11-01
 ## * If nargout > 1, indexes of elements are returned.
 ##
@@ -43,7 +46,7 @@ function varargout = element_with_name(all_elements, names)
   for k = 1:length(names)
     a_name = names{k};
     for n = 1:length(all_elements)
-      if (strcmp (all_elements{n}.name, a_name))
+      if (isfield(all_elements{n}, "name") && strcmp(all_elements{n}.name, a_name))
         output{end+1} = all_elements{n};
         ind_elem(end+1) = n;
         break;
