@@ -1,7 +1,20 @@
+## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{bm_rec} =} BM(@var{property_struct})
-## @deftypefx {Function File} {@var{bm_rec} =} BM(@var{bmprop}, @var{name}, [@var{apartue}, "pError", @var{p_error}])
+## @deftypefnx {Function File} {@var{bm_rec} =} BM(@var{bmprop}, @var{name}, [@var{apartue}, "pError", @var{p_error}])
 ##
 ## Make a bending magnet object
+##
+## @var{bmprop} is a structure which have following fields.
+## @table @code
+## @item bmangle
+## [rad]. Angle of bending magnet.
+## @item radius
+## [m]. radius of beam axis.
+## @item edgeangle
+## [rad] edge angle.
+## @item efflen
+## [m] effective length. Optional.
+## @end table
 ##
 ## @end deftypefn
 
@@ -31,7 +44,7 @@ function bm_struct = BM(varargin)
     while (n <= length(varargin))
       if (ismatrix(varargin{n}))
         ##== apertue
-        bm_struct.duct = ductAperture(varargin{1});
+        bm_struct.duct = duct_aperture(varargin{n});
       elseif (strcmp(varargin{n}, "pError"))
         n++;
         bm_struct.pError = varargin{n};
@@ -51,8 +64,7 @@ function bm_struct = BM(varargin)
   endif
   bm_struct.edgeK.h = (tan(bm_struct.edgeangle)/radius)/(1 + bm_struct.pError);
   
-  bm_struct.mat.h = BMHmat(radius, bm_struct.bmangle ...
-                         , bm_struct.edgeangle, bm_struct.pError);
+  bm_struct.mat.h = BMHmat(setfields(bm_struct, "radius", radius));
   if (hasEfflen)
     bm_struct.mat.h = DTmat(-dl) * bm_struct.mat.h * DTmat(-dl);
   endif

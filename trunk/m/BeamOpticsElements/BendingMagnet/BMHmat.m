@@ -15,16 +15,16 @@
 
 #function matrix = BMHmat(radius, bmangle, edgeangle ,varargin)
 function matrix = BMHmat(varargin)
-  if (isstruct(varargin{1})
+  if (isstruct(varargin{1}))
     prop = varargin{1};
     radius = prop.radius;
     bmangle = prop.bmangle;
   else
     radius = varargin{1};
-    bmangle = varargin{3}
-    edgeangle = varargin{2};
-    if (length(varargin) > 2)
-      pError = varargin{3};
+    bmangle = varargin{2};
+    edgeangle = varargin{3};
+    if (length(varargin) > 3)
+      pError = varargin{4};
     else
       pError = 0;
     endif

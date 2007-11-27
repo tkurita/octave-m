@@ -1,4 +1,3 @@
-#shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking.m
 ## Usage : out_particles = particles_at_turns(particle_hist, elem_name, turn_range, [horv])
 ##              or
 ##         out_particles = particles_at_turns(particle_hist, "initial", [horv])

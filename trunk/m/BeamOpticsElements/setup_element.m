@@ -16,7 +16,7 @@
 ## * renamed from buildElememntStruct
 
 function element_rec = setup_element(element_rec, mat_func, horv)
-  [len, hasEfflen] = fieldLength(element_rec);
+  [len, hasEfflen] = field_length(element_rec);
   ## full
   element_rec.mat.(horv) = mat_func(element_rec);
   

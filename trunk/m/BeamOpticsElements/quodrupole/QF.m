@@ -30,8 +30,8 @@ function q_struct = QF(varargin)
     q_struct.name = a_name;
     q_struct.k = qk;
     
-    if (length(varargin) > 4)
-      q_struct.duct = ductAperture(varargin{4});
+    if (length(varargin) > 3)
+      q_struct.duct = duct_aperture(varargin{4});
     endif
     
   endif

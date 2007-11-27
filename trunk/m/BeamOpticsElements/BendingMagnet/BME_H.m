@@ -16,7 +16,7 @@
 #function matrix = BME_H(radius,edgeangle ,varargin)
 function matrix = BME_H(varargin)
   p_error = 0;
-  if (isstruct(varargin{1})
+  if (isstruct(varargin{1}))
     prop = varargin{1};
     radius = prop.radius;
     edgeangle = prop.edgeangle;

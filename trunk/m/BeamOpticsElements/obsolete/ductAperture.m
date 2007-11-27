@@ -1,6 +1,7 @@
 ## obsolete. use duct_aperture
 ##= functions for aperture
 function ductSize = ductAperture(theSize)
+  warning("ductAparture is obsolute. Use duct_aperture");
   switch length(theSize)
     case 1
       ductSize = struct("xman", theSize(1), "xmix", -theSize(1)... 

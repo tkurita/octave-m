@@ -43,7 +43,7 @@ function strDT = DT(varargin)
     strDT.len = varargin{1}; # 長さ
     strDT.name = varargin{2}; # 名前
     if (length(varargin) > 2)
-      strDT.duct = ductAperture(varargin{3});
+      strDT.duct = duct_aperture(varargin{3});
     endif
   endif    
   
