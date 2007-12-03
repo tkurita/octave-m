@@ -25,8 +25,11 @@
 ## * cod_diff_FT
 
 ##= Hisotry
+## 2007-12-03
+## * update obsolete functions
+##
 ## 2007.07.12
-## - add useWeight option
+## * add useWeight option
 
 function varargout\
               = vertical_kickfactor(codRecord_FB, codRecord_FT, codAtBPM_FB, codAtBPM_FT);
@@ -36,8 +39,8 @@ function varargout\
   #  codAtBPM_FT = codAtBPM_after_FT_3
   cod_diff_FB = codRecord_FB;
   cod_diff_FT = codRecord_FT;
-  cod_diff_FB.codAtBPM = subtractCOD(codRecord_FB.codAtBPM, codAtBPM_FB);
-  cod_diff_FT.codAtBPM = subtractCOD(codRecord_FT.codAtBPM, codAtBPM_FT);
+  cod_diff_FB.codAtBPM = subtract_cod(codRecord_FB.codAtBPM, codAtBPM_FB);
+  cod_diff_FT.codAtBPM = subtract_cod(codRecord_FT.codAtBPM, codAtBPM_FT);
   codMatStruct_FB = buildCODMatrix(cod_diff_FB);
   codMatStruct_FT = buildCODMatrix(cod_diff_FT);
   codList_FB = applyKickerAngle(codMatStruct_FB, cod_diff_FB);

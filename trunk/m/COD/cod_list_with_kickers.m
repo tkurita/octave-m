@@ -47,6 +47,8 @@ function cod_list = cod_list_with_kickers(cod_rec, varargin)
         warning([varargin{n}, " is unknown option\n"]);
       endif
     endfor
+  else
+    varargin = {};
   endif
   
   if (!use_steerer_values )
