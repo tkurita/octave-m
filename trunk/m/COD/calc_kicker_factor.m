@@ -30,10 +30,16 @@
 ##
 ## calc_kicker_factor(codAtBPM1, codAtBPM0, cod_rec_FB, "STV1", -2);
 
+##== History
+## 2007-12-03
+## * subtractCOD -> subtract_cod
+## * buildTargetCOD -> cod_list_with_bpms
+## * setElementsOnPlot -> elements_on_plot
+
 function kicker_factor =...
   calc_kicker_factor(on_cod, off_cod, lattice_rec, kicker_name, kicker_value, varargin)
-  lattice_rec.codAtBPM = subtractCOD(on_cod, off_cod);
-  lattice_rec.targetCOD = buildTargetCOD(lattice_rec);
+  lattice_rec.codAtBPM = subtract_cod(on_cod, off_cod);
+  lattice_rec.targetCOD = cod_list_with_bpms(lattice_rec);
   lattice_rec.steererNames = {kicker_name};
   lattice_rec = lFitCOD(lattice_rec);
   fit_result = lattice_rec.steererValues;
@@ -64,16 +70,16 @@ function kicker_factor =...
   endfor
   
   cod_rec_on = setfields(lattice_rec, "codAtBPM", on_cod);
-  cod_rec_on.targetCOD = buildTargetCOD(cod_rec_on);
+  cod_rec_on.targetCOD = cod_list_with_bpms(cod_rec_on);
   cod_rec_off = setfields(lattice_rec, "codAtBPM", off_cod);
-  cod_rec_off.targetCOD = buildTargetCOD(cod_rec_off);
+  cod_rec_off.targetCOD = cod_list_with_bpms(cod_rec_off);
   
   xlabel("Position [m]");
   ylabel("COD [mm]");
   title(plot_title);
   grid on;
-  setElementsOnPlot(visible_elements, lattice_rec.lattice, "clear", "yposition", "graph 0.5");
-  setElementsOnPlot(fieldnames(on_cod), lattice_rec.lattice, "yposition", "graph 0.1");
+  elements_on_plot(visible_elements, lattice_rec.lattice, "clear", "yposition", "graph 0.5");
+  elements_on_plot(fieldnames(on_cod), lattice_rec.lattice, "yposition", "graph 0.1");
   pointsize(2);
   xyplot(cod_rec_on.targetCOD, ["-@;",on_label,";"]\
     , cod_rec_off.targetCOD, ["-@;",off_label,";"]\
