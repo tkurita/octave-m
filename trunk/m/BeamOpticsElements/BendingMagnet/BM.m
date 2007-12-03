@@ -38,7 +38,6 @@ function bm_struct = BM(varargin)
   else
     bmprop = varargin{1};
     bm_struct = setfields(bmprop, "name", varargin{2} ...
-      , "len", bmprop.radius*bmprop.bmangle...
       , "pError", 0);
     n = 3;
     while (n <= length(varargin))
@@ -53,6 +52,7 @@ function bm_struct = BM(varargin)
     endwhile
   endif
   
+  bm_struct.len = bm_struct.radius*bm_struct.bmangle;
   hasEfflen = isfield(bm_struct, "efflen"); #effective length info exists
   ##== horizontal
   ##=== full

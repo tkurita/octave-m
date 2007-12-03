@@ -1,3 +1,10 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} func_name(@var{arg})
+##
+## hit_flag(1,:) : horizontal
+## hit_flag(2,:) : vertical
+## @end deftypefn
+
 ##== History
 ## 2007-11-27
 ## * initial implementaion
@@ -8,7 +15,7 @@ function particle_rec = track_course(a_course, initial_particles, step)
   total_len = 0;
   global __shift_vector;
   __shift_vector = zeros(size(initial_particles));
-  hit_flag = zeros(1, columns(initial_particles));
+  hit_flag = zeros(2, columns(initial_particles));
   
   particles_in = initial_particles;
   for n = 1:length(a_course)
@@ -31,7 +38,7 @@ function particle_rec = track_course(a_course, initial_particles, step)
     total_len += an_elem.len;
     position_list(end+1) = total_len;
     if (isfield(an_elem, "duct"))
-      hit_flag = hit_flag | check_hit(particle_list{end}, an_elem);
+        hit_flag = hit_flag | check_hit(particle_list{end}, an_elem);
     end
   endfor
   
@@ -55,5 +62,7 @@ end
 
 function hit_flag = check_hit(particles, an_elem)
   x_list = particles(1,:);
-  hit_flag = (x_list > an_elem.duct.xmax) | (x_list < an_elem.duct.xmin);
+  y_list = particles(4,:);
+  hit_flag =[(x_list > an_elem.duct.xmax) | (x_list < an_elem.duct.xmin);
+             (y_list > an_elem.duct.ymax) | (y_list < an_elem.duct.ymin)] ;
 end

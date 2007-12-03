@@ -1,7 +1,17 @@
+## -*- texinfo -*-
 ## @deftypefn {Function File} {} QF(@var{property_struct})
 ## @deftypefnx {Function File} {} QF(@var{qk}, @var{ql}, @var{name} [,@var{aparture}] )
 ##
 ## Make QF magnet object
+##
+## @table @code
+## @item @var{qk}
+## [1/(m*m)]
+## @item @var{ql}
+## [m]
+## If the effective length is different from mechanical length, give a structure consists of fields 'len' and 'efflen'.
+##
+## @end table
 ##
 ## @end deftypefn
 
@@ -9,7 +19,6 @@
 ## 2007-11-24
 ## * accept a structure as an argument.
 
-#function q_struct = QF(qk, ql, a_name, varargin)
 function q_struct = QF(varargin)
   if (length(varargin) == 1)
     if (isstruct(varargin{1}))
