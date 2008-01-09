@@ -13,15 +13,8 @@
 ##= Result 
 ##  mean value of gaussian fit
 
-##== History
-## 2008-01-09
-## * use load_profile_csv instead of loadProfileCVS
-##
-## 2007-12-03
-## * update for 2.9.14
-
 function varargout = fit_profile(filepath, plot_title, horv)
-  pr = load_profile_csv(filepath);
+  pr = loadProfileCVS(filepath);
   valid_limit = 3000;
   for n = 1:rows(pr.(horv))
     if pr.(horv)(n,2) > 3000
@@ -37,7 +30,7 @@ function varargout = fit_profile(filepath, plot_title, horv)
   fit_result_pr = gaussianFit(pr.(horv), initial_values);
   #fit_result_pr
   mean_value = fit_result_pr(3);
-  #unsetarrow()
+  unsetarrow()
   vline(mean_value);
   gp = gravity_point(pr.(horv))
   vline(gp)

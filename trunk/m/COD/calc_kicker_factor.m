@@ -35,6 +35,8 @@
 ## * subtractCOD -> subtract_cod
 ## * buildTargetCOD -> cod_list_with_bpms
 ## * setElementsOnPlot -> elements_on_plot
+## * calcCODWithPerror -> cod_list_with_kickers
+## * remove pointsize
 
 function kicker_factor =...
   calc_kicker_factor(on_cod, off_cod, lattice_rec, kicker_name, kicker_value, varargin)
@@ -80,12 +82,11 @@ function kicker_factor =...
   grid on;
   elements_on_plot(visible_elements, lattice_rec.lattice, "clear", "yposition", "graph 0.5");
   elements_on_plot(fieldnames(on_cod), lattice_rec.lattice, "yposition", "graph 0.1");
-  pointsize(2);
-  xyplot(cod_rec_on.targetCOD, ["-@;",on_label,";"]\
-    , cod_rec_off.targetCOD, ["-@;",off_label,";"]\
-    , lattice_rec.targetCOD, ["-@;difference of COD;"]\
-    , calcCODWithPerror(lattice_rec)\
+  xyplot(cod_rec_on.targetCOD, ["-@;",on_label,";"], "MarkerSize", 2 \
+    , cod_rec_off.targetCOD, ["-@;",off_label,";"], "MarkerSize", 2\
+    , lattice_rec.targetCOD, ["-@;difference of COD;"], "MarkerSize", 2 \
+    , cod_list_with_kickers(lattice_rec)\
     , sprintf("-;fitting result: %.4f [mrad]/%.2f [A];", lattice_rec.kickAngles*1e3, kicker_value)
-  );
+  );grid on;
 
 endfunction
