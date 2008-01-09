@@ -4,9 +4,12 @@
 ##
 ## units of particle_hist is [rad] and [m]
 ## units of output is [mrad] and [mm]
-##
+## horv is ommited, return a matrix of form of [x, x', delp, y, y',delp]
 
 ##== History
+## 2007-12-04
+## * when horv is not given, a matrix of form of [x, x', delp, y, y',delp]
+##
 ## 2007-10-03
 ## * initial implementation
 
@@ -17,7 +20,7 @@ function out_particles = particles_at_turns(varargin)
   # varargin = {"h"}
   particle_hist = varargin{1};
   elem_name = varargin{2};
-  horv = "h";
+  horv = "hv";
   if (ischar(varargin{end}))
     switch varargin{end}
       case "h"
@@ -45,6 +48,8 @@ function out_particles = particles_at_turns(varargin)
       out_particles = particles(1:2,:);
     case "v"
       out_particles = particles(4:5,:);
+    otherwise
+      out_particles = particles;
   endswitch
   
   out_particles = cleanParticles(out_particles)'.*1e3;

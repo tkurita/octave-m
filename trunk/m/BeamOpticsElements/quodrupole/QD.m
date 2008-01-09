@@ -31,7 +31,7 @@ function q_struct = QD(varargin)
     q_struct.k = qk;
     
     if (length(varargin) > 4)
-      q_struct.duct = ductAperture(varargin{4});
+      q_struct.duct = duct_aperture(varargin{4});
     endif
     
   endif
@@ -43,7 +43,7 @@ function q_struct = QD(varargin)
   q_struct = setup_element(q_struct, @QFmat, "v");  
   
   if (length(varargin) != 0)
-    q_struct.duct = ductAperture(varargin{1});
+    q_struct.duct = duct_aperture(varargin{1});
   endif
   q_struct.kind = "QD";
 endfunction

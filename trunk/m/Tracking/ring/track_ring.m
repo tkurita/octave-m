@@ -24,20 +24,23 @@
 function varargout = track_ring(track_rec, particle_rec, n_loop)
   # n_loop = 250
   specials = {};
-  all_elements = track_rec.lattice;
+  
   ##== setup sextupole magnet
-  if (isfield(track_rec, "sextupoles"))
-    for n = 1:length(track_rec.sextupoles)
-      sx_rec = track_rec.sextupoles{n};
-      [an_elem, ind_elem] = element_with_name(all_elements, sx_rec.name);
-      sx_rec = join_struct(an_elem, sx_rec);
-      sx_rec = setup_sx(sx_rec, track_rec.brho);
-      all_elements{ind_elem} = sx_rec;
-      track_rec.sextupoles{n} = sx_rec;
-      #specials{end+1} = setup_sx(sx_rec, track_rec.brho);
-    endfor
-    #track_rec.sextupoles = specials;
-  endif
+  track_rec = setup_sextupoles(track_rec);
+#  if (isfield(track_rec, "sextupoles"))
+#    for n = 1:length(track_rec.sextupoles)
+#      sx_rec = track_rec.sextupoles{n};
+#      [an_elem, ind_elem] = element_with_name(all_elements, sx_rec.name);
+#      sx_rec = join_struct(an_elem, sx_rec);
+#      sx_rec = setup_sx(sx_rec, track_rec.brho);
+#      all_elements{ind_elem} = sx_rec;
+#      track_rec.sextupoles{n} = sx_rec;
+#      #specials{end+1} = setup_sx(sx_rec, track_rec.brho);
+#    endfor
+#    #track_rec.sextupoles = specials;
+#  endif
+  
+  all_elements = track_rec.lattice;
   
   ##== setup kickers
   if (isfield(track_rec, "kickers"))
