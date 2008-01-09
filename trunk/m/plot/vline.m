@@ -1,31 +1,18 @@
-## usage : vline(x [,lt])
+## usage : vline(x , [properties])
 ##
 ## Show vertival line.
-## If no arguments are passed, all arrows are removed.
 ##
 ## = arguments
 ## * x -- x position of the vertical line
-## * lt -- line type. optional
+## * properties -- line type. optional
 
-function vline(varargin)
-  
-  if (length(varargin) == 0) 
-    unsetarrow();
-    return;
-  endif
-  
-  x = varargin{1};
-  if (nargin == 2)
-    lttext = sprintf("lt %i", lt);
-  else
-    lttext = "";
-  endif
-  
-  eval (sprintf ("__gnuplot_set__(\"arrow from first %g,graph 0 to first %g,graph 1 nohead %s;\")"\
-    , x, x, lttext));
+##== History
+## 2007-10-31
+## * use line instead of __gnuplot_raw__
+## * The code chekcing automatic_replot is removed for compatibility to 2.9.14
 
-  if (automatic_replot)
-    replot ();
-  endif
-
+function result = vline(x, varargin)
+  ca = gca();
+  ylim = get(ca, "ylim");
+  result = line([x,x], [ylim(1), ylim(2)], varargin{:});  
 endfunction

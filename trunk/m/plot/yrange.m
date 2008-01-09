@@ -3,5 +3,10 @@
 ## no arguments set yrange to autoscale
 
 function yrange(varargin)
-  __plot_range__("yrange", varargin{:});
+  ca = gca();
+  if (nargin > 0)
+    set(ca, "ylim", [varargin{1},varargin{2}]);
+  else
+    set(ca, "ylimmode", "auto");
+  endif
 endfunction
