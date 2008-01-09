@@ -14,11 +14,14 @@
 ##  mean value of gaussian fit
 
 ##== History
+## 2008-01-09
+## * use load_profile_csv instead of loadProfileCVS
+##
 ## 2007-12-03
 ## * update for 2.9.14
 
 function varargout = fit_profile(filepath, plot_title, horv)
-  pr = loadProfileCVS(filepath);
+  pr = load_profile_csv(filepath);
   valid_limit = 3000;
   for n = 1:rows(pr.(horv))
     if pr.(horv)(n,2) > 3000
