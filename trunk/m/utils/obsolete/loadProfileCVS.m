@@ -9,7 +9,12 @@
 ##  .h -- [positions, values]
 ##  .v -- [positions, values]
 
+##== History
+## 2008.01.09
+## * obsolete
+
 function result = loadProfileCVS(file_path)
+  warning("loadProfileCVS is obsolete. Use load_profile_csv.");
   [fid, msg] = fopen(file_path, "r");
   if (fid == -1)
     error(msg);
