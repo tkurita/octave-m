@@ -1,12 +1,16 @@
-## Usage : result = gaussianFit([x,y] [, initial_values])
-##         result = gaussianFit(x, y [, initial_values])
-##         result = gaussianFit([x,y], initial_values)
+## Usage : result = gaussian_fit([x,y] [, initial_values])
+##         result = gaussian_fit(x, y [, initial_values])
+##         result = gaussian_fit([x,y], initial_values)
 ##                  gaussinaFit("setting", value) -- not implemented
 ##
 ## = Parameters
 ## * initial_values = [amp, sigma, mu]
 
-function result = gaussianFit(varargin)
+##== History
+## 2008-01-09
+## * renamed gaussian_fit into gaussian-fit
+
+function result = gaussian_fit(varargin)
   persistent initial_values = [1, 1, 0];
   persistent stol = 0.00000001;
   persistent niter = 500;
