@@ -1,12 +1,10 @@
 ## Usage : [fit_center, gravity_point]
-##                  = plot_profile(filepath, plot_title, horv)
+##                  = plot_profiles(filelist, horv)
 ##
-##  Apply gaussian to Profile Hold Data and obtain mean value
-##  (center of gaussian).
-##  Also calculate gravity point.
 ##
 ##= Parameters
-##  * filepath -- path to Profile Hold data
+##  * filelist -- a cell array of path to Profile Hold data and legend comment
+##     e.g. {"../profile.csv", "comment", "../profile2.csv, "comment2"...}
 ##  * plot_title
 ##  * horv -- "h" or "v"
 ##
@@ -14,10 +12,10 @@
 ##  mean value of gaussian fit
 
 ##== History
-## 2008-01-09
-## * not implemented
+## 2008-01-10
+## * first implementation
 
-function varargout = plot_profile(filelist, horv)
+function varargout = plot_profiles(filelist, horv)
   
   plot_arg = {};
   for n = 1:2:length(filelist)
