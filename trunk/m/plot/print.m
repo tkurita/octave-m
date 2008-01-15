@@ -1,12 +1,12 @@
-## Copyright (C) 1999 Daniel Heiserer
+## Copyright (C) 1999, 2005, 2006, 2007 Daniel Heiserer
 ## Copyright (C) 2001 Laurent Mazet
 ##
 ## This file is part of Octave.
 ##
 ## Octave is free software; you can redistribute it and/or modify it
 ## under the terms of the GNU General Public License as published by
-## the Free Software Foundation; either version 2, or (at your option)
-## any later version.
+## the Free Software Foundation; either version 3 of the License, or (at
+## your option) any later version.
 ##
 ## Octave is distributed in the hope that it will be useful, but
 ## WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,9 +14,8 @@
 ## General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with Octave; see the file COPYING.  If not, write to the Free
-## Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-## 02110-1301, USA.
+## along with Octave; see the file COPYING.  If not, see
+## <http://www.gnu.org/licenses/>.
 
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {} print (@var{filename}, @var{options})
@@ -68,20 +67,27 @@
 ##   @item cdr
 ##   @itemx corel
 ##     CorelDraw
-##   @item hpgl
-##     HP plotter language
-##   @item fig
-##     XFig
 ##   @item dxf
 ##     AutoCAD
+##   @item emf
+##     Microsoft Enhanced Metafile
+##   @item fig
+##     XFig.  If this format is selected the additional options
+##     @code{-textspecial} or @code{-textnormal} can be used to control
+##     whether the special flag should be set for the text in the figure
+##     (default is @code{-textnormal}). 
+##   @item hpgl
+##     HP plotter language
 ##   @item mf
 ##     Metafont
 ##   @item png
 ##     Portable network graphics
 ##   @item pbm
 ##     PBMplus
-##   @item emf
-##     Microsoft Enhanced Metafile
+##   @item svg
+##     Scalable vector graphics
+##   @item pdf
+##     Portable document format
 ##   @end table
 ##
 ##   Other devices are supported by "convert" from ImageMagick.  Type
@@ -89,6 +95,11 @@
 ##
 ##   If the device is omitted, it is inferred from the file extension,
 ##   or if there is no filename it is sent to the printer as postscript.
+##
+## @itemx -S@var{xsize},@var{ysize}
+##   Plot size in pixels for PNG and SVG.  If using the command form of
+##   the print function, you must quote the @var{xsize},@var{ysize}
+##   option.  For example, by writing @code{"-S640,480"}.
 ##
 ## @item -F@var{fontname}
 ## @itemx -F@var{fontname}:@var{size}
@@ -115,12 +126,17 @@ function print (varargin)
   force_solid = 0; # 0=default, -1=dashed, +1=solid
   fontsize = "";
   font = "";
+  size = "";
   name = "";
   devopt = "";
   printer = "";
-  linewidth = "";
   debug = false;
   debug_file = "octave-print-commands.log";
+  special_flag = "textnormal";
+
+  ## Ensure the last figure is on the screen for single line commands like
+  ##   plot(...); print(...);
+  drawnow ();
 
   for i = 1:nargin
     arg = varargin{i};
@@ -137,13 +153,13 @@ function print (varargin)
 	orientation = "portrait";
       elseif (strcmp (arg, "-landscape"))
 	orientation = "landscape";
+      elseif (strcmp (arg, "-textspecial"))
+	special_flag = "textspecial";
       elseif (strncmp (arg, "-debug", 6))
 	debug = true;
 	if (length (arg) > 7)
 	  debug_file = arg(8:end);
 	endif
-      elseif (length (arg) > 3 && arg(1:3) == "-LW")
-        linewidth = arg(4:length(arg));
       elseif (length (arg) > 2 && arg(1:2) == "-d")
 	devopt = arg(3:end);
       elseif (length (arg) > 2 && arg(1:2) == "-P")
@@ -156,6 +172,8 @@ function print (varargin)
 	else
 	  font = arg(3:length(arg));
 	endif
+      elseif (length (arg) > 2 && arg(1:2) == "-S")
+	size = arg(3:length(arg));
       elseif (length (arg) >= 1 && arg(1) == "-")
 	error ("print: unknown option `%s'", arg);
       elseif (length (arg) > 0)
@@ -200,7 +218,7 @@ function print (varargin)
   endif
 
   ## check if we have to use convert
-  dev_list = {"aifm", "corel", "fig", "png", "pbm", "dxf", "mf", ...
+  dev_list = {"aifm", "corel", "fig", "png", "pbm", "dxf", "mf", "svg", ...
 	      "hpgl", "ps", "ps2", "psc", "psc2", "eps", "eps2", ...
 	      "epsc", "epsc2", "emf", "pstex", "pslatex", ...
 	      "epslatex", "epslatexstandalone", "pdf"};
@@ -241,7 +259,6 @@ function print (varargin)
       else
 	options = strcat (orientation, " ");
       endif
-      options = strcat (options, "enhanced ");
       termn = "postscript";
     endif
     
@@ -292,11 +309,13 @@ function print (varargin)
     else
       options = " mono";
     endif
+    options = strcat (options, " ", special_flag);
     if (! isempty (fontsize))
       options = strcat (options, " fontsize ", fontsize);
     endif
 
     new_terminal = strcat ("fig ", options);
+
 
   elseif (strcmp (dev, "emf"))
     ## Enhanced Metafile format
@@ -317,28 +336,6 @@ function print (varargin)
     endif
 
     new_terminal = strcat ("emf ", options);
-  elseif (strcmp (dev, "pdf"))
-
-    if (use_color >= 0)
-      options = "color";
-    else
-      options = "mono";
-    endif
-    options = strcat (options, " enhanced");
-
-    if (force_solid > 0)
-       options = strcat (options, " solid");
-    elseif (force_solid < 0)
-      options = strcat (options, " dashed");
-    endif
-    if ((! isempty (font)) || (! isempty(fontsize)) )
-      options = strcat (options, " font \"", font,",",fontsize,"\"");
-    endif
-    if (! isempty(linewidth))
-      options = strcat (options, " linewidth \"", linewidth, "\"");
-    endif
-      
-    new_terminal = strcat ("pdf ", options);
 
   elseif (strcmp (dev, "png") || strcmp (dev, "pbm"))
     ## Portable network graphics, PBMplus
@@ -356,17 +353,53 @@ function print (varargin)
     ##eval (sprintf ("__gnuplot_set__ term %s mono medium", dev));
     ##endif
 
-    new_terminal = "png large";
+    if (isempty (size))
+      options = " large";
+    else
+      options = strcat (" size ", size);
+    endif
+    new_terminal = strcat ("png", options);
 
   elseif (strcmp (dev, "dxf") || strcmp (dev, "mf") || strcmp (dev, "hpgl"))
     ## AutoCad DXF, METAFONT, HPGL
     new_terminal = dev;
+
+  elseif (strcmp (dev, "svg"))
+    ## SVG
+    options = "";
+    if (! isempty (size))
+      options = strcat (" size ", size);
+    endif
+    new_terminal = strcat ("svg", options);
+    
+  elseif (strcmp (dev, "pdf"))
+    ## Portable Document format
+    options = " ";
+    if (use_color >= 0)
+      options = "color";
+    else
+      options = "mono";
+    endif
+
+    if (force_solid > 0)
+       options = strcat (options, " solid");
+    elseif (force_solid < 0)
+      options = strcat (options, " dashed");
+    endif
+    if ((! isempty (font)) || (! isempty(fontsize)) )
+      options = strcat (options, " font \"", font,",",fontsize,"\"");
+    endif
+
+    new_terminal = strcat ("pdf ", options);
+
   endif
 
+  mono = use_color < 0;
+
   if (debug)
-    drawnow (new_terminal, name, debug_file);
+    drawnow (new_terminal, name, mono, debug_file);
   else
-    drawnow (new_terminal, name);
+    drawnow (new_terminal, name, mono);
   endif
 
   if (! isempty (convertname))

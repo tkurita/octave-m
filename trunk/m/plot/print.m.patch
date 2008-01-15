@@ -1,30 +1,59 @@
-75a76,77
-> ##   @item pdf
-> ##     Portable Document Format
-128a131
->   __gnuplot_raw__(sprintf("cd '%s'\n",pwd));
-204c207
-< 	      "ps" "ps2" "psc" "psc2" "eps" "eps2" "epsc" "epsc2" "emf"};
----
-> 	      "ps" "ps2" "psc" "psc2" "eps" "eps2" "epsc" "epsc2" "emf" "pdf"};
-255d257
-< 
-306a309,326
->     elseif (strcmp (dev, "pdf"))
->       if (use_color >= 0)
-> 	options = " color";
->       else
-> 	options = " mono";
->       endif
->       options = strcat (options, " enhanced");
->       if (force_solid > 0)
-> 	options = strcat (options, " solid");
->       else
-> 	options = strcat (options, " dashed");
->       endif
->       if ((! isempty (font)) || (! isempty(fontsize)) )
-> 	options = strcat (options, " font \"", font,",",fontsize,"\"");
->       endif
->       __gnuplot_raw__ ("set terminal push;\n");
->       __gnuplot_raw__ (sprintf ("set terminal pdf %s;\n", options));
-> 
+*** /sw/share/octave/3.0.0/m/plot/print.m	2008-01-07 16:28:13.000000000 +0900
+--- print.m	2008-01-10 10:10:48.000000000 +0900
+***************
+*** 86,91 ****
+--- 86,93 ----
+  ##     PBMplus
+  ##   @item svg
+  ##     Scalable vector graphics
++ ##   @item pdf
++ ##     Portable document format
+  ##   @end table
+  ##
+  ##   Other devices are supported by "convert" from ImageMagick.  Type
+***************
+*** 219,225 ****
+    dev_list = {"aifm", "corel", "fig", "png", "pbm", "dxf", "mf", "svg", ...
+  	      "hpgl", "ps", "ps2", "psc", "psc2", "eps", "eps2", ...
+  	      "epsc", "epsc2", "emf", "pstex", "pslatex", ...
+! 	      "epslatex", "epslatexstandalone"};
+    convertname = "";
+    [idx, errmsg] = cellidx (dev_list, dev);
+    if (! idx)
+--- 221,227 ----
+    dev_list = {"aifm", "corel", "fig", "png", "pbm", "dxf", "mf", "svg", ...
+  	      "hpgl", "ps", "ps2", "psc", "psc2", "eps", "eps2", ...
+  	      "epsc", "epsc2", "emf", "pstex", "pslatex", ...
+! 	      "epslatex", "epslatexstandalone", "pdf"};
+    convertname = "";
+    [idx, errmsg] = cellidx (dev_list, dev);
+    if (! idx)
+***************
+*** 369,374 ****
+--- 371,396 ----
+        options = strcat (" size ", size);
+      endif
+      new_terminal = strcat ("svg", options);
++     
++   elseif (strcmp (dev, "pdf"))
++     ## Portable Document format
++     options = " ";
++     if (use_color >= 0)
++       options = "color";
++     else
++       options = "mono";
++     endif
++ 
++     if (force_solid > 0)
++        options = strcat (options, " solid");
++     elseif (force_solid < 0)
++       options = strcat (options, " dashed");
++     endif
++     if ((! isempty (font)) || (! isempty(fontsize)) )
++       options = strcat (options, " font \"", font,",",fontsize,"\"");
++     endif
++ 
++     new_terminal = strcat ("pdf ", options);
+  
+    endif
+  
