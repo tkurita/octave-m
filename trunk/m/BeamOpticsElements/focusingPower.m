@@ -1,5 +1,9 @@
+##== History
+## 2008-01-16
+## * change fieldLength to field_length
+
 function result = focusingPower(inStr, horv)
-  len = fieldLength(inStr);
+  len = field_length(inStr);
   switch (inStr.kind)
     case ("QF")
       if (strcmp(horv, "h"))
