@@ -1,3 +1,7 @@
+##== History
+## 2008.01.16
+## * fix setuped element is not inserted into track_rec.lattice
+
 function track_rec = setup_sextupoles(track_rec)
   all_elements = track_rec.lattice;
 
@@ -7,7 +11,7 @@ function track_rec = setup_sextupoles(track_rec)
       [an_elem, ind_elem] = element_with_name(all_elements, sx_rec.name);
       sx_rec = join_struct(an_elem, sx_rec);
       sx_rec = setup_sx(sx_rec, track_rec.brho);
-      all_elements{ind_elem} = sx_rec;
+      track_rec.lattice{ind_elem} = sx_rec;
       track_rec.sextupoles{n} = sx_rec;
     endfor
   else

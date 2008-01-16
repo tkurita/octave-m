@@ -39,7 +39,6 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
 #    endfor
 #    #track_rec.sextupoles = specials;
 #  endif
-  
   all_elements = track_rec.lattice;
   
   ##== setup kickers
