@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{sepatartix_info} =} prepare_for_separatrix(@var{track_rec})
+## @deftypefn {Function File} {@var{sepatartix_info} =} values_for_separatrix(@var{track_rec})
 ## Return pre-parameters for calculation of third resonance separatrix.
 ##
 ## 
@@ -27,7 +27,7 @@
 ## 2007-10-16
 ## * initial implementation
 
-function separatrix_info = prepare_for_separatrix(track_rec)
+function separatrix_info = values_for_separatrix(track_rec)
   sx_strength = [];
   sx_positions = [];
   sx_beta = [];

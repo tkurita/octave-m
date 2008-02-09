@@ -17,7 +17,7 @@
 ## * initial implementaion
 
 function area = separatrix_detune_area(track_rec)
-  sep_info = prepare_for_separatrix(track_rec);
+  sep_info = values_for_separatrix(track_rec);
   ac = 16*sep_info.detune_xx*sep_info.delta_tune/(9*sep_info.a_3n0^2);
   if (sep_info.delta_tune < 0)
     J_ufp = ((sep_info.a_3n0/sep_info.detune_xx)*(-3/4 + (3/4)*sqrt(1- ac)))^2;

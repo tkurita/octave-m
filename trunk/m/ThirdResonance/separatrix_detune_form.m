@@ -21,7 +21,7 @@
 ## * initial implementaion
 
 function xy_points = separatrix_detune_form(track_rec, elem_name, pos_in_elem)
-  sep_info = prepare_for_separatrix(track_rec)
+  sep_info = values_for_separatrix(track_rec)
   an_elem = element_with_name(track_rec, elem_name);
   phase_advance = an_elem.([pos_in_elem, "Phase"]).h;
   s = an_elem.([pos_in_elem, "Position"]);

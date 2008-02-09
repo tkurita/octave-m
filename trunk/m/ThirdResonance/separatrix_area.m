@@ -15,7 +15,7 @@
 ## * initial implementaion
 
 function area = separatrix_area(track_rec)
-  sep_info = prepare_for_separatrix(track_rec);
+  sep_info = values_for_separatrix(track_rec);
   area = 2/sqrt(3)*(sep_info.delta_tune/sep_info.a_3n0)^2*1e6/pi;
 endfunction
 
