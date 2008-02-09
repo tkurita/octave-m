@@ -12,6 +12,7 @@
 ## @code{delta_tune = n0/3 - tune}
 ##
 ## @item a_3n0
+## Coupling factor ?
 ## 
 ## @item circumference
 ## The circumference of the ring.
