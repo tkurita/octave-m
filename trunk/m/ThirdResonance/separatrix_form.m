@@ -20,6 +20,9 @@
 #shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking2/extraction_tracking2.m
 
 ##== History
+## 2008-02-09
+## * use values_for_separatrix instead of prepare_for_separatrix
+## 
 ## 2007-11-02
 ## * add support bm_sx
 ##

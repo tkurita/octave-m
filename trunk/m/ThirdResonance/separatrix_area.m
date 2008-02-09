@@ -11,6 +11,9 @@
 ## [pi mrad mm]
 
 ##== History
+## 2008-02-09
+## * use values_for_separatrix instead of prepare_for_separatrix
+## 
 ## 2007-10-12
 ## * initial implementaion
 

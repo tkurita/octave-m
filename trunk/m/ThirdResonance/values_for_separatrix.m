@@ -21,6 +21,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-02-09
+## * rename from prepare_for_separatrix into values_for_separatrix
+## 
 ## 2007-11-02
 ## * add support BM fringing sextupole
 ##
