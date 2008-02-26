@@ -1,4 +1,4 @@
-## usage : result = velocityForMeV(mev, "particle")
+## usage : result = velocity_with_mev(mev, "particle")
 ##
 ## calculate velocity of a paticle from its energy.
 ##
@@ -11,9 +11,10 @@
 
 ##== History
 ## 2008-02-26
+## * rename velocityForMeV to velocity_with_mev
 ## * Use physical_constant instead of physicalConstant
 
-function result = velocityForMeV(mev, particle)
+function result = velocity_with_mev(mev, particle)
   mass_e = mass_energy(particle);
   #c = physicalConstant("light velocity");
   c = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
@@ -22,4 +23,4 @@ function result = velocityForMeV(mev, particle)
 endfunction
 
 %!test
-%! velocityForMeV(10,"proton")
+%! velocity_with_mev(10,"proton")
