@@ -11,9 +11,11 @@
 
 ##== History
 ## 2008-02-26
+## * deprecated
 ## * Use physical_constant instead of physicalConstant
 
 function result = velocityForMeV(mev, particle)
+  warning("velocityForMeV is deprecated. Use velocity_with_mev");
   mass_e = mass_energy(particle);
   #c = physicalConstant("light velocity");
   c = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");

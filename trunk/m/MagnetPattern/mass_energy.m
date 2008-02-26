@@ -1,18 +1,21 @@
 ## usage : result = mass_energy(particle)
 ##  resolve rest mass enery [MeV]
 ##
-##= Parameter
-## * particle -- "proton" or "carbon"
+##== Parameter
+## * particle -- "proton" or "carbon" or "helium" or mass number [amu]
 
+##== History
+## 
 function result = mass_energy(particle)
   switch particle
     case "proton"
-      result = physicalConstant("proton [MeV]");
+      result = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
     case "helium"
-      amu = physicalConstant("amu");
-      result = amu *4;
+       result = physical_constant("ALPHA_PARTICLE_MASS_ENERGY_EQUIVALENT_IN_MEV");
     case "carbon"
-      amu = physicalConstant("amu");
+      amu = physical_constant("ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV");
       result = amu *12;
+    otherwise
+
   endswitch
 endfunction
