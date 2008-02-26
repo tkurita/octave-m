@@ -14,6 +14,9 @@ function result = momentumForMeV(energy, particle)
     case "proton"
       proton_MeV = physicalConstant("proton [MeV]");
       massE = proton_MeV;
+    case "helium"
+      amu = physicalConstant("amu");
+      massE = amu *4;
     case "carbon"
       amu = physicalConstant("amu");
       massE = amu *12;
