@@ -9,7 +9,12 @@
 ##= Result
 ## revolution frequency [Hz]
 
+##== History
+## 2008-03-03
+## * obosolte. Use frev_with_mev
+
 function result = frevForMeV(mev, circumstance, particle)
+  warning("frevForMeV is deprecated. Use frev_with_mev");
   v = velocityForMeV(mev, particle);
   result = v/circumstance;
 endfunction
