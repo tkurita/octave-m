@@ -9,7 +9,12 @@
 ##= Results
 ## エネルギー [MeV]
 
+##== History
+## 2008-03-03
+## * obsolete
+
 function result = frevToMeV(frev, particle)
+  warning("frevToMeV is deprecated. Use mev_with_frev");
   mass_e = mass_energy(particle);
   v = frev * 33.201; #[m/s]
   lv = physicalConstant("light velocity");
