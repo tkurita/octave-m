@@ -1,4 +1,4 @@
-## usage : momentumForMeV(energy, particle)
+## usage : momentum_with_mev(energy, particle)
 ##
 ##= Parameters
 ## * energy -- 運動エネルギー [MeV]
@@ -7,7 +7,10 @@
 ##= Result
 ## 運動量 [MeV/c]
 
-function result = momentumForMeV(energy, particle)
+##== History
+## * renamed from momentumForMeV
+
+function result = momentum_with_mev(energy, particle)
   #energy = 660 #[MeV]
     
 #  switch particle
@@ -22,7 +25,6 @@ function result = momentumForMeV(energy, particle)
 #      massE = amu *12;
 #  endswitch
   mass_e = mass_energy(particle)
-#  lv = physicalConstant("light velocity");
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
   W= energy + mass_e; #total energy [MeV]
   result = (1/lv)*sqrt(W^2 - mass_e^2);
