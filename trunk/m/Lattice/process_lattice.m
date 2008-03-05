@@ -13,9 +13,12 @@
 ##
 ## @table @code
 ## @item entranceTwpar.h and .v
+## Twiss parameter at the entrance of the element.
+## [beta; alpha; gamma]
+## 
 ## @item centerTwpar.h and .v
 ## @item exitTwpar.h and .v
-## Twiss parameter at the exit of the element.
+##
 ## @item exitDispersion
 ## @item entranceBeta.h and .v
 ## @item centerBeta.h and .v

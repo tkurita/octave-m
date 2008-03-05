@@ -25,25 +25,22 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   # n_loop = 250
   specials = {};
   
+
   ##== setup sextupole magnet
   track_rec = setup_sextupoles(track_rec);
-#  if (isfield(track_rec, "sextupoles"))
-#    for n = 1:length(track_rec.sextupoles)
-#      sx_rec = track_rec.sextupoles{n};
-#      [an_elem, ind_elem] = element_with_name(all_elements, sx_rec.name);
-#      sx_rec = join_struct(an_elem, sx_rec);
-#      sx_rec = setup_sx(sx_rec, track_rec.brho);
-#      all_elements{ind_elem} = sx_rec;
-#      track_rec.sextupoles{n} = sx_rec;
-#      #specials{end+1} = setup_sx(sx_rec, track_rec.brho);
-#    endfor
-#    #track_rec.sextupoles = specials;
-#  endif
   all_elements = track_rec.lattice;
+  
+  if (isfield(track_rec, "start_elem"))
+    [an_elem, ind_elem] = element_with_name(all_elements, track_rec.start_elem);
+    ind_elem
+    size(all_elements)
+    all_elements = {all_elements{ind_elem:length(all_elements)}, all_elements{1:ind_elem-1}}';
+    size(all_elements)
+  endif
+
   
   ##== setup kickers
   if (isfield(track_rec, "kickers"))
-    #specials = [specials, track_rec.kickers];
     for n = 1:length(track_rec.kickers)
       kicker_rec = track_rec.kickers{n};
       [an_elem, ind_elem] = element_with_name(all_elements, kicker_rec.name);
@@ -91,24 +88,6 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     else
       a_span{end+1} = an_elem;
     endif
-    
-    
-    #    for m = 1:length(specials)
-    #      if (strcmp(specials{m}.name, an_elem.name))
-    #        if (length(a_span) > 0)
-    #          span_array{end+1} = span_with_elements(a_span);
-    #          a_span = {};
-    #        endif
-    #        
-    #        span_array{end+1} = specials{m};
-    #        an_elem = [];
-    #        break;
-    #      endif
-    #    endfor
-    #    
-    #    if (length(an_elem) > 0)
-    #      a_span{end+1} = an_elem;
-    #    endif
   endfor
   
   if (length(a_span))
@@ -116,9 +95,15 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     a_span = {};
   endif
   
-  ##== start tracking
-  ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
+  ##== setup initial particles
+  if (isstruct(particle_rec))
+    #ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
+    ini_particles = generate_particles(particle_rec, all_elements{end});
+  else
+    ini_particles = particle_rec;
+  endif
   
+  ##== start tracking
   particles = ini_particles;
   for n = 1:n_loop
     for m = 1:length(span_array)

@@ -1,9 +1,14 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{sepatartix_info} =} values_for_separatrix(@var{track_rec})
+## @deftypefn {Function File} {@var{sepatartix_info} =} values_for_separatrix(@var{track_rec}, [@var{TUNE}])
+##
 ## Return pre-parameters for calculation of third resonance separatrix.
 ##
-## 
-## 
+## The folling equation is used.
+##
+## @math{a_3n0 e^{i xi} = (sqrt(2)/(24*pi))*sum(sx_beta.^(3/2).*sx_strength.*exp(i*(3.*sx_phase - (3*tune - n0).*sx_theta)));}
+##
+## When the argument @var{TUNE} is ommited, @var{track_rec}.tune.h is used.
+##
 ## The result has following fields.
 ##
 ## @table @code
@@ -11,9 +16,15 @@
 ## difference of resonance tune and particle tune.
 ## @code{delta_tune = n0/3 - tune}
 ##
+## @item tune
+## same to @var{track_rec}.tune.h
+##
 ## @item a_3n0
 ## Coupling factor ?
 ## 
+## @item xi
+## coupling_angle ?
+##
 ## @item circumference
 ## The circumference of the ring.
 ##
@@ -21,6 +32,16 @@
 ## @end deftypefn
 
 ##== History
+## 2008-02-20
+## * the argument tune can be a vector
+## * if tune is a vector, each fields of the result struct are vectors.
+## 
+## 2008-02-20
+## * tune can be given as an argument
+##
+## 2008-02-19
+## * result including tune
+##
 ## 2008-02-09
 ## * rename from prepare_for_separatrix into values_for_separatrix
 ## 
@@ -30,7 +51,14 @@
 ## 2007-10-16
 ## * initial implementation
 
-function separatrix_info = values_for_separatrix(track_rec)
+function separatrix_info = values_for_separatrix(varargin)
+  track_rec = varargin{1};
+  if (length(varargin) > 1)
+    tune = varargin{2}(:);
+  else
+    tune = track_rec.tune.h;
+  endif
+  
   sx_strength = [];
   sx_positions = [];
   sx_beta = [];
@@ -63,25 +91,34 @@ function separatrix_info = values_for_separatrix(track_rec)
   
   circumference = circumference(track_rec);
   sx_theta = 2*pi.*sx_positions./circumference;
-  
-  tune = track_rec.tune.h;
+
+  n_sx = length(sx_beta);
+  n_tune = length(tune);
+  if (n_tune > 1)
+    sx_theta = repmat(sx_theta, n_tune, 1);
+    sx_phase = repmat(sx_phase, n_tune, 1);
+    sx_strength = repmat(sx_strength, n_tune, 1);
+    sx_beta = repmat(sx_beta, n_tune, 1);
+  endif
   n0 = find_n0(tune, 3);
-  sx_beta_32 = sx_beta.^(3/2);
-  b = sx_beta_32.*sx_strength.*exp(i*(3.*sx_phase - (3*tune - n0).*sx_theta));
-  coupling_term = (sqrt(2)/(24*pi))*sum(b);
-  a_3n0 = abs(coupling_term);
-  coupling_angle = angle(coupling_term);
   delta_tune = tune - n0/3;
+  sx_beta_32 = sx_beta.^(3/2);
+  b = sx_beta_32.*sx_strength...
+        .*exp(i*(3.*sx_phase - 3*repmat(delta_tune, 1, n_sx).*sx_theta));
+  coupling_term = (sqrt(2)/(24*pi))*sum(b, 2);
+  a_3n0 = abs(coupling_term);
+  xi = angle(coupling_term);
   
   # detuning factor
-  detune_xx = 0;
-  for n = 1:length(sx_strength)
-    del_phase = abs(sx_phase(n) - sx_phase);
-    detune_xx += (sx_strength(n)*sx_strength).*(sx_beta_32(n).*sx_beta_32)...
-    .*(cos(3*(pi*tune-del_phase))/sin(3*pi*tune) + 3*cos(pi*tune - del_phase)/sin(pi*tune));
-  endfor
-  detune_xx = (1/(64*pi))*sum(detune_xx);
+#  detune_xx = 0;
+#  for n = 1:length(sx_strength)
+#    del_phase = abs(sx_phase(n) - sx_phase);
+#    detune_xx += (sx_strength(n)*sx_strength).*(sx_beta_32(n).*sx_beta_32)...
+#    .*(cos(3*(pi*tune-del_phase))/sin(3*pi*tune) + 3*cos(pi*tune - del_phase)/sin(pi*tune));
+#  endfor
+#  detune_xx = (1/(64*pi))*sum(detune_xx);
   
   # build result
-  separatrix_info = build_struct(delta_tune, a_3n0, coupling_angle, circumference, detune_xx);
+#  separatrix_info = build_struct(tune, delta_tune, n0,  a_3n0, xi, circumference, detune_xx);
+   separatrix_info = build_struct(tune, delta_tune, n0,  a_3n0, xi, circumference);
 endfunction

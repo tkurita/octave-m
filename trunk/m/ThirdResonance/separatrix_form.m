@@ -17,9 +17,17 @@
 ## @var{pos_in_elem} : position in the element. "entrance", "center" or "exit"
 ##
 ## @end deftypefn
+
 #shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2007.10 Tracking/extraction_tracking2/extraction_tracking2.m
 
 ##== History
+## 2008-02-25
+## * fix a bug that "alpha_f" is not considered an argument "pos_in_elem".
+## * fixed points without 1000 factor as second return value.
+## 
+## 2008-02-21
+## * rename sep_info.coupling_angle to sep_info.xi
+## 
 ## 2008-02-09
 ## * use values_for_separatrix instead of prepare_for_separatrix
 ## 
@@ -29,25 +37,32 @@
 ## 2007-10-16
 ## * initial implementaion
 
-function xy_points = separatrix_form(track_rec, elem_name, pos_in_elem)
+function [xy_points_1000, xy_points] = separatrix_form(track_rec, elem_name, pos_in_elem)
   sep_info = values_for_separatrix(track_rec);
   an_elem = element_with_name(track_rec, elem_name);
   phase_advance = an_elem.([pos_in_elem, "Phase"]).h;
   s = an_elem.([pos_in_elem, "Position"]);
   if (sep_info.delta_tune > 0) 
-    phi_fp = [pi/3, pi, 5*pi/3];
+    psi_fp = [pi/3, pi, 5*pi/3];
   else
-    phi_fp = [0, 2*pi/3, 4*pi/3];
+    psi_fp = [0, 2*pi/3, 4*pi/3];
   endif
-  
-  phi = phi_fp + phase_advance...
-  - sep_info.delta_tune*2*pi*s/sep_info.circumference...
-  - sep_info.coupling_angle/3;
+  theta = 2*pi*s/sep_info.circumference;
+  psi_fp
+  phi = psi_fp + phase_advance...
+    - sep_info.delta_tune*theta...
+    - sep_info.xi/3;
+  phi
   beta_f = an_elem.([pos_in_elem,"Beta"]).h;
-  alpha_f = an_elem.centerTwpar.h(2);
+  #beta_f
+  #alpha_f = an_elem.centerTwpar.h(2);
+  alpha_f = an_elem.([pos_in_elem, "Twpar"]).h(2);
+  #alpha_f
   J = (2*sep_info.delta_tune/(3*sep_info.a_3n0))^2;
+  J
   x = sqrt(2*J*beta_f).*cos(phi);
   xprime = -sqrt(2*J/beta_f).*(alpha_f.*cos(phi) + sin(phi));
-  xy_points = [x; xprime]'*1000;
-  xy_points(end+1,:) = xy_points(1,:);
+  xy_points = [x; xprime]';
+  xy_points(end+1, :) = xy_points(1,:);
+  xy_points_1000 = xy_points*1000;
 endfunction

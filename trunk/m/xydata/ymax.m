@@ -1,6 +1,7 @@
 ## Usage : [max_data, imax] = ymax([x, y])
 ##         max_data = ymax([x, y])
-##      return a pair value of maxmum y
+##
+##      return a row acooding to maxmum y
 
 ##== History
 ## 2008-02-20

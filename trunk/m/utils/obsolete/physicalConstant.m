@@ -6,6 +6,7 @@
 ## * "proton [MeV]"
 
 function result = physicalConstant(constName)
+  warning("physicalConstant is deprecated. Use physical_constant.");
   switch (constName)
     case "light velocity"
       result = 2.99792458e8; #[m/s] light velocity
