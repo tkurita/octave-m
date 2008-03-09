@@ -9,8 +9,8 @@ function result = xyplot(varargin)
     if (ischar(item))
       plotarg = {plotarg{:}, item};
     else
-      theSize = size(item);
-      if (theSize(2) == 1) 
+      a_size = size(item);
+      if (a_size(2) == 1) 
         plotarg = {plotarg{:}, item};
       else
         plotarg = {plotarg{:}, item(:,1), item(:,2)};
