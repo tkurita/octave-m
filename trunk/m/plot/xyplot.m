@@ -7,13 +7,12 @@ function result = xyplot(varargin)
   for i = 1:length(varargin)
     item = varargin{i};
     if (ischar(item))
-      plotarg = {plotarg{:}, item};
+      plotarg{end+1} = item;
     else
-      a_size = size(item);
-      if (a_size(2) == 1) 
-        plotarg = {plotarg{:}, item};
-      else
+      if (columns(item) == 2) 
         plotarg = {plotarg{:}, item(:,1), item(:,2)};
+      else
+        plotarg{end+1} = item;
       endif
     endif
   endfor

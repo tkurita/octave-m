@@ -48,18 +48,18 @@ function [xy_points_1000, xy_points] = separatrix_form(track_rec, elem_name, pos
     psi_fp = [0, 2*pi/3, 4*pi/3];
   endif
   theta = 2*pi*s/sep_info.circumference;
-  psi_fp
+#  psi_fp
   phi = psi_fp + phase_advance...
     - sep_info.delta_tune*theta...
     - sep_info.xi/3;
-  phi
+  #phi
   beta_f = an_elem.([pos_in_elem,"Beta"]).h;
   #beta_f
   #alpha_f = an_elem.centerTwpar.h(2);
   alpha_f = an_elem.([pos_in_elem, "Twpar"]).h(2);
   #alpha_f
   J = (2*sep_info.delta_tune/(3*sep_info.a_3n0))^2;
-  J
+  #J
   x = sqrt(2*J*beta_f).*cos(phi);
   xprime = -sqrt(2*J/beta_f).*(alpha_f.*cos(phi) + sin(phi));
   xy_points = [x; xprime]';

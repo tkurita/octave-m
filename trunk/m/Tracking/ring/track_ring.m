@@ -17,6 +17,9 @@
 ## * n_loop -- 粒子をまわす回数
 
 ##== History
+## 2008-03-06
+## * start_elem を設定できるようにした。
+##
 ## 2007.10.03
 ## * separatrixTracking.m から派生。より一般化する。
 ## * thin lenz 近似だけをサポートする。
@@ -30,6 +33,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   track_rec = setup_sextupoles(track_rec);
   all_elements = track_rec.lattice;
   
+  ##== shift all_elements to change start point
   if (isfield(track_rec, "start_elem"))
     [an_elem, ind_elem] = element_with_name(all_elements, track_rec.start_elem);
     ind_elem
