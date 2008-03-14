@@ -21,7 +21,7 @@ function area = points_area(points, varargin)
   polar_env =  [points_sorted(:,1), up];
   polar_env = polar_env(!isnan(polar_env(:,2)),:);
   xy_env = [polar_env(:,2).*cos(polar_env(:,1)), polar_env(:,2).*sin(polar_env(:,1))];
-  xyplot(points, ".", xy_env + shift_mat(1:rows(xy_env),:) , "-");
+  xyplot(points, "@", xy_env + shift_mat(1:rows(xy_env),:) , "-");
   
   xy_env(:,end+1) = zeros(rows(xy_env),1);
   xy_env_shifted = shift(xy_env,1);
