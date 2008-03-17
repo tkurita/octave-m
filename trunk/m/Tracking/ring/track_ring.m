@@ -1,3 +1,27 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{particles} =} track_ring(@var{track_rec}, @var{particle_rec}, @var{n_loop})
+## @deftypefnx {Function File} {[@var{particles}, @var{last_particles}, @var{ini_particles}] =} track_ring(@var{track_rec}, @var{particle_rec}, @var{n_loop})
+##
+## @var{track_rec} is a structure which must have following fields.
+## @table @code
+## @item lattice
+## @item brho
+## @end table
+## 
+## @var{track_rec} can have following optional fields.
+## @table @code
+## @item sextupoles
+## @item kickers
+## @item bm_sx
+## S*L [1/m] Sextupole strength of BM fringing field
+## @item start_elem
+## @end table
+##
+## See generate_particles for the fields @var{particle_rec} can have.
+##
+## @end deftypefn
+
+
 ## Usage : [particles, last_particles, init_patricles] 
 ##                    = track_ring(track_rec, particle_rec, n_loop)
 ## 

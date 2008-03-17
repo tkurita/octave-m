@@ -1,4 +1,4 @@
-## usage: allElements = buildWERCMatrix(qfk,qdk,[vedge] )
+## usage: all_elements = buildWERCMatrix(qfk,qdk,[vedge] )
 ##
 ## WERC シンクロトロンの全要素の matrix の配列を返す。
 ##
@@ -21,7 +21,7 @@
 ## 2007-10-18
 ## * accept a structure as an argument
 
-function allElements = buildWERCMatrix(varargin)
+function all_elements = buildWERCMatrix(varargin)
   if (isstruct(varargin{1}))
     lattice_rec = varargin{1};
     qfk = lattice_rec.qfk;
@@ -80,8 +80,9 @@ function allElements = buildWERCMatrix(varargin)
   MRD14 = MRD4; #絶縁ダクト
   MRD15 = MRD3;
   FCTDuct = 133e-3/2;
-  
-  allElements = {
+  RFK_Duct = 200e-3/2;
+  RFK_Electrode = [140/2, 38/2];
+  all_elements = {
   DT(0.4,"ESI", [61.2e-3, -77e-3, 77e-3, -77e-3]),
   QF(qfk,qlength,"QF1", MRD1),
   DT(0.3,"L1", MRD1),
@@ -101,12 +102,15 @@ function allElements = buildWERCMatrix(varargin)
   DT(0.2, "BMPi1", MRD4),
   DT(0.3, "L6", bmDuct),
   BM(bmprop, "BM2", bmDuct),
-  DT(0.6,"L7", MRD5),
-  DT(0.05,"STH2", bpmDuct),
-  DT(0.05,"BPM2", bpmDuct),
-  DT(0.3,"L8", bpmDuct),
-  DT(0.3,"RFK", [140/2, 38/2]),
-  DT(0.5,"L9", MRD6),
+  DT(0.175, "L7", bmDuct),
+  DT(0.35, "MRD5", MRD5),
+  DT(0.05, "STH2", bpmDuct),
+  DT(0.05, "BPM2", bpmDuct),
+  DT(0.175, "L8", bpmDuct),
+  DT(0.16, "RFK_Duct", RFK_Duct),
+  DT(0.2, "RFK_H", RFK_Electrode),
+  DT(0.16, "RFK_V", RFK_Electrode),
+  DT(0.48, "L9", MRD6),
   QF(qfk,qlength,"QF2", MRD6),
   DT(0.65,"L10", MRD6),
   DT(0.05,"SCR", [68e-3, -68e-3, 17.5e-3, -17.5e-3]),
