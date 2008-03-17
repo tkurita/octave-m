@@ -1,7 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} mev_with_frev(@var{frev}, @var{circumference}, @var{particle})
 ##
-## Calculate the energy [MeV] of the particle of given revolution frequency.
+## Calculate the kinetic energy [MeV] of the particle of given revolution frequency.
 ## It is assumed that the harmonics is 1.
 ##
 ## @table @code
@@ -12,7 +12,7 @@
 ## Circumference of the ring [m]
 ##
 ## @item @var{particle}
-## The kind of the particle. "proton" or "carbon" or mass number.
+## The kind of the particle. "proton", "helium", "carbon" or mass number.
 ## @end table
 ##
 ## @end deftypefn
