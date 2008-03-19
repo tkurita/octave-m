@@ -20,8 +20,13 @@
 function result = mev_with_momentum(p, particle)
   mass_e = mass_energy(particle);
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
-  x = p/(mass_e*c) # beta/(sqrt(1-beta^2))
-  b2 = x/(1+x);
+  x = lv*p/mass_e; # beta/(sqrt(1-beta^2))
+  b2 = x^2/(1+x^2);
   g = 1/sqrt(1-b2);
-  result = mass_e(g-1);
+  result = mass_e*(g-1);
 endfunction
+
+%!test
+%! mev_with_momentum(2.1498e-6, "proton")
+#       ans =  200.03
+# PASSES 1 out of 1 tests

@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} mev_with_brho(@var{brho}, @bar{charge}, @var{particle})
+## @deftypefn {Function File} {} mev_with_brho(@var{brho}, @var{charge}, @var{particle})
 ##
 ## Evaluate Kinetic energy from Brho and chanrge number.
 ##
@@ -21,5 +21,5 @@
 ## * first implementaion
 
 function result = mev_with_brho(brho, charge, particle)
-  result = mev_with_momentum(charge*brho, particle);
+  result = mev_with_momentum(charge*brho*1e-6, particle);
 endfunction

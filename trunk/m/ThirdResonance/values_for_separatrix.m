@@ -25,6 +25,12 @@
 ## @item xi
 ## coupling_angle ?
 ##
+## @item J
+## Action at the fixed points.
+##
+## @item psi
+## Phase of fixed points.
+##
 ## @item circumference
 ## The circumference of the ring.
 ##
@@ -32,6 +38,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-03-17
+## * add psi and J into the output.
+## 
 ## 2008-02-20
 ## * the argument tune can be a vector
 ## * if tune is a vector, each fields of the result struct are vectors.
@@ -108,7 +117,12 @@ function separatrix_info = values_for_separatrix(varargin)
   coupling_term = (sqrt(2)/(24*pi))*sum(b, 2);
   a_3n0 = abs(coupling_term);
   xi = angle(coupling_term);
-  
+  J = (2*delta_tune/(3*a_3n0))^2;
+  if (delta_tune > 0) 
+    psi = [pi/3, pi, 5*pi/3];
+  else
+    psi = [0, 2*pi/3, 4*pi/3];
+  endif
   # detuning factor
 #  detune_xx = 0;
 #  for n = 1:length(sx_strength)
@@ -120,5 +134,6 @@ function separatrix_info = values_for_separatrix(varargin)
   
   # build result
 #  separatrix_info = build_struct(tune, delta_tune, n0,  a_3n0, xi, circumference, detune_xx);
-   separatrix_info = build_struct(tune, delta_tune, n0,  a_3n0, xi, circumference);
+   
+   separatrix_info = tars(tune, delta_tune, n0,  a_3n0, xi, circumference, psi, J);
 endfunction

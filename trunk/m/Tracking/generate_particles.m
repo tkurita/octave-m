@@ -38,7 +38,6 @@
 ## * add delP/P in result
 ## * derived from makeParticles
 
-#function result = generate_particles(an_elem, particle_rec)
 function result = generate_particles(varargin)
   particle_rec = varargin{1};
   an_elem = varargin{2};
@@ -76,3 +75,4 @@ function result = generate_particles(varargin)
   p_error_vec = repmat(p_error,1,n);
   result = [x; xprime; p_error_vec; y; yprime ;p_error_vec];
 endfunction
+

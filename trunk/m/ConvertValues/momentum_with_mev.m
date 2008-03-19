@@ -1,13 +1,22 @@
-## usage : momentum_with_mev(energy, particle)
+## -*- texinfo -*-
+## @deftypefn {Function File} {} momentum_with_mev(@var{energy}, @var{particle})
+## 
+## Evaluate momentum [MeV/c] from the kinetic energy.
 ##
-##= Parameters
-## * energy -- 運動エネルギー [MeV]
-## * particle -- "proton" or "carbon"
+## @table @code
+## @item @var{energy}
+## Kinetic Energy [MeV]
 ##
-##= Result
-## 運動量 [MeV/c]
+## @item @var{particle}
+## The kind of the particle. "proton", "helium", "carbon" or mass number.
+## @end table
+##
+## @end deftypefn
 
 ##== History
+## 2008-03-17
+## * add texinfo help
+## ????-??-??
 ## * renamed from momentumForMeV
 
 function result = momentum_with_mev(energy, particle)
@@ -16,3 +25,8 @@ function result = momentum_with_mev(energy, particle)
   W= energy + mass_e; #total energy [MeV]
   result = (1/lv).*sqrt(W.^2 - mass_e.^2);
 endfunction
+
+%!test
+%! momentum_with_mev(200, "proton")
+#       ans =  2.1496e-06
+# PASSES 1 out of 1 tests

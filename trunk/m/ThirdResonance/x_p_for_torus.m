@@ -6,12 +6,15 @@
 ## 2008-03-07
 ## * initial implementation
 
-function x_p_list = x_p_for_torus(h_list, track_rec, elem_name, pos_in_elem)
+function x_p_list = x_p_for_torus(h_list, track_rec, elem_name, pos_in_elem, psi_list)
   global __g_j_for_phi__;
   sepinfo = values_for_separatrix(track_rec);
-  psi_list = 0:(2*pi/360):2*pi;
-  psi_j_list = {}
-
+  if (nargin < 5)
+    psi_list = 0:(2*pi/360):2*pi;
+  end
+  
+  psi_j_list = {};
+  
   for h = h_list;
     __g_j_for_phi__ = setfields(sepinfo, "h", h);
     j_buffer = [];
@@ -42,13 +45,3 @@ function x_p_list = x_p_for_torus(h_list, track_rec, elem_name, pos_in_elem)
   x_p_list = x_p_with_psi_j(psi_j_list, track_rec, elem_name, pos_in_elem);
 endfunction
 
-function hdiff = j_for_phi(j)
-  global __g_j_for_phi__;
-  h = __g_j_for_phi__.h;
-  psi = __g_j_for_phi__.psi;
-  a_3n0 = __g_j_for_phi__.a_3n0;
-  delta_tune = __g_j_for_phi__.delta_tune;
-  hdiff = delta_tune*j ...
-    + (j.^(3/2))*a_3n0.*cos(3*psi) ...
-    - h;
-endfunction

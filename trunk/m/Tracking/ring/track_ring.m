@@ -41,6 +41,9 @@
 ## * n_loop -- 粒子をまわす回数
 
 ##== History
+## 2008-03-17
+## RFK を設定できるようにした。
+##
 ## 2008-03-06
 ## * start_elem を設定できるようにした。
 ##
@@ -50,9 +53,7 @@
 
 function varargout = track_ring(track_rec, particle_rec, n_loop)
   # n_loop = 250
-  specials = {};
   
-
   ##== setup sextupole magnet
   track_rec = setup_sextupoles(track_rec);
   all_elements = track_rec.lattice;
@@ -60,10 +61,10 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   ##== shift all_elements to change start point
   if (isfield(track_rec, "start_elem"))
     [an_elem, ind_elem] = element_with_name(all_elements, track_rec.start_elem);
-    ind_elem
-    size(all_elements)
+#    ind_elem
+#    size(all_elements)
     all_elements = {all_elements{ind_elem:length(all_elements)}, all_elements{1:ind_elem-1}}';
-    size(all_elements)
+    #size(all_elements)
   endif
 
   
@@ -75,6 +76,24 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
       all_elements{ind_elem} = kicker_rec;
     endfor
   endif
+  
+  ##== setup BM fringing sextupole
+  if (isfield(track_rec, "bm_sx"))
+    for n = 1:length(all_elements)
+      if (is_BM(all_elements{n}))
+        all_elements{n} = setup_fringing_sx(all_elements{n}, track_rec.bm_sx);
+      endif
+    endfor
+  endif
+
+  ##== setup RFK
+  if (isfield(track_rec, "rfks"))
+    for n = 1:length(track_rec.rfks)
+      rfk_rec = track_rec.rfks{n};
+      [an_elem, ind_elem] = element_with_name(all_elements, rfk_rec.name);
+      all_elements{ind_elem} = setup_rfk(rfk_rec, an_elem, track_rec.brho, particle_rec);
+    end
+  end
   
   ##== setup monitors
   if (isfield(track_rec, "monitors"))
@@ -91,16 +110,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     all_elements{ind_elem} = monitor_with_element(an_elem);
     _particle_history.(monitor_names{n}) = {};
   endfor
-  
-  ##== setup BM fringing sextupole
-  if (isfield(track_rec, "bm_sx"))
-    for n = 1:length(all_elements)
-      if (is_BM(all_elements{n}))
-        all_elements{n} = setup_fringing_sx(all_elements{n}, track_rec.bm_sx);
-      endif
-    endfor
-  endif
-  
+    
   ##== build span array
   span_array = {};
   a_span = {};
@@ -125,15 +135,26 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   
   ##== setup initial particles
   if (isstruct(particle_rec))
-    #ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
-    ini_particles = generate_particles(particle_rec, all_elements{end});
+    if (isfield(particle_rec, "particles"))
+      ini_particles = particle_rec.particles;
+    else
+      #ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
+      if (isfield(particle_rec, "kind") && (strcmp(particle_rec.kind, "third")))
+        particle_rec = generate_particles3(particle_rec, track_rec);
+        ini_particles = particle_rec.particles;
+      else
+        ini_particles = generate_particles(particle_rec, all_elements{end});
+      end
+    end
   else
     ini_particles = particle_rec;
   endif
   
   ##== start tracking
   particles = ini_particles;
+  global __revolution_number__;
   for n = 1:n_loop
+    __revolution_number__ = n;
     for m = 1:length(span_array)
       #span_array{m}.name
       particles = span_array{m}.apply(span_array{m}, particles);
