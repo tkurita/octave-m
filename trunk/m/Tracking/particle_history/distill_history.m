@@ -9,8 +9,12 @@
 ##      .h : a cell array of which each cell is a hidtory of a particle.
 ##      .v  : 
 ##      .dp : 
+##      .id :
 
 ##== History
+## 2008-03-25
+## * id field を付け加えるようにした。
+##
 ## 2008-03-21
 ## * 劇的に高速化
 ## * matrix の結合は遅い
@@ -57,9 +61,10 @@ function result = distill_history(hist_at_elem, filtering)
   result.h = pick_history(a_mat, 1, 2);
   result.v = pick_history(a_mat, 4, 5);
   result.dp = pick_history(a_mat, 3, 3);
+  result.id = 1:length(result.h);
   #after_pick_history = time()
   #printf("time for pick_history %d\n", after_pick_history - before_pick_history);
-
+  
   if (nargin > 1)
     switch filtering
       case "surviving"
@@ -74,11 +79,13 @@ function a_hist = remove_nan_tails(a_hist, nan_mat)
   [max_val, max_ind] = max(nan_mat);
   max_ind = (max_ind - 1)/6;
   for [val, key] = a_hist
-    for n = 1:length(max_ind)
-      if (max_ind(n) > 0)
-        val{n} = val{n}(1:max_ind(n), :);
-      end
-    end
+    if (!strcmp(key, "id"))
+      for n = 1:length(max_ind)
+        if (max_ind(n) > 0)
+          val{n} = val{n}(1:max_ind(n), :);
+        endif
+      endfor
+    endif
     a_hist.(key) = val;
   end
 end

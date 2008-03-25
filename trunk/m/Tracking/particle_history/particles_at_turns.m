@@ -7,6 +7,9 @@
 ## horv is ommited, return a matrix of form of [x, x', delp, y, y',delp]
 
 ##== History
+## 2008-03-21
+## * make faster by not using cell2mat.
+## * 
 ## 2007-12-04
 ## * when horv is not given, a matrix of form of [x, x', delp, y, y',delp]
 ##
@@ -39,8 +42,14 @@ function out_particles = particles_at_turns(varargin)
   if (strcmp(elem_name, "initial"))
     particles = particle_hist.(elem_name);
   else
-    particles = particle_hist.(elem_name)(turn_range(1):turn_range(end));
-    particles = cell2mat(particles);    
+    particles_in_turns = particle_hist.(elem_name)(turn_range(1):turn_range(end));
+    # particles = cell2mat(particles);
+    num_particle = columns(particles_in_turns{1});
+    particles = zeros(6,length(particles_in_turns)*num_particle);
+    for n = 1:length(particles_in_turns)
+      m = 1 + num_particle*(n - 1);
+      particles(:, m:m+(num_particle-1)) = particles_in_turns{n};
+    end
   endif
 
   switch horv

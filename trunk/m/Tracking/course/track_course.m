@@ -1,8 +1,9 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} func_name(@var{arg})
+## @deftypefn {Function File} {@var{result} =} track_course(@var{a_course}, @var{initial_particles}, @var{step})
 ##
 ## hit_flag(1,:) : horizontal
 ## hit_flag(2,:) : vertical
+## 
 ## @end deftypefn
 
 ##== History

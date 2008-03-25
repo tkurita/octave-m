@@ -14,6 +14,12 @@ function result = through_rfk(rfk_rec, particles)
   particles = rfk_rec.premat*particles;
   rfkicks = zeros(6, rfk_rec.n_particle);
   #rfk_rec.kick_angle(__revolution_number__)
-  rfkicks(2,:) = ones(1,rfk_rec.n_particle)*rfk_rec.kick_angle(__revolution_number__);
+  kick_angle_len = columns(rfk_rec.kick_angle);
+  kick_ind = __revolution_number__;
+  while (kick_ind > kick_angle_len)
+    kick_ind = kick_ind - kick_angle_len
+  end
+
+  rfkicks(2,:) = ones(1,rfk_rec.n_particle)*rfk_rec.kick_angle(kick_ind);
   result = rfk_rec.postmat * (particles + rfkicks);
 endfunction

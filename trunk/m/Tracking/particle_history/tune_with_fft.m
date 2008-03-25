@@ -12,9 +12,13 @@
 ## @end example
 ## @end deftypefn
 
+##== History
+## 2008-03-19
+## * removing DC component before fft
+
 function tune_frac = tune_with_fft(mat)
   # mat = a_hist.h{1}
-  f_result = fourier(struct("data", mat(:,1), "interval", 1));
+  f_result = fourier(struct("data", mat(:,1)-mean(mat(:,1)), "interval", 1));
   #plot(f_result.frequency, f_result.amplitude);
   [max_amp, ind_max] = max(f_result.amplitude);
   tune_frac = f_result.frequency(ind_max);

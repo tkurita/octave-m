@@ -1,5 +1,8 @@
 
 ##== History
+## 2008-03-20
+## removing DC components of particles before converting to action-angle variable.
+## 
 ## 2008-03-11
 ## *tune can be scalar
 ##
@@ -28,6 +31,8 @@ function [h, phi_j] = hamiltonian_3reso(particle_hists, tune, track_rec, elem_na
   phase_advance = an_elem.([pos_in_elem, "Phase"]).h;
   for n = 1:n_particles
     particles = particle_hists{n};
+    particles(:,1) = particles(:,1) - mean(particles(:,1));
+    particles(:,2) = particles(:,2) - mean(particles(:,2));
     phi_j{n} = action_angle(particles, b.h, a);
     k = phi_j{n}(:,2);
 #    phi1 = phi_j{n}(:,1) - an_elem.entrancePhase.h + sep_info.tune(n) * theta;

@@ -54,6 +54,12 @@
 function varargout = track_ring(track_rec, particle_rec, n_loop)
   # n_loop = 250
   
+  if (isfield(track_rec, "check_hit"))
+    check_hit = track_rec.check_hit;
+  else
+    check_hit = false;
+  end
+
   ##== setup sextupole magnet
   track_rec = setup_sextupoles(track_rec);
   all_elements = track_rec.lattice;
@@ -67,11 +73,31 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     #size(all_elements)
   endif
 
+  ##== setup initial particles
+  if (isstruct(particle_rec))
+    if (isfield(particle_rec, "particles"))
+      ini_particles = particle_rec.particles;
+      particle_rec.num = columns(ini_particles);
+    else
+      #ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
+      if (isfield(particle_rec, "kind") && (strcmp(particle_rec.kind, "third")))
+        particle_rec = generate_particles3(particle_rec, track_rec);
+        ini_particles = particle_rec.particles;
+      else
+        ini_particles = generate_particles(particle_rec, all_elements{end});
+      end
+    end
+  else
+    ini_particles = particle_rec;
+  endif
+  n_particles = columns(ini_particles);
+  
   
   ##== setup kickers
   if (isfield(track_rec, "kickers"))
     for n = 1:length(track_rec.kickers)
       kicker_rec = track_rec.kickers{n};
+      #kicker_rec.kickMat = repmat(kicker_rec.kickVector, 1, n_particles);
       [an_elem, ind_elem] = element_with_name(all_elements, kicker_rec.name);
       all_elements{ind_elem} = kicker_rec;
     endfor
@@ -84,6 +110,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
         all_elements{n} = setup_fringing_sx(all_elements{n}, track_rec.bm_sx);
       endif
     endfor
+    all_elements = flat_cell(all_elements);
   endif
 
   ##== setup RFK
@@ -108,9 +135,27 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     [an_elem, ind_elem] = element_with_name(all_elements, monitor_names{n});
     
     all_elements{ind_elem} = monitor_with_element(an_elem);
-    _particle_history.(monitor_names{n}) = {};
+    _particle_history.(monitor_names{n}) = cell(1, n_loop);;
   endfor
-    
+  
+  ##=== setup hit checkers;
+  if (check_hit)
+    _particle_history.hit = {};
+    for n = 1:length(all_elements)
+      an_elem = all_elememnts{n};
+      if (is_BM(an_elem))
+        all_elements{n} = {hit_checker_with_element(an_elem, "entrance")...
+                           , an_elem ...
+                           , hit_checker_with_element(an_elem, "exit")};
+      elseif (is_Qmag(all_elememnts{n}))
+        all_elememnts{n} = { half_elelement(an_elem, true)...
+                           , hit_checker_with_element(an_elem)...
+                           , half_elelement(an_elem, false)};
+      end
+    end
+    all_elements = flat_cell(all_elements);
+  end
+
   ##== build span array
   span_array = {};
   a_span = {};
@@ -133,23 +178,6 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     a_span = {};
   endif
   
-  ##== setup initial particles
-  if (isstruct(particle_rec))
-    if (isfield(particle_rec, "particles"))
-      ini_particles = particle_rec.particles;
-    else
-      #ini_particles = generate_particles(particle_rec, track_rec.lattice{end});
-      if (isfield(particle_rec, "kind") && (strcmp(particle_rec.kind, "third")))
-        particle_rec = generate_particles3(particle_rec, track_rec);
-        ini_particles = particle_rec.particles;
-      else
-        ini_particles = generate_particles(particle_rec, all_elements{end});
-      end
-    end
-  else
-    ini_particles = particle_rec;
-  endif
-  
   ##== start tracking
   particles = ini_particles;
   global __revolution_number__;
@@ -164,9 +192,14 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   #particle_hist = setfields(_particle_history, "num", particle_rec.num);
   particle_hist = _particle_history;
   particle_hist.initial = ini_particles;
+  particle_hist.revolution_number = __revolution_number__;
   varargout{1} = particle_hist;
   if (nargout > 1)
     varargout{end+1} = track_rec;
-  endif
+  end
+
+  if (nargout > 2)
+    varargout{end+1} = track_rec;
+  end
   
 endfunction
