@@ -11,6 +11,11 @@
 ##      .dp : 
 
 ##== History
+## 2008-03-21
+## * 劇的に高速化
+## * matrix の結合は遅い
+## * あらかじめ matrix を作って代入するのが高速
+## 
 ## 2008-03-13
 ## * elem_name は必要ない。引数に与える時に particle_hist.(elem_name)とすればいい。
 ## * 各種モードを作った。
@@ -25,7 +30,11 @@
 function result = distill_history(hist_at_elem, filtering)
   # elem_name = "ESD";
   # horv = "h";
-  a_mat = cell2mat(hist_at_elem');
+  # before_cell2mat = time()
+  #a_mat = cell2mat(hist_at_elem');
+  a_mat = arrange_cell(hist_at_elem);
+  #after_cell2mat = time()
+  # printf("time for cell2mat %d\n", after_cell2mat - before_cell2mat);
   ## 次のように整形される
   ## x11 , x21 ...
   ## y11 , y21 ...
@@ -44,9 +53,12 @@ function result = distill_history(hist_at_elem, filtering)
   #  result.h = pick_history(a_mat, nan_cols, 1, 2);
   #  result.v = pick_history(a_mat, nan_cols, 4, 5);
   #  result.dp = pick_history(a_mat, nan_cols, 3, 3);
+  #before_pick_history = time()
   result.h = pick_history(a_mat, 1, 2);
   result.v = pick_history(a_mat, 4, 5);
   result.dp = pick_history(a_mat, 3, 3);
+  #after_pick_history = time()
+  #printf("time for pick_history %d\n", after_pick_history - before_pick_history);
 
   if (nargin > 1)
     switch filtering
@@ -135,3 +147,11 @@ function result = pick_history(a_mat, q_index, p_index)
   ## とセルに分割 出来上がるのは row wise
   result = mat2cell(qp_mat, [nturns], 2*ones(1,nparticles));
 endfunction
+
+function out = arrange_cell(a_cell)
+  out = zeros(6*length(a_cell), length(a_cell{1}));
+  for n = 1:length(a_cell)
+    ind = 1+6*(n-1);
+    out(ind:ind+5,:) = a_cell{n};
+  end
+end
