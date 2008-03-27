@@ -133,7 +133,7 @@ function all_elements = buildWERCMatrix(varargin)
   DT(0.175, "L16_1", bmDuct),
   DT(0.195, "L16_2", 197.2e-3/2),
   #DT(0.37,"L16"),
-  DT(0.9, "ESD", [58e-3, -197.2e-3/2, 197.2e-3/2, -197.2e-3/2]),
+  DT(0.9, "ESD", [(58e-3)-(0.3e-3), -197.2e-3/2, 197.2e-3/2, -197.2e-3/2]),
   DT(0.53, "L17", MRD9),
   QF(qfk, qlength, "QF3", MRD9),
   #DT(1.4,"L18"),

@@ -19,6 +19,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-03-26
+## * acceptance に [xmin, xmax] を与えられるようにした。
+##
 ## 2008-03-25
 ## * NaN になる粒子を選別できるようにした。
 ##
@@ -33,8 +36,13 @@ function last_points = distill_lasts(a_hist, min_turn, acceptance)
     check_condition = @in_par;
     __par__ = acceptance;
   else
-    xthreshold = acceptance;
-    check_condition = @return_true;
+    if (length(acceptance) > 1)
+      xthreshold = acceptance(1);
+      check_condition = @return_true;
+    else
+      xthreshold = acceptance;
+      check_condition = @return_true;
+    end
   end
   
   last_points = struct("h", [], "v", [], "n_rev", [], "id", []);
@@ -43,6 +51,9 @@ function last_points = distill_lasts(a_hist, min_turn, acceptance)
       compare_result = isnan(a_hist.h{n}(:,1));
     else
       compare_result = a_hist.h{n}(:,1) > xthreshold;
+      if (length(acceptance) > 1)
+        compare_result = compare_result & (a_hist.h{n}(:,1) <= acceptance(2)) ;
+      endif
     end
 
     if (any(compare_result))
@@ -54,10 +65,11 @@ function last_points = distill_lasts(a_hist, min_turn, acceptance)
           last_points.h(end+1,:) = a_hist.h{n}(max_ind,:);
           last_points.v(end+1,:) = a_hist.v{n}(max_ind,:);
           last_points.n_rev(end+1) = max_ind;
-          last_points.id(end+1) = n;
-        end
-      end
-    end
+          #last_points.id(end+1) = n;
+          last_points.id(end+1) = a_hist.id(n);
+        endif
+      endif
+    endif
   end
 endfunction
 

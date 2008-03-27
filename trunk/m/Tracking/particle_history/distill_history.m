@@ -1,15 +1,33 @@
-## distill_history(hist_at_elem, mode)
-## 
-## mode : 
-##  * "surviving" : NaN にならない粒子だけ
-##  * "strip NaN" : NaN 以降を削除
-##  * omit : 何もしない。
-## 
-## result
-##      .h : a cell array of which each cell is a hidtory of a particle.
-##      .v  : 
-##      .dp : 
-##      .id :
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} distill_history(@var{hist_at_elem}, @var{mode})
+##
+## track_ring の particle_hist 出力の monitor の記録を粒子ごとの matrix に並び替える。
+##
+## @table @code
+## @item @var{hist_at_elem}
+## monitor で観測された粒子の履歴 e.x.) particle_hist.ESD
+##
+## @item @var{mode}
+## @itemize
+## @item "surviving" : NaN にならない粒子
+## @item "strip NaN" : NaN 以降を削除
+## @item omit : 何もしない。
+## @end itemize
+## @end table
+##
+## The result is a structure which has following fields
+## @table @code
+## @item h
+## a cell array of which each cell is a history of a particle.
+## @item v
+## vertical
+##
+## @item dp
+##
+## @item id
+## @end table
+##
+## @end deftypefn
 
 ##== History
 ## 2008-03-25
@@ -28,9 +46,6 @@
 ## * .v をちゃんとした。
 ## * .dp を付け加えた。
 
-## particle_hist の構造 -- 適切は function (track_ring)
-## 
-## 
 function result = distill_history(hist_at_elem, filtering)
   # elem_name = "ESD";
   # horv = "h";

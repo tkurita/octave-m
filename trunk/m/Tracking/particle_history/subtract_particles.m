@@ -15,13 +15,16 @@
 ## @end deftypefn
 
 ##== History
+## 2008-03-25
+## * 複数の set を引き算できるようにした。
+## 
 ## 2008-03-24
 ## * initial implementaion
 
 function particles_a = subtract_particles(particles_a, varargin)
-  if (!isfield(particles_a, "id"))
-    particles_a.id = 1:length(particles_a.h);
-  end
+#  if (!isfield(particles_a, "id"))
+#    particles_a.id = 1:length(particles_a.h);
+#  end
   
   for n = 1:length(varargin)
     particles_b = varargin{n};
@@ -40,7 +43,7 @@ function particles_a = subtract_particles(particles_a, varargin)
 #            for m = 1:length(particles_a.(key))
 #              particles_a.(key){m} = particles_a.(key){m}(:,ia) = [];
 #            end
-            particles_a.(key)(ia) = []
+            particles_a.(key)(ia) = [];
           else
             #particles_a.(key) = val(!ia, :);
             particles_a.(key)(ia, :) = [];

@@ -15,8 +15,8 @@ function result = setup_fringing_sx(element_rec, sx)
 #  
 #  result.apply = @through_fringing_sx;
 #  result.track_info = "special";
-  result = {thin_sx_element(sx, [element_rec.name, "_fringing_sx_entrance"])...
+  result = {thin_sx_element(sx, ["fringing_sx_entrance_",element_rec.name])...
            , element_rec ...
-           , thin_sx_element(sx, [element_rec.name, "_fringing_sx_exit"])};
+           , thin_sx_element(sx, ["fringing_sx_exit_", element_rec.name])};
 endfunction
   
