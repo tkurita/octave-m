@@ -54,7 +54,7 @@ function lineRecList = lineRecsInRange(lineCoeff, nxrange, nyrange)
       endif
     endif
     
-    newRec = tar(x, y, c, resoOrder, isNoCouple, isSum);
+    newRec = tars(x, y, c, resoOrder, isNoCouple, isSum);
     if (y == 0)
       x0 = c/x;
       plotData = [[x0;x0], nyrange(:)];

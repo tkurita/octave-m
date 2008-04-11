@@ -1,4 +1,9 @@
 function fmt = plotFmtForLineRec(lineRec, varargin)
+  [with_kind, colors] = get_properties(varargin, {"with_kind", "colors"}, {false, []});
+  if (isempty(colors))
+    colors = rgbfull(length(lineRec.resoOrder*2));
+  end
+
   if (lineRec.x == 0)
     if (lineRec.y == 1)
       eqString = sprintf("ny = %d", lineRec.c);
@@ -29,19 +34,19 @@ function fmt = plotFmtForLineRec(lineRec, varargin)
   
   switch(lineRec.resoOrder)
     case (1)
-      plotColor = 1;
+      color_ind = 1;
     otherwise
-      plotColor = 3*lineRec.resoOrder-4;
+      color_ind = 3*lineRec.resoOrder-4;
       if (!lineRec.isNoCouple)
         if (lineRec.isSum)
-          plotColor = plotColor + 1;
+          color_ind = color_ind + 1;
         else
-          plotColor = plotColor + 2;
+          color_ind = color_ind + 2;
         endif
       endif
   endswitch
   
-  if (length(varargin) > 0)
+  if (with_kind)
     switch (lineRec.resoOrder)
       case (1)
         kindString = "integer ";
@@ -64,6 +69,7 @@ function fmt = plotFmtForLineRec(lineRec, varargin)
   else
     kindString = "";
   endif
-  
-  fmt = ["-",sprintf("%i", plotColor), ";",kindString, eqString, ";"];
+  p_color = colors(color_ind, :);
+  # fmt = ["-",sprintf("%i", color_ind), ";",kindString, eqString, ";"]
+  fmt = {["-;",kindString, eqString, ";"], "color", p_color, "linewidth", 2};
 endfunction

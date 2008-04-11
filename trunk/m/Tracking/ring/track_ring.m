@@ -115,7 +115,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   
   ##=== setup hit checkers;
   if (check_hit)
-    _particle_history.hit = {};
+    _particle_history.hit = struct;
     for n = 1:length(all_elements)
       an_elem = all_elements{n};
       if (is_BM(an_elem))

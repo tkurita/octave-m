@@ -1,17 +1,29 @@
-## usage:array = value_for_keypath(struct or array of struct, 
-##                                 keypath [, as_cells]) 
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{value} = } value_for_keypath(@var{a_struct}, @var{keypath})
+## @deftypefnx {Function File} {@var{cell_or_mat} = } value_for_keypath(@var{cells}, @var{keypath} [, @var{as_cell}])
 ##
-##== Parameters
-## * cellarray -- cell array which elements are structures.
-## * keypath -- cell array of strings which are path of field of structure
-## * as_cells (optional) -- if true is given, cell array is output 
-##                                 instead of matrix
+## @table @code
+## @item @var{keypath}
+## A cell array of strings which are path of field of structure. or string like key1.key2...
 ##
-##== result
-## row-wise matrix or cell array of cellarray{i}.(keypath{1}).(keypath{2})...
+## @item @var{cells}
+## cell array which elements are structures.
+## 
+## @item @var{as_cells}
+## Optional. f true is given, cell array is output instead of matrix.
+##
+## @end table
+##
+## If the first argument is a cell array, the result is a row-wise matrix or a cell array of cellarray@{i@}.(keypath@{1@}).(keypath@{2@})...
+## 
+## @end deftypefn
+
+##== History
+## 2008-04-11
+## * Texinfo で help を書いた。
 
 function array = value_for_keypath(cellarray, keypath, varargin)
-  #	cellarray = allElements
+  # cellarray = allElements
   isOutCells = (length(varargin) > 0);
   if (isOutCells)
     array = {};
@@ -19,7 +31,7 @@ function array = value_for_keypath(cellarray, keypath, varargin)
     array = [];
   endif
   
-  #	keypath={"exitPhase","h"};
+  # keypath={"exitPhase","h"};
   if (ischar(keypath))
     keys = split(keypath, ".");
     keypath = cellfun(@deblank...

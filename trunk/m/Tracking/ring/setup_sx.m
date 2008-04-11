@@ -23,7 +23,7 @@
 ## @item postmat
 ## @item apply
 ## function handle to kick particles.
-## The default value is @sx_thin_kick
+## The default value is @@sx_thin_kick
 ## @end table
 ##
 ## @seealso{sx_thin_kick}

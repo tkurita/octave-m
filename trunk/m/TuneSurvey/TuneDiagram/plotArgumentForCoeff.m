@@ -1,4 +1,4 @@
-function result = plotArgumentForCoeff(coeffMat, nxrange, nyrange)
+function result = plotArgumentForCoeff(coeffMat, nxrange, nyrange, colors)
   #coeffMat = [2;-2];
   #coeffMat = targetCoeffs
   #coeffMat
@@ -14,12 +14,14 @@ function result = plotArgumentForCoeff(coeffMat, nxrange, nyrange)
     return;
   endif
   
-  lineRecList{1}.plotFmt = plotFmtForLineRec(lineRecList{1}, "withKind");
+  lineRecList{1}.plotFmt = plotFmtForLineRec(lineRecList{1}, "with_kind"...
+                                                , "colors", colors);
   result = {lineRecList{1}.plotData, lineRecList{1}.plotFmt};
   
-  for i = 2:length(lineRecList)
-    lineRecList{i}.plotFmt = plotFmtForLineRec(lineRecList{i});
-    result{end+1} = lineRecList{i}.plotData;
-    result{end+1} = lineRecList{i}.plotFmt;
+  for n = 2:length(lineRecList)
+    lineRecList{n}.plotFmt = plotFmtForLineRec(lineRecList{n}, "colors", colors);
+    result{end+1} = lineRecList{n}.plotData;
+    result{end+1} = lineRecList{n}.plotFmt;
   endfor
+  result = flat_cell(result);
 endfunction

@@ -81,15 +81,15 @@ function all_elements = buildWERCMatrix(varargin)
   MRD15 = MRD3;
   FCTDuct = 133e-3/2;
   RFK_Duct = 200e-3/2;
-  RFK_Electrode = [140/2, 38/2];
+  RFK_Electrode = [140e-3/2, 38e-3/2];
   all_elements = {
   DT(0.4,"ESI", [61.2e-3, -77e-3, 77e-3, -77e-3]),
   QF(qfk,qlength,"QF1", MRD1),
   DT(0.3,"L1", MRD1),
   DT(0.05,"STH1", bpmDuct),
   DT(0.05,"BPM1", bpmDuct),
-  DT(0.30,"L2", [176/2]),
-  DT(0.05,"PR1", [176/2]),
+  DT(0.30,"L2", [176e-3/2]),
+  DT(0.05,"PR1", [176e-3/2]),
   DT(0.55,"L0A", MRD2),
   DT(0.20,"SX1", MRD2),
   DT(0.3,"L3", MRD2),
@@ -146,9 +146,9 @@ function all_elements = buildWERCMatrix(varargin)
   DT(0.175, "L19_2", bmDuct),
   BM(bmprop, "BM5", bmDuct),
   DT(0.175,"L20_1", bmDuct),
-  DT(0.225,"L20_2", [143.2/2]); 
+  DT(0.225,"L20_2", [143.2e-3/2]); 
   #DT(0.4,"L20"),
-  DT(0.05,"PR2", [143.2/2]),
+  DT(0.05,"PR2", [143.2e-3/2]),
   DT(0.25, "L2A", MRD10),
   QD(qdk,qlength,"QD3", MRD10),
   DT(0.2,"L21", MRD10),
@@ -162,7 +162,7 @@ function all_elements = buildWERCMatrix(varargin)
   #DT(0.45,"L23"),
   DT(0.05,"BPM7", bpmDuct),
   DT(0.2,"L24", bpmDuct),
-  DT(0.6,"RFC", [146/2]),
+  DT(0.6,"RFC", [146e-3/2]),
   DT(0.5,"L2B", MRD12),
   QF(qfk,qlength,"QF4", MRD12),
   DT(0.3,"L25", bpmDuct),

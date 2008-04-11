@@ -2,7 +2,9 @@
 ## 2007-11-27
 ## * initial implementation
 
-function plot_duct_wall(elements ,horv)
+function plot_duct_wall(elements ,horv, varargin)
+  prop = get_properties(varargin, {"scale"}, {1e3});
+  scale = prop.scale;
   switch (horv)
     case "h"
       xory = "x";
@@ -27,8 +29,8 @@ function plot_duct_wall(elements ,horv)
       position_list(end+1) = current_pos;
     else
       if (length(position_list) > 0)
-        line(position_list, max_list*1e3, "marker", "*");
-        line(position_list, min_list*1e3, "marker", "*");
+        line(position_list, max_list*scale, "marker", "*");
+        line(position_list, min_list*scale, "marker", "*");
         max_list = [];
         min_list = [];
         position_list = [];
@@ -36,8 +38,8 @@ function plot_duct_wall(elements ,horv)
     end
     
   end
-  line(position_list, max_list*1e3, "marker", "*");
-  line(position_list, min_list*1e3, "marker", "*");
+  line(position_list, max_list*scale, "marker", "*");
+  line(position_list, min_list*scale, "marker", "*");
   
 end
     

@@ -1,3 +1,12 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{track_rec} =} setup_sextupoles(@var{track_rec})
+##
+## Setup Sextupole magnets for tracking.
+## 
+## @seealso setup_sx
+## @end deftypefn
+
+
 ##== History
 ## 2008.01.16
 ## * fix setuped element is not inserted into track_rec.lattice

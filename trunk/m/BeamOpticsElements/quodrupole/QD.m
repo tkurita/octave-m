@@ -6,6 +6,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-04-11
+## * Fixed fourth argument for the duct aperture is ignored
+## 
 ## 2007-11-24
 ## * accept a structure as an argument.
 
@@ -30,7 +33,7 @@ function q_struct = QD(varargin)
     q_struct.name = a_name;
     q_struct.k = qk;
     
-    if (length(varargin) > 4)
+    if (length(varargin) > 3)
       q_struct.duct = duct_aperture(varargin{4});
     endif
     
@@ -40,10 +43,7 @@ function q_struct = QD(varargin)
   q_struct = setup_element(q_struct, @QDmat, "h");
   
   ##== vertical
-  q_struct = setup_element(q_struct, @QFmat, "v");  
+  q_struct = setup_element(q_struct, @QFmat, "v");
   
-  if (length(varargin) != 0)
-    q_struct.duct = duct_aperture(varargin{1});
-  endif
   q_struct.kind = "QD";
 endfunction
