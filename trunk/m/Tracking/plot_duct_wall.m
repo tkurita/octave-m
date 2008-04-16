@@ -3,8 +3,8 @@
 ## * initial implementation
 
 function plot_duct_wall(elements ,horv, varargin)
-  prop = get_properties(varargin, {"scale"}, {1e3});
-  scale = prop.scale;
+  [scale, style] = get_properties(varargin, {"scale", "style"},...
+                {1e3, {"marker", "*", "linewidth",2}});
   switch (horv)
     case "h"
       xory = "x";
@@ -29,8 +29,8 @@ function plot_duct_wall(elements ,horv, varargin)
       position_list(end+1) = current_pos;
     else
       if (length(position_list) > 0)
-        line(position_list, max_list*scale, "marker", "*");
-        line(position_list, min_list*scale, "marker", "*");
+        line(position_list, max_list*scale, style{:});
+        line(position_list, min_list*scale, style{:});
         max_list = [];
         min_list = [];
         position_list = [];
@@ -38,8 +38,8 @@ function plot_duct_wall(elements ,horv, varargin)
     end
     
   end
-  line(position_list, max_list*scale, "marker", "*");
-  line(position_list, min_list*scale, "marker", "*");
+  line(position_list, max_list*scale, style{:});
+  line(position_list, min_list*scale, style{:});
   
 end
     

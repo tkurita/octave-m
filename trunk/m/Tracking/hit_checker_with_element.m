@@ -16,7 +16,15 @@ function result = hit_checker_with_element(an_elem, name_suffix)
   #result.name
   result.duct = an_elem.duct;
   result.track_info = "special";
-  result.apply = @through_hit_checker;
+  shape = a_elem.duct.shape;
+  switch shape
+    case "rect"
+      result.apply = @through_hit_checker_rect;
+    case "circle"
+      result.apply = @through_hit_checker_circle;
+    otherwise
+      error("%s is unknown shape.",shape);
+  endswitch
   
   global _particle_history;
   _particle_history.hit.(result.name) = {};
