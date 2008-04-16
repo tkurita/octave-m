@@ -16,7 +16,7 @@ function result = hit_checker_with_element(an_elem, name_suffix)
   #result.name
   result.duct = an_elem.duct;
   result.track_info = "special";
-  shape = a_elem.duct.shape;
+  shape = an_elem.duct.shape;
   switch shape
     case "rect"
       result.apply = @through_hit_checker_rect;

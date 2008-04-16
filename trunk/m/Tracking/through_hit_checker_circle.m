@@ -7,7 +7,7 @@
 ## 2008-04-17
 ## * initial implementaion
 
-function retval = through_hit_checker_circle(an_elem, particles)
+function particles = through_hit_checker_circle(an_elem, particles)
   global _particle_history;
   global __revolution_number__;
   global __particle_id__;
