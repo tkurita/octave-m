@@ -11,29 +11,33 @@
 ## @end deftypefn
 
 ##== History
-## renamed from momentumForVelocity
+## 2008-04-16
+## * Use physical_constant instead of physicalConstant.
+## 
+## 2007-10-24
+## * renamed from momentumForVelocity
 
 function result = momentum_with_velocity(velocity, particle)  
   #energy = 660 #[MeV]
   
-  lv = physicalConstant("light velocity");
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
   b = velocity/lv;
   g = 1/sqrt(1-b^2);
   
   if (ischar(particle))
     switch particle
       case "proton"
-        massE = physicalConstant("proton [MeV]");
+        massE = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
       case "carbon"
-        amu = physicalConstant("amu");
+        amu = physical_constant("ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV");
         massE = amu *12;
     endswitch
   else
     if (particle > 1)
-        amu = physicalConstant("amu");
-        massE = amu *12;
+      amu = physical_constant("ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV");
+      massE = amu *12;
     elseif (particle == 1)
-      massE = physicalConstant("proton [MeV]");
+      massE = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
     else
       error("a.m.u. must be greater than 1.");
     endif
