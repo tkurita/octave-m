@@ -9,14 +9,19 @@
 ## 
 ## @end deftypefn
 
+## PKG_ADD: mark_as_command vim
+
 ##== History
+## 2008-04-16
+## * use view command (vim -R) intead of vim.
+## 
 ## 2008-03-15
 ## * first implementaion
 
 function vim(varargin)
   persistent pager_saved;
   persistent pager_flags_saved;
-  
+  vim_command = "view";
   if (isempty(pager_saved))
     pager_saved = PAGER();
     pager_flags_saved = PAGER_FLAGS();
@@ -25,7 +30,7 @@ function vim(varargin)
   if (length(varargin) > 0)
     action = varargin{1};
   else
-    if (strcmp(PAGER(), "vim"))
+    if (strcmp(PAGER(), vim_command))
       action = "off";
     else
       action = "on";
@@ -37,7 +42,8 @@ function vim(varargin)
       PAGER(pager_saved);
       PAGER_FLAGS(pager_flags_saved);
     case "on"
-      PAGER("vim");
+      #PAGER("vim");
+      PAGER(vim_command);
       #PAGER_FLAGS("-R -");
       PAGER_FLAGS("-");
     otherwise
