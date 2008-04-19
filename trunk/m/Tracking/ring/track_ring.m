@@ -57,7 +57,6 @@
 ##  それで、すべてを統一的に扱える。
 
 function varargout = track_ring(track_rec, particle_rec, n_loop)
-  # n_loop = 250
   
   if (isfield(track_rec, "check_hit"))
     check_hit = track_rec.check_hit;
@@ -170,7 +169,9 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   if (isfield(track_rec, "monitors"))
     monitor_names = track_rec.monitors;
   else
-    monitor_names = {"ESD"};
+    #monitor_names = {"ESD"};
+    monitor_names ={};
+    warning("No monitors are givend.");
   endif
   
   for n = 1:length(monitor_names)
@@ -207,12 +208,16 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   ##== start tracking
   particles = ini_particles;
   global __revolution_number__;
+  global __tracking_times__;
+  __tracking_times__ = zeros(1,n_loop);
   for n = 1:n_loop
+    tic();
     __revolution_number__ = n;
     for m = 1:length(span_array)
       #span_array{m}.name
       particles = span_array{m}.apply(span_array{m}, particles);
     endfor
+    __tracking_times__(n) = toc();
   endfor    
     
   #particle_hist = setfields(_particle_history, "num", particle_rec.num);
