@@ -15,7 +15,7 @@ function particles = through_hit_checker_circle(an_elem, particles)
   y_list = particles(4,:);
   r2_list = x_list.^2 + y_list.^2;
 
-  hit_flag =  r2_list >= an_elem.duct.radius;
+  hit_flag =  r2_list >= an_elem.duct.radius^2;
   if (any(hit_flag))
     hit_mat = [(x_list > an_elem.duct.xmax);...
                (x_list < an_elem.duct.xmin);...

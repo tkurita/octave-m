@@ -22,6 +22,8 @@ function result = hit_checker_with_element(an_elem, name_suffix)
       result.apply = @through_hit_checker_rect;
     case "circle"
       result.apply = @through_hit_checker_circle;
+    case "polygon"
+      result.apply = @thorough_hit_checker_poly;
     otherwise
       error("%s is unknown shape.",shape);
   endswitch
