@@ -71,9 +71,9 @@ function setBPandSHonXaxis(allElements, position, varargin)
       continue;
     endif
   endfor
-  if (automatic_replot)
-    replot;
-  endif  
+#  if (automatic_replot)
+#    replot;
+#  endif  
 endfunction
 
 function plottext(theElement, position, units)
