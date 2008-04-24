@@ -17,46 +17,41 @@
 ##                  0 -- it mean "first 0"
 
 ##= History
+## 2008-04-24
+## * Fiexed a problem wht "yposition" is negative.
+## 
+## 2008-04-12
+## * Fixed a problem when "yposition" is omitted.
+## 
 ## 2007-11-16
 ## * derived from setElementsOnPlot
 
 function elements_on_plot(names, lattice, varargin)
-  n_options = length(varargin);
-  n = 1;
-  yposition = "graph 0";
-  while (n_options >= n)
-    option = varargin{n};
-    switch (option)
-      case ("clear")
-        text();
-      case ("yposition")
-        yposition = varargin{n+1};
-        y_pos = varargin{n+1};
-        if (ischar(y_pos))
-          [s, e, te, m, t, nm] = regexp(yposition, "(\\w+)\\s(\\d*)");
-          if (s > 0)
-            switch t{1}{1}
-              case "first"
-                yposition = str2num(t{1}{2});
-              case "graph"
-                yposition = str2num(t{1}{2});
-                ca = gca();
-                ylim = get(ca, "ylim");
-                yposition = ylim(1) + (ylim(2) - ylim(1))*yposition;
-              otherwise
-                error("value of yposition is invalid.");
-            endswitch
-          else
-            error("value of yposition is invalid.");
-          endif
-        endif
-        n++;
-      otherwise
-        error("unknown option is given in arguments.");
-    endswitch
-    n++;
-  endwhile
-   
+  [clear_flag, yposition] = get_properties(varargin, {"clear", "yposition"},...
+                                                {false, "graph 0"});
+  if (clear_flag)
+    text();
+  end
+  
+  if (ischar(yposition))
+    [s, e, te, m, t, nm] = regexp(yposition, "(\\w+)\\s(-?\\d*)");
+    if (s > 0)
+      switch t{1}{1}
+        case "first"
+          yposition = str2num(t{1}{2});
+        case "graph"
+          yposition = str2num(t{1}{2});
+          ca = gca();
+          ylim = get(ca, "ylim");
+          yposition = ylim(1) + (ylim(2) - ylim(1))*yposition;
+        otherwise
+          error("value of yposition is invalid.");
+      endswitch
+    else
+      error("value of yposition is invalid.");
+    endif
+  endif
+  
   for n = 1:length(lattice)
     for m = 1:length(names)
       findAns = findstr(lattice{n}.name, names{m}, 0);
@@ -70,7 +65,7 @@ function elements_on_plot(names, lattice, varargin)
         #  , "Rotation", 90, "FontName", "Helvetica");
         text("Position", [lattice{n}.centerPosition, yposition]\
           , "Rotation", 90\
-          , "String", lattice{n}.name);
+          , "String", lattice{n}.name)
       endif
     endfor
   endfor
