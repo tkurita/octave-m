@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{iorB} =} value_for_kickangle(@var{element}, @var{kick_angle}, @var{brho})
+## @deftypefn {Function File} {@var{iorB} =} ib_for_kickangle(@var{element}, @var{kick_angle}, @var{brho})
 ##
 ## Convert kick angle at the @var{element} into the current [A] or magnetic field [T].
 ##
@@ -22,6 +22,6 @@
 ## * renamed from convertKickValues
 ## * wrote function help with texinfo.
 
-function iorB = value_for_kickangle(targetElement, kickAngle, brho)
+function iorB = ib_for_kickangle(targetElement, kickAngle, brho)
   iorB = convertKickValues(targetElement, kickAngle, brho, false);
 endfunction

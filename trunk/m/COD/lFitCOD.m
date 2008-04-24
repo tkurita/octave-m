@@ -19,8 +19,11 @@
 ##     .pError
 
 ##= History
-## 2006.07.17
-##  fitCOD(using non-linear least square method) と同じ結果が得られることを確認
+## 2008-04-24
+## * Use ib_for_kickangle instead of calcKickerValue
+##
+## 2006-07-17
+## * fitCOD(using non-linear least square method) と同じ結果が得られることを確認
 ##
 
 function cod_rec = lFitCOD(cod_rec, varargin);
@@ -107,7 +110,7 @@ function cod_rec = lFitCOD(cod_rec, varargin);
       if (strcmp(kickerName, stNameList{j}))
         kickAngleList = [kickAngleList; kickAngleResult(j)];
         steererValues = [steererValues; 
-        calcKickerValue(kickers.(kickerName), kickAngleResult(j), cod_rec.brho)];
+        ib_for_kickangle(kickers.(kickerName), kickAngleResult(j), cod_rec.brho)];
       endif
     endfor
   endfor
