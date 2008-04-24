@@ -12,6 +12,7 @@
 
 ##= History
 ## 2008-04-24
+## * obsolete. Use convert_kicker_value
 ## * resolving the conversion factor from the function returned by itobl_definition.
 ## 
 ## 2006-11-26
@@ -19,6 +20,7 @@
 ## * iorB > 0 の時、内側にキック kick angle < 0 とするため。
 
 function retval = convertKickValues(targetElement, inVal, brho, isOutAngle)
+  warning("convertKickValues is deprecated. Use convert_kicker_value.");
   itobl_def = itobl_definition();
   itobl = itobl_def(targetElement);
   retval = calc_output(inVal, itobl, brho, isOutAngle);

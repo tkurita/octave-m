@@ -23,5 +23,5 @@
 ## * wrote function help with texinfo.
 
 function iorB = ib_for_kickangle(targetElement, kickAngle, brho)
-  iorB = convertKickValues(targetElement, kickAngle, brho, false);
+  iorB = convert_kicker_value(targetElement, kickAngle, brho, false);
 endfunction
