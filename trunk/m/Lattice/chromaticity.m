@@ -12,6 +12,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-04-24
+## * Use is_BM instead of isBendingMagnet
+## 
 ## 2007-10-26
 ## * help with texinfo format
 ## * accept lattice_rec structure
@@ -41,7 +44,7 @@ function chrom = chromaticity(lattice_rec)
     betaList.v = [betaList.v; allElements{n}.centerBeta.v];
     betaList.h = [betaList.h; allElements{n}.centerBeta.h];
     
-    if (isBendingMagnet(allElements{n}))
+    if (is_BM(allElements{n}))
 #      kList.h = [kList.h; allElements{n}.edgeK.h; allElements{n}.edgeK.h];
 #      kList.v = [kList.v; allElements{n}.edgeK.v; allElements{n}.edgeK.v];
 #      lengthList = [lengthList; 1; 1];

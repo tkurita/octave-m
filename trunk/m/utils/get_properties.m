@@ -5,6 +5,9 @@
 ##
 
 ##== History
+## 2008-04-12
+## prop_list が property 名一つだけの時、無限 loop になる不具合を修正
+## 
 ## 2008-04-10
 ## * property name が指定されているだけの property にも対応した
 ## * その property が存在していれば true
@@ -24,18 +27,22 @@ function varargout = get_properties(prop_list, prop_names, default_values)
 #  end
   n_args = length(prop_list);        
   n = 1;
+  end_arg = false;
   while (n <= n_args)
     a_name = prop_list{n++};
     if (n <= n_args)
       a_value = prop_list{n++};
     else
       a_value = a_name;
+      end_arg = true;
     end
     if (ischar(a_value))
       ind = contain_str(prop_names, a_value);
       if (ind)
         a_value = true;
-        n--;
+        if (!end_arg)
+          n--;
+        end
       end
     end
     ind = contain_str(prop_names, a_name);

@@ -1,22 +1,30 @@
-## Usage : elements_on_plot(names, lattice, "property", value...)
+## -*- texinfo -*-
+## @deftypefn {Function File} {} elements_on_plot(@var{names}, @var{lattice}, "property", value...)
 ##
-## show element nemas in lattice on plot
-## 
-## = Parameters
-## * names (cell array) -- cell array of strins
-##                         show elements of which name starts with strings in names
-## * lattice (cell array)
-## 
-## * property
-##   "clear" -- clear text on plot before making new text on plot. no value
-##   "yposition" -- vertical position of element names
-##                  value is string or nunber.
-##                  ex)
-##                  "graph 0"
-##                  "first 0"
-##                  0 -- it mean "first 0"
+## Show element nemas in lattice on plot
+##
+## Parameters
+## @table @code
+## @item @var{names}
+## A cell array of regular expressions to specify names of elements.
+## @item @var{lattice}
+## A lattice object.
+## @end table
+##
+## Optional Properties
+## @table @code
+## @item "yposition"
+## Vertical position of element names. The value is string or number. e.g., "graph 0", "first 0". If a number x is given, it means "first x".
+## @item "clear"
+## clear text on plot before making new text on plot. No value. May no actual effect on Octave 3.
+## @end table
+## @end deftypefn
 
 ##= History
+## 2008-04-30
+## * Help written by texinfo format.
+## * element names are specified with regular expressions.
+## 
 ## 2008-04-24
 ## * Fiexed a problem wht "yposition" is negative.
 ## 
@@ -54,15 +62,7 @@ function elements_on_plot(names, lattice, varargin)
   
   for n = 1:length(lattice)
     for m = 1:length(names)
-      findAns = findstr(lattice{n}.name, names{m}, 0);
-      if (length(findAns) && findAns(1)==1)
-        #eval(sprintf("__gnuplot_set__ label \"%s\" at %f,graph 0 rotate by 90 font \"Helvetica,10\""...
-        #eval(sprintf("__gnuplot_raw__(\"set label \\\"%s\\\" at %f,%s rotate by 90;\");",...
-        #                          lattice{n}.name, lattice{n}.centerPosition, yposition));
-        #text(lattice{n}.centerPosition, yposition, lattice{n}.name\
-        #, "Rotation", 90, "FontName", "Helvetica", "FontSize", 10);
-        #text(lattice{n}.centerPosition, yposition, lattice{n}.name\
-        #  , "Rotation", 90, "FontName", "Helvetica");
+      if (regexp(lattice{n}.name, names{m}));
         text("Position", [lattice{n}.centerPosition, yposition]\
           , "Rotation", 90\
           , "String", lattice{n}.name)

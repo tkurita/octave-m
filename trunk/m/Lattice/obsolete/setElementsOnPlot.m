@@ -1,6 +1,7 @@
 ## Usage : setElementsOnPot(names, lattice, "property", value...)
 ##
-## show element nemas in lattice on plot
+## show element nemas in lattice on plot.
+## Deprecated. Use elements_on_plot.
 ## 
 ## = Parameters
 ## * names (cell array) -- cell array of strins

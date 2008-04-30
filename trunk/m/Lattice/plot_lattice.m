@@ -14,6 +14,9 @@
 ##    - qdk
 
 ##== History
+## 2008-04-30
+## * names of elements are plotted by elements_on_plot
+## 
 ## 2007-11-01
 ## * update for 2.9.14
 
@@ -27,7 +30,7 @@ function retval = plot_lattice(first_arg, varargin)
 endfunction
 
 function  out = prepare_plot(latRec, varargin);
-    tuneText = printTune(latRec.tune);
+  tuneText = printTune(latRec.tune);
   # horizontal ture:1.31562
   # vertial ture:1.18495
   returnText = "\n";
@@ -43,8 +46,8 @@ function  out = prepare_plot(latRec, varargin);
   betaFunc.v = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.v")'];
   dispersion = [exitPositionList, value_for_keypath(latRec.lattice, "exitDispersion")'];
   
-  alpha = momentumCompactionFactor(latRec.lattice);
-  alpha_comment = sprintf("momentum compaction factor:%g",alpha) 
+  alpha = momentum_compaction_factor(latRec.lattice);
+  alpha_comment = sprintf("momentum compaction factor:%g",alpha)
   # momentum compaction factor:0.612075
   
   ## calc chromaticity
@@ -63,7 +66,7 @@ function  out = prepare_plot(latRec, varargin);
     , chrom_h_comment, returnText\
     , chrom_v_comment];
   
-  visibleLabels = {"QF","QD","BM","ES","SX"};
+  visibleLabels = {"QF\\d","QD\\d","BM\\d","^ESD$", "^ESI$","SX\\d"};
   plot_title = "";
   if (length(varargin) > 0)
     plot_title = varargin{1};
@@ -84,34 +87,15 @@ function retval = _plot_lattice(allElements,betaFunction,dispersion,visibleLabel
   #__gnuplot_raw__("unset label\n");
   
   ##plot
-  retval = xyplot(betaFunction.h, "-@;horizontal beta;"...
-    , betaFunction.v, "-@;vertical beta;"...
-    , dispersion, "-@;dispersion;");  
+  retval = xyplot(betaFunction.h, "-@;horizontal beta;", "linewidth", 2 ...
+    , betaFunction.v, "-@;vertical beta;", "linewidth", 2 ...
+    , dispersion, "-@;dispersion;", "linewidth", 2);  
   title(titleText);
   ylabel("dispersion,beta [m]");
   xlabel("Position [m]");
   text("Position", [0.05, 0.95]...
     , "Units", "normalized"...
-    , "String", insertComment)
+    , "String", insertComment);
   drawnow();
-  thePosition = 0;
-  ca = gca();
-  ylim = get(ca, "ylim")
-  for n = 1:length(allElements)
-    theElement = allElements{n};
-    xPosition = thePosition+(theElement.len/2);
-    for n = 1:length(visibleLabels)
-      visibleName = visibleLabels{n};
-      findAns = findstr(theElement.name,visibleName,0);
-      if (length(findAns) && findAns(1)==1)
-        text("Position", [xPosition, ylim(1)]\
-          , "Rotation", 90\
-          , "String", theElement.name)
-        
-        break;
-      endif
-    end
-    thePosition = thePosition + theElement.len;
-  end
-  
+  elements_on_plot(visibleLabels, allElements);
 endfunction

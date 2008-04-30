@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} distill_lasts(@var{particle_hist}, @{min_turn}, @var{acceptance})
+## @deftypefn {Function File} {@var{result} =} distill_lasts(@var{particle_hist}, @var{min_turn}, @var{acceptance})
 ## 
 ## Horizontal の座標に条件を与えて、その条件を満たす最初の点の集合を求める。
 ## 
@@ -46,7 +46,7 @@ function last_points = distill_lasts(a_hist, min_turn, acceptance)
   end
   
   last_points = struct("h", [], "v", [], "n_rev", [], "id", []);
-  for n = 1:length(a_hist.h)
+  for n = 1:length(a_hist.h) # n is index of particles
     if (isnan(xthreshold))
       compare_result = isnan(a_hist.h{n}(:,1));
     else
