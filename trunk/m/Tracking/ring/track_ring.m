@@ -37,6 +37,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-05-16
+## * hit_elements の名前指定 field を regname から name に変更
+## 
 ## 2008-05-14
 ## * hit_element を指定できるようにした。
 ## * Q や BM を hit_element に自動的に含めない。
@@ -117,49 +120,27 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     _particle_history.hit = struct;
     for n = 1:length(all_elements)
       an_elem = all_elements{n};
-#      if (is_BM(an_elem))
-#        all_elements{n} = {hit_checker_with_element(an_elem, "entrance")...
-#                           , an_elem...
-#                           , hit_checker_with_element(an_elem, "exit")};
-#      if (is_Qmag(all_elements{n}))
-#        all_elements{n} = { half_element(an_elem, true)...
-#                           , hit_checker_with_element(an_elem)...
-#                           , half_element(an_elem, false)};
-
-#      elseif (strcmp(an_elem.name, "ESD"))
-#        #an_elem.name
-#        all_elements{n} = {hit_checker_with_element(an_elem, "entrance"),an_elem};
-#      else
-        for m = 1:length(track_rec.hit_elements)
-          hit_elem = track_rec.hit_elements{m};
-          if (regexp(an_elem.name, hit_elem.regname))
-            hms = {an_elem};
-            if (contain_str(hit_elem.position, "center"))
-              hms = { half_element(an_elem, true)...
-                    , hit_checker_with_element(an_elem)...
-                    , half_element(an_elem, false)};
-            endif
-            
-            if (contain_str(hit_elem.position, "entrance"))
-              hms = {hit_checker_with_element(an_elem, "entrance"), hms};
-            endif
-            
-            if (contain_str(hit_elem.position, "exit"))
-              hms(end+1) = hit_checker_with_element(an_elem, "exit");
-            endif
-            
-#            for k = 1:length(hit_elem.position)
-#              switch (hit_elem.position{k})
-#                case "entrance"
-#                  hms = {hit_checker_with_element(an_elem, "entrance"), hms};
-#                case "exit"
-#                  hms(end+1) = hit_checker_with_element(an_elem, "exit");
-#              endswitch
-#            endfor
-            all_elements{n} = hms;
+      for m = 1:length(track_rec.hit_elements)
+        hit_elem = track_rec.hit_elements{m};
+        if (regexp(an_elem.name, hit_elem.name))
+          hms = {an_elem};
+          if (contain_str(hit_elem.position, "center"))
+            hms = { half_element(an_elem, true)...
+              , hit_checker_with_element(an_elem)...
+              , half_element(an_elem, false)};
           endif
-        endfor      
-#      endif
+          
+          if (contain_str(hit_elem.position, "entrance"))
+            hms = {hit_checker_with_element(an_elem, "entrance"), hms};
+          endif
+          
+          if (contain_str(hit_elem.position, "exit"))
+            hms(end+1) = hit_checker_with_element(an_elem, "exit");
+          endif
+          
+          all_elements{n} = hms;
+        endif
+      endfor      
     endfor
     all_elements = flat_cell(all_elements);
   endif
