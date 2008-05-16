@@ -9,38 +9,38 @@
 ## @end table
 ## 
 ## @var{track_rec} can have following optional fields.
+##
 ## @table @code
 ## @item sextupoles
 ## @item kickers
 ## @item bm_sx
 ## S*L [1/m] Sextupole strength of BM fringing field
 ## @item start_elem
+## @item hit_elements
 ## @end table
+##
+## The 'hit_elements' field should have a cell array of structures which have two fields of 'name' and 'positions'. The 'name' field specify element names with a regular expression. The following is an example of 'hit_elements' field.
+##
+## @verbatim
+##  track_rec_9201_fsx.hit_elements =...
+##    {setfields(struct, "name", "MRD9IN", "position", {"entrance"}),...
+##     setfields(struct, "name", "MRD9OUT", "position", {"exit"}),...
+##     setfields(struct, "name", "BMD\\dIN", "position", {"entrance"}),...
+##     setfields(struct, "name", "BMD\\dOUT", "position", {"exit"}),...
+##     setfields(struct, "name", "^ESD$", "position", {"entrance"}),...
+##     setfields(struct, "name", "QF\\d", "position", {"center"}),...
+##     setfields(struct, "name", "QD\\d", "position", {"center"})};
+## @end verbatim
 ##
 ## See generate_particles for the fields @var{particle_rec} can have.
 ##
 ## @end deftypefn
 
-
-## Usage : [particles, last_particles, init_patricles] 
-##                    = track_ring(track_rec, particle_rec, n_loop)
-## 
-##== Parameters
-## * track_rec
-##    .lattice
-##    .brho
-##    .pError
-##    .sextupoles
-##    .kickers
-##    .bm_sx -- S*L [1/m] Sextupole strength of BM fringing field
-##
-## * track_recs
-##      .lattice
-##      .brho
-## * nParticles -- 粒子の数
-## * n_loop -- 粒子をまわす回数
-
 ##== History
+## 2008-05-14
+## * hit_element を指定できるようにした。
+## * Q や BM を hit_element に自動的に含めない。
+## 
 ## 2008-03-17
 ## RFK を設定できるようにした。
 ##
@@ -117,22 +117,52 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     _particle_history.hit = struct;
     for n = 1:length(all_elements)
       an_elem = all_elements{n};
-      if (is_BM(an_elem))
-        all_elements{n} = {hit_checker_with_element(an_elem, "entrance")...
-                           , an_elem...
-                           , hit_checker_with_element(an_elem, "exit")};
-      elseif (is_Qmag(all_elements{n}))
-        all_elements{n} = { half_element(an_elem, true)...
-                           , hit_checker_with_element(an_elem)...
-                           , half_element(an_elem, false)};
+#      if (is_BM(an_elem))
+#        all_elements{n} = {hit_checker_with_element(an_elem, "entrance")...
+#                           , an_elem...
+#                           , hit_checker_with_element(an_elem, "exit")};
+#      if (is_Qmag(all_elements{n}))
+#        all_elements{n} = { half_element(an_elem, true)...
+#                           , hit_checker_with_element(an_elem)...
+#                           , half_element(an_elem, false)};
 
-      elseif (strcmp(an_elem.name, "ESD"))
-        #an_elem.name
-        all_elements{n} = {hit_checker_with_element(an_elem, "entrance"),an_elem};
-      endif
-    end
+#      elseif (strcmp(an_elem.name, "ESD"))
+#        #an_elem.name
+#        all_elements{n} = {hit_checker_with_element(an_elem, "entrance"),an_elem};
+#      else
+        for m = 1:length(track_rec.hit_elements)
+          hit_elem = track_rec.hit_elements{m};
+          if (regexp(an_elem.name, hit_elem.regname))
+            hms = {an_elem};
+            if (contain_str(hit_elem.position, "center"))
+              hms = { half_element(an_elem, true)...
+                    , hit_checker_with_element(an_elem)...
+                    , half_element(an_elem, false)};
+            endif
+            
+            if (contain_str(hit_elem.position, "entrance"))
+              hms = {hit_checker_with_element(an_elem, "entrance"), hms};
+            endif
+            
+            if (contain_str(hit_elem.position, "exit"))
+              hms(end+1) = hit_checker_with_element(an_elem, "exit");
+            endif
+            
+#            for k = 1:length(hit_elem.position)
+#              switch (hit_elem.position{k})
+#                case "entrance"
+#                  hms = {hit_checker_with_element(an_elem, "entrance"), hms};
+#                case "exit"
+#                  hms(end+1) = hit_checker_with_element(an_elem, "exit");
+#              endswitch
+#            endfor
+            all_elements{n} = hms;
+          endif
+        endfor      
+#      endif
+    endfor
     all_elements = flat_cell(all_elements);
-  end  
+  endif
 
   
   ##== setup kickers
@@ -154,7 +184,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     endfor
     all_elements = flat_cell(all_elements);
   endif
-
+  
   ##== setup RFK
   if (isfield(track_rec, "rfks"))
     for n = 1:length(track_rec.rfks)
@@ -176,7 +206,6 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   
   for n = 1:length(monitor_names)
     [an_elem, ind_elem] = element_with_name(all_elements, monitor_names{n});
-    
     all_elements{ind_elem} = monitor_with_element(an_elem);
     _particle_history.(monitor_names{n}) = cell(1, n_loop);
   endfor
