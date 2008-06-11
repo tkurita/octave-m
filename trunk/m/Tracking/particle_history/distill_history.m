@@ -49,8 +49,8 @@
 function result = distill_history(hist_at_elem, filtering)
   # elem_name = "ESD";
   # horv = "h";
+  # hist_at_elem = 
   # before_cell2mat = time()
-  #a_mat = cell2mat(hist_at_elem');
   a_mat = arrange_cell(hist_at_elem);
   #after_cell2mat = time()
   # printf("time for cell2mat %d\n", after_cell2mat - before_cell2mat);

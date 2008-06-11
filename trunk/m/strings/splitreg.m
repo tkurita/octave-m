@@ -1,21 +1,27 @@
 ## usage: outList = splitreg(inStr, pattern)
 
 function outList = splitreg(inStr, pattern)
-#  pattern = "[ 	]+";
-#  inStr = "hello   	123  456 hello  ";
+  #  pattern = "\\n";
+  #  inStr = "hello\nhey\noh\naaa\n";
   outList = {};
-  match = regexp(pattern, inStr);
-  while (length(match) > 0)  
-	if (match(1) > 1)
-	   s = inStr(1:(match(1)-1));
-	   outList = {outList{:},s};
-	 endif
-	 inStr = inStr(match(2)+1:end);
-     match = regexp(pattern, inStr);
-   endwhile
-   
-   if (length(inStr) > 1)
-	 outList = {outList{:},inStr};
-   endif
-   #outList
+  [S, E, TE, M, T, NM] = regexp(inStr, pattern);
+  if (E(end) == length(inStr))
+    E = E(1:end-1);
+    #S = S(1:end-1);
+  else
+    S(end+1) = length(inStr)+1;
+  endif
+  spos = E+1;
+  epos = S-1;
+  if (S(1) != 1)
+    spos = [1, spos];
+  else
+    epos = epos(2:end);
+  endif
+
+  for n = 1:length(spos)
+    outList(end+1) = inStr(spos(n):epos(n));
+  endfor
+
+  # outList
 endfunction

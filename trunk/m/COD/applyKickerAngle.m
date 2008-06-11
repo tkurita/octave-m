@@ -24,8 +24,12 @@
 ##      kickAngles is orderd with order of kicker elements in a ring.
 
 ##== History
+## 2008-05-09
+## * used kick_angle instead of calcSteerAngle
+## 
 ## 2007-10-02
 ## * add option "noKickFactor"
+##
 ## 2006-12-08
 ## * fix miscalculation when the order of steererNames doesn't follow 
 ##   the order in the ring.
@@ -61,7 +65,7 @@ function result = applyKickerAngle(codMatStruct, cod_rec, varargin)
       if (strcmp(target_kicker.name, cod_rec.steererNames{m}))
         if (use_steerer_values)
           kickAngles = [kickAngles;...
-          calcSteerAngle(target_kicker, value_list(m), cod_rec.brho)];
+          kick_angle(target_kicker, value_list(m), cod_rec.brho)];
         else
           kickAngles = [kickAngles; value_list(m)];
         endif

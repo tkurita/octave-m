@@ -54,6 +54,9 @@ function varargout = element_with_name(all_elements, names)
     endfor
   endfor
   
+  if (isempty(output))
+    error("Can't find elements for the name '%s'", names{1});
+  endif
   if (!cell_out)
     output = output{1};
     ind_elem = ind_elem(1);

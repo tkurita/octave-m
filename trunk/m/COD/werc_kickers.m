@@ -66,7 +66,7 @@ function retval = werc_kickers(element)
     ##= 出射セプタム電磁石からの漏れ磁場
     # iorB > 0 の時、内側にキックするので、符号を反転させる。
     #kickAngle = iorB.*targetElement.len/brho;
-    retval = -1*targetElement.len;
+    retval = -1*element.len;
     
   elseif(findstr(a_name,"BMPe1") == 1)
     ##= 出射バンプ

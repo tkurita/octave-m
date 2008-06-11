@@ -11,5 +11,6 @@
 ## * use value for kick_angle
 
 function kickAngle = calcSteerAngle(targetElement, iorB, brho)
+  warning("calcSteerAngle is obsolete. Use kick_angle.");
   kickAngle = convertKickValues(targetElement, iorB, brho, true);
 endfunction

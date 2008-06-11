@@ -7,6 +7,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-06-02
+## * return edgek
+##
 ## 2007-11-23
 ## * accept one argument of structure.
 ##
@@ -14,7 +17,7 @@
 ## * add support p_error arugument
 
 #function matrix = BMHmat(radius, bmangle, edgeangle ,varargin)
-function matrix = BMHmat(varargin)
+function [matrix, edgek] = BMHmat(varargin)
   if (isstruct(varargin{1}))
     prop = varargin{1};
     radius = prop.radius;
@@ -37,4 +40,5 @@ function matrix = BMHmat(varargin)
               -sin(bmangle)/radius, cos(bmangle), sin(bmangle);
               0, 0, 1];
   matrix = edgematrix*bmmatrix*edgematrix;
+  edgek = -1*edgematrix(2,1);
 endfunction

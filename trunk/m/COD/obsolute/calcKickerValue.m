@@ -25,6 +25,6 @@
 ## * wrote function help with texinfo.
 
 function iorB = calcKickerValue(targetElement, kickAngle, brho)
-  warning("calcKickerValue is obsolete. Use value_for_kickangle.");
+  warning("calcKickerValue is obsolete. Use ib_for_kickangle.");
   iorB = convertKickValues(targetElement, kickAngle, brho, false);
 endfunction

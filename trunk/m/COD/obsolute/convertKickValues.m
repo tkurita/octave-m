@@ -21,6 +21,7 @@
 
 function retval = convertKickValues(targetElement, inVal, brho, isOutAngle)
   warning("convertKickValues is deprecated. Use convert_kicker_value.");
+  #error("convertKickValues is deprecated. Use convert_kicker_value.");
   itobl_def = itobl_definition();
   itobl = itobl_def(targetElement);
   retval = calc_output(inVal, itobl, brho, isOutAngle);

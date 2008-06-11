@@ -7,6 +7,9 @@
 ##    .kickVector : 6 elements vector
 
 ##== History
+## 2008-05-21
+## * Use is_BM instead of isBendingMagnet
+##
 ## 2007-10-03
 ## * initial implementaion
 
@@ -24,7 +27,7 @@ function kicker_rec = kicker_with_angle(name, kick_angle, cod_rec)
   
   kicker_rec.track_info = "special";
   kicker_rec.kickVector = a_vec;
-  if (isBendingMagnet(kicker_rec))
+  if (is_BM(kicker_rec))
     #kicker_rec
     kicker_rec.premat = [kicker_rec.mat_half.h, zeros(3);...
                         zeros(3), kicker_rec.mat_half.v];

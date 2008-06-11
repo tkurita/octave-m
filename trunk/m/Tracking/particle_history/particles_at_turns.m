@@ -60,6 +60,6 @@ function out_particles = particles_at_turns(varargin)
     otherwise
       out_particles = particles;
   endswitch
-  
+  #out_particles = out_particles'.*1e3;
   out_particles = clean_particles(out_particles)'.*1e3;
 endfunction

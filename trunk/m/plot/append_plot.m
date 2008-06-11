@@ -1,4 +1,16 @@
-## append data to plot
+## -*- texinfo -*-
+## @deftypefn {Function File} {} append_plot(@var{xy}, @var{props}, ...)
+## @deftypefnx {Function File} {} append_plot("colororder", @var{colors})
+## @deftypefnx {Function File} {} append_plot("index")
+## @deftypefnx {Function File} {} append_plot("reset")
+##
+## Append data to plot
+## "colororder" property indicate colors of data.
+## "reset" indicate to clear internal data index.
+##
+## @end deftypefn
+
+## 
 
 ##== History
 ## 2008-03-10
@@ -15,6 +27,9 @@ function result = append_plot(varargin)
           _colororder = varargin{arg_ind++};
         case "reset"
           _data_index = 1;
+        case "index"
+          result = _data_index;
+          return;
         otherwise
           varargin{arg_ind}
           break;
@@ -49,6 +64,7 @@ function result = append_plot(varargin)
     varargin{end+1} = "color";
     varargin{end+1} = auto_color;
   end
+  #varargin
   hold on;
   if (columns(varargin{1})==2)
     xyplot(varargin{:});

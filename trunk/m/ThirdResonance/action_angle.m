@@ -1,4 +1,9 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} action_angle(@var{xy}, @var{tw_beta}, @var{tw_alpha})
+##
 ## Calculate action anble variables
+##
+## @end deftypefn
 
 function phi_j = action_angle(particles, tw_beta, tw_alpha)
   x = particles(:,1);

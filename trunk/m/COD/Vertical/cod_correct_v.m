@@ -47,10 +47,10 @@ function [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT, vararg
   
   xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"\
     , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;"\
-    , cod_rec_FB.prediction.correctCOD, "-;Predicated COD with QD2, QD4, L18_1 at FB;"\
+    , cod_rec_FB.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FB;"\
     , cod_rec_FT.targetCOD, "-@;Measured COD at Flat Top;"\
     , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;"\
-    , cod_rec_FT.prediction.correctCOD, "-;Predicated COD with QD2, QD4, L18_1 at FT;");
+    , cod_rec_FT.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FT;");
   grid on;
   
   printf("At Flat Base\n");
@@ -63,5 +63,5 @@ function cod_rec = setup_cod_rec_v(cod_rec)
   cod_rec.horv = "v";
   cod_rec.steererNames = {"STV1","QD2","QD3"};
   cod_rec.targetCOD = cod_list_with_bpms(cod_rec);
-  cod_rec.prediction = cod_fit_with_kickers(cod_rec, {"QD2", "QD4", "L18_1"});
+  cod_rec.prediction = cod_fit_with_kickers(cod_rec, {"QD2", "QD4", "SMIN"});
 endfunction

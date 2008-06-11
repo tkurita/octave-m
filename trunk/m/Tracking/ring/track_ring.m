@@ -59,15 +59,42 @@
 ##  任意の element の真ん中に特殊要素を任意の数だけ挿入できる仕様にすべきだった
 ##  それで、すべてを統一的に扱える。
 
-function varargout = track_ring(track_rec, particle_rec, n_loop)
-  
+function varargout = track_ring(track_rec, particle_rec, n_loop, varargin)
   if (isfield(track_rec, "check_hit"))
     check_hit = track_rec.check_hit;
   else
     check_hit = false;
   end
+  
+  logdir = [];
+  loopstep = 1;
+  save_history = @__dummy;
+  if (length(varargin) > 0)
+    logdir = varargin{1};
+    if (!mkdir(logdir));
+      if (!isdir(logdir))
+        error(sprintf("%s is not directory", logdir));
+      endif
+      system(sprintf("rm -rf %s/*.mat", logdir));
+    endif
+    if (length(varargin) > 1)
+      loopstep = varargin{2};
+    else
+      loopstep = 500;
+    endif
+    if (loopstep > n_loop)
+      loopstep = 1;
+    endif
+    save_history = @__save_history;
+    save_history("loopmax", n_loop, "location", logdir);
+  endif
+  
   ##== setup sextupole magnet
-  track_rec = setup_sextupoles(track_rec);
+  if (isfield(track_rec, "sextupoles"))
+    track_rec = setup_sextupoles(track_rec);
+  else
+    warning("No sextupole elements.");
+  endif
   all_elements = track_rec.lattice;
 
   ##== shift all_elements to change start point
@@ -81,7 +108,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
 
   ##== setup globals
   global _particle_history;
-  _particle_history = struct;
+  initialize_global_storages();
 
   global __particle_id__;
   __particle_id__ = [];
@@ -115,7 +142,7 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   endif
   
   
-  ##=== setup hit checkers;
+  ##== setup hit checkers;
   if (check_hit)
     _particle_history.hit = struct;
     for n = 1:length(all_elements)
@@ -188,7 +215,12 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   for n = 1:length(monitor_names)
     [an_elem, ind_elem] = element_with_name(all_elements, monitor_names{n});
     all_elements{ind_elem} = monitor_with_element(an_elem);
-    _particle_history.(monitor_names{n}) = cell(1, n_loop);
+    if (loopstep == 1)
+      m = n_loop;
+    else
+      m = loopstep;
+    endif
+    _particle_history.monitors.(monitor_names{n}) = cell(1, m);
   endfor
   
   #element_with_name(all_elements, "SX1")
@@ -219,17 +251,21 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
   particles = ini_particles;
   global __revolution_number__;
   global __tracking_times__;
+  _particle_history.beginning_revolution = 1;
   __tracking_times__ = zeros(1,n_loop);
-  for n = 1:n_loop
-    tic();
-    __revolution_number__ = n;
-    for m = 1:length(span_array)
-      #span_array{m}.name
-      particles = span_array{m}.apply(span_array{m}, particles);
-    endfor
-    __tracking_times__(n) = toc();
-  endfor    
-    
+  for k = 1:loopstep:n_loop
+    for n = k:(k+loopstep-1)
+      tic();
+      __revolution_number__ = n;
+      for m = 1:length(span_array)
+        #span_array{m}.name
+        particles = span_array{m}.apply(span_array{m}, particles);
+      endfor
+      __tracking_times__(n) = toc();
+    endfor    
+    save_history(particles);
+  endfor
+  
   #particle_hist = setfields(_particle_history, "num", particle_rec.num);
   particle_hist = _particle_history;
   particle_hist.initial = ini_particles;
@@ -244,4 +280,59 @@ function varargout = track_ring(track_rec, particle_rec, n_loop)
     varargout{end+1} = track_rec;
   end
   
+  if (!isempty(logdir))
+    save("-z", [logdir,"/track_rec.mat"], "track_rec");
+  endif
 endfunction
+
+function initialize_global_storages()
+  global _particle_history;
+  global __revolution_number__;
+  has_hit = isfield(_particle_history, "hit");
+  if (has_hit)
+    hit_records = _particle_history.hit;
+    for [val, key] = hit_records
+      hit_records.(key) = {};
+    endfor
+  endif
+  #_particle_history = struct;
+  if (has_hit)
+    _particle_history.hit = hit_records;
+  endif
+  
+  if (isfield(_particle_history, "monitors"))
+    for [val, key] = _particle_history.monitors
+      _particle_history.monitors.(key) = cell(1, length(val));
+    endfor
+  endif
+  _particle_history.beginning_revolution = __revolution_number__ + 1;
+endfunction
+  
+function __dummy(varargin)
+end
+
+function __save_history(varargin)
+  persistent digit;
+  persistent location;
+  persistent pretime = time;
+  if (ischar(varargin{1}))
+    [loopmax, location] = get_properties(varargin,...
+                        {"loopmax", "location"}, {10000,"./"});
+    digit = int2str(length(int2str(loopmax)));
+    pretime = time;
+    return;
+  endif
+  
+  global _particle_history;
+  global __particle_id__;
+  global __revolution_number__;
+  particle_hist = _particle_history;
+  particle_hist.revolution_number = __revolution_number__;
+  particle_hist.id = __particle_id__;
+  particle_hist.last_particles = varargin{1};
+  save("-z", sprintf(["%s/","%0", digit, "d.mat"],location, __revolution_number__), "particle_hist");
+  initialize_global_storages();
+  printf("Ended until %d turns.\n", __revolution_number__);
+  printf("Spended time %d [sec]\n", time - pretime);
+  pretime = time;
+end  

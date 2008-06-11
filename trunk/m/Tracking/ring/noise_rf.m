@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} noise_rf(@var{vmax}, @var{nu}, @var{width}, @var{df}, @var{n_rev})
+## @deftypefn {Function File} {} noise_rf(@var{vmax}, @var{nu}, @var{width}, @var{df}, @var{n_rev}, [@var{h}])
 ##
 ## Generate pseudo noise pattern
 ##
@@ -30,9 +30,12 @@ function result = noise_rf(vmax, nu, width, df, n_rev)
   n_turn = 0:n_rev;
   nf = 0:df:width;
   dphi = rand(1,length(nf))*2*pi;
-  v0 = [];
+  v0 = zeros(1, n_rev+1);
   for t = n_turn
-    v0(end+1) = sum(sin(2*pi*(nu + nf)*t+dphi) + sin(2*pi*(nu - nf)*t-dphi));
+    v0(t+1) = sum(sin(2*pi*(nu + nf)*t+dphi) + sin(2*pi*(nu - nf)*t-dphi));
+    #v0(t+1) = sum(sin(2*pi*((h+nu) + nf)*t+dphi) + sin(2*pi*((h+nu) - nf)*t-dphi));
+#    v0(t+1) = sum(sin(2*pi*((h+nu) + nf)*t+dphi) + sin(2*pi*((h+nu) - nf)*t-dphi) ...
+#                  + (sin(2*pi*((h+nu) + nf)*t+dphi+pi/2) + sin(2*pi*((h+nu) - nf)*t-(dphi+pi/2))));
   end
   result = vmax*v0/max(v0);
 endfunction

@@ -1,15 +1,21 @@
 
 ##== History
+## 2008-05-23
+## * add optional argument 'offset'
+## 
 ## 2008-03-20
-## removing DC components of particles before converting to action-angle variable.
+## * removing DC components of particles before converting to action-angle variable.
 ## 
 ## 2008-03-11
-## *tune can be scalar
+## * tune can be scalar
 ##
 ## 2008-02-20
 ## * initial implementation
 
-function [h, phi_j] = hamiltonian_3reso(particle_hists, tune, track_rec, elem_name, pos_in_elem)
+function [h, phi_j] = hamiltonian_3reso(particle_hists, tune, track_rec, elem_name, pos_in_elem, offset)
+  if (nargin < 6)
+    offset = [];
+  endif
   if (isscalar(tune))
     tune = tune*ones(size(particle_hists));
   end
@@ -31,8 +37,11 @@ function [h, phi_j] = hamiltonian_3reso(particle_hists, tune, track_rec, elem_na
   phase_advance = an_elem.([pos_in_elem, "Phase"]).h;
   for n = 1:n_particles
     particles = particle_hists{n};
-    particles(:,1) = particles(:,1) - mean(particles(:,1));
-    particles(:,2) = particles(:,2) - mean(particles(:,2));
+    if (isempty(offset))
+      offset =  [mean(particles(:,1)), mean(particles(:,2))];
+    endif
+    particles(:,1) = particles(:,1) - offset(1);
+    particles(:,2) = particles(:,2) - offset(2);
     phi_j{n} = action_angle(particles, b.h, a);
     k = phi_j{n}(:,2);
 #    phi1 = phi_j{n}(:,1) - an_elem.entrancePhase.h + sep_info.tune(n) * theta;

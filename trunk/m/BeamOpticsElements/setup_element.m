@@ -12,6 +12,10 @@
 ## @end deftypefn
 
 ##== History
+## 2008-06-02
+## * efflen が設定されているときの mat_half がおかしかった。
+## * dlMat * element_rec.mat_half.(horv) となっていた。
+##
 ## 2007-10-26
 ## * renamed from buildElememntStruct
 
@@ -31,7 +35,7 @@ function element_rec = setup_element(element_rec, mat_func, horv)
   ## half
   element_rec.mat_half.(horv) = mat_func(setfield(element_rec, "efflen", len/2));
   if (hasEfflen)
-    element_rec.mat_half.(horv) = dlMat * element_rec.mat_half.(horv);
+    element_rec.mat_half.(horv) = element_rec.mat_half.(horv) * dlMat;
   endif
   element_rec.twmat_half.(horv) = twpMatrix(element_rec.mat_half.(horv));
 endfunction

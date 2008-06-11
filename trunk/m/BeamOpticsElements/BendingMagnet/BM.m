@@ -19,6 +19,10 @@
 ## @end deftypefn
 
 ##== History
+## 2008-06-02
+## * edgeK の符号が逆になっていた。
+## * chromaticity の計算がおかしくなる。
+## 
 ## 2007-11-25
 ## * accept one argument of a structure
 ##
@@ -62,9 +66,9 @@ function bm_struct = BM(varargin)
   else
     radius = bm_struct.radius;
   endif
-  bm_struct.edgeK.h = (tan(bm_struct.edgeangle)/radius)/(1 + bm_struct.pError);
+  #bm_struct.edgeK.h = (tan(bm_struct.edgeangle)/radius)/(1 + bm_struct.pError);
   
-  bm_struct.mat.h = BMHmat(setfields(bm_struct, "radius", radius));
+  [bm_struct.mat.h,  bm_struct.edgeK.h] = BMHmat(setfields(bm_struct, "radius", radius));
   if (hasEfflen)
     bm_struct.mat.h = DTmat(-dl) * bm_struct.mat.h * DTmat(-dl);
   endif
@@ -96,7 +100,7 @@ function bm_struct = BM(varargin)
   endif
   
   edgematrix = BME_V(radius, bm_struct.edgeangle, options{:});
-  bm_struct.edgeK.v = edgematrix(2,1);
+  bm_struct.edgeK.v = -1*edgematrix(2,1);
   
   if (hasEfflen)
     len = bm_struct.efflen;

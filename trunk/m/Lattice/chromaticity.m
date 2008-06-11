@@ -12,6 +12,10 @@
 ## @end deftypefn
 
 ##== History
+## 2008-06-02
+## * BM does not contribute chromaticity.
+## * Edges of BMs are considered.
+##
 ## 2008-04-24
 ## * Use is_BM instead of isBendingMagnet
 ## 
@@ -26,40 +30,39 @@ function chrom = chromaticity(lattice_rec)
     allElements = lattice_rec;
   endif
     
-#  kList.h = [];
-#  kList.v = [];
-#  lengthList = [];
   betaList.h = [];
   betaList.v = [];
   klList.h = [];
   klList.v = [];
   for n = 1:length(allElements)
-    klList.h = [klList.h; focusingPower(allElements{n}, "h")];
-    klList.v = [klList.v; focusingPower(allElements{n}, "v")];
-    
-#    kList.h = [kList.h; allElements{n}.k.h];
-#    kList.v = [kList.v; allElements{n}.k.v];
-#    lengthList = [lengthList; allElements{n}.len];
-    
-    betaList.v = [betaList.v; allElements{n}.centerBeta.v];
-    betaList.h = [betaList.h; allElements{n}.centerBeta.h];
-    
-    if (is_BM(allElements{n}))
-#      kList.h = [kList.h; allElements{n}.edgeK.h; allElements{n}.edgeK.h];
-#      kList.v = [kList.v; allElements{n}.edgeK.v; allElements{n}.edgeK.v];
-#      lengthList = [lengthList; 1; 1];
+    ##if (regexp(allElements{n}.name, "^QD"))
+#      klList.h(end+1) = focusingPower(allElements{n}, "h");
+#      klList.v(end+1)= focusingPower(allElements{n}, "v");
+#      betaList.v(end+1) = allElements{n}.centerBeta.v;
+#      betaList.h(end+1) = allElements{n}.centerBeta.h;
+#    endif
 
-      klList.h = [klList.h; allElements{n}.edgeK.h; allElements{n}.edgeK.h];
-      klList.v = [klList.v; allElements{n}.edgeK.v; allElements{n}.edgeK.v];
+    if (is_BM(allElements{n}))
+      klList.h(end+1) = allElements{n}.edgeK.h;
+      klList.h(end+1) = allElements{n}.edgeK.h;
+      klList.v(end+1) = allElements{n}.edgeK.v;
+      klList.v(end+1) = allElements{n}.edgeK.v;
   
-      betaList.h = [betaList.h; allElements{n}.entranceBeta.h; allElements{n}.exitBeta.h];
-      betaList.v = [betaList.v; allElements{n}.entranceBeta.v; allElements{n}.exitBeta.v];
+      betaList.h(end+1) = allElements{n}.entranceBeta.h;
+      betaList.h(end+1) = allElements{n}.exitBeta.h;
+      betaList.v(end+1) = allElements{n}.entranceBeta.v;
+      betaList.v(end+1) = allElements{n}.exitBeta.v;
+#    endif
       
+    else
+      klList.h(end+1) = focusingPower(allElements{n}, "h");
+      klList.v(end+1)= focusingPower(allElements{n}, "v");
+      betaList.v(end+1) = allElements{n}.centerBeta.v;
+      betaList.h(end+1) = allElements{n}.centerBeta.h;
     endif
+
   endfor
   
-#  chrom.h = -sum(kList.h .* betaList.h.*lengthList)/(4*pi);
-#  chrom.v = -sum(kList.v .* betaList.v.*lengthList)/(4*pi);
   chrom.h = -sum(klList.h .* betaList.h)/(4*pi);
   chrom.v = -sum(klList.v .* betaList.v)/(4*pi);
 endfunction

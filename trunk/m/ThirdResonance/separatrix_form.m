@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{xy_points} =} separatrix_form(@var{track_rec}, @var{elem_name}, @var{pos_in_elem})
+## @deftypefn {Function File} {[@var{fixed_points}, @var{sep_info}] =} separatrix_form(@var{track_rec}, @var{elem_name}, @var{pos_in_elem})
 ##
 ## Return fixed points of third sepatartix at the location specified with with @var{elem_name} and @var{pos_in_elem}. For the plotting, 4 xy-points is returnd where first xy-point is equal to last xy-point.
 ##
@@ -15,6 +15,32 @@
 ## @var{elem_name} : name of the element.
 ## 
 ## @var{pos_in_elem} : position in the element. "entrance", "center" or "exit"
+##
+## Results:
+##
+## @table @code
+## @item @var{fiexed_points}
+## The coordinates of fiexd points on the phase space in the unit of [mm] and [mrad].
+## @item @var{sep_info}
+## A collection of values related with the 3rd resonance separatrix.
+## @end table
+##
+## @var{sep_info} has following fields.
+##
+## @table @code
+## @item J
+## @item psi
+## @item theta
+## @item xi
+## @item phi
+## @item phase_advance
+## @item delta_tune
+## @item tune
+## @item a_3n0
+## @item circumference
+## @item fixed_points
+## The coordinates of fiexd points on the phase space in the unit of [m] and [rad].
+## @end table
 ##
 ## @end deftypefn
 
@@ -40,7 +66,7 @@
 ## 2007-10-16
 ## * initial implementaion
 
-function [xy_points_1000, xy_points] = separatrix_form(track_rec, elem_name, pos_in_elem)
+function [xy_points_1000, sep_info] = separatrix_form(track_rec, elem_name, pos_in_elem)
   sep_info = values_for_separatrix(track_rec);
   an_elem = element_with_name(track_rec, elem_name);
   phase_advance = an_elem.([pos_in_elem, "Phase"]).h;
@@ -70,4 +96,8 @@ function [xy_points_1000, xy_points] = separatrix_form(track_rec, elem_name, pos
   xy_points = [x; xprime]';
   xy_points(end+1, :) = xy_points(1,:);
   xy_points_1000 = xy_points*1000;
+  sep_info.phi = phi;
+  sep_info.theta = theta;
+  sep_info.phase_advance = phase_advance;
+  sep_info.fixed_points = xy_points;
 endfunction

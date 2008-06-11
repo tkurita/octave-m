@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {} itobl_definition(@var{func_name})
-## @deftypefn {Function File} {@var{func_handle}} itobl_definition()
+## @deftypefnx {Function File} {@var{func_handle} = } itobl_definition()
 ##
 ## Set a function name which provides conversion functors from current value to BL value.
 ## 

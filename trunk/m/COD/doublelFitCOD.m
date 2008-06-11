@@ -15,11 +15,14 @@
 #shareTerm ../../../WorkSpace/シンクロトロン/2006.9-12 垂直 COD/Check_PR12_1211/Check_PR12_1211.m
 
 ##= Hisotry
+## 2008-05-09
+## * Used value_for_kickangle instead of calcKickerValue.
+## 
 ## 2007.07.12
-## - add useWeight option
+## * add useWeight option
 
-function [codRecord_FB, codRecord_FT] \
-              = doublelFitCOD(codRecord_FB, codRecord_FT, variableKickers, varargin);
+function [codRecord_FB, codRecord_FT] = ...
+              doublelFitCOD(codRecord_FB, codRecord_FT, variableKickers, varargin);
   #  codRecord_FB = codRec_FB_correct;
   #  codRecord_FT = codRec_correct_FT;
   #  variableKickers = {"QD2"};
@@ -124,8 +127,8 @@ function [codRecord_FB, codRecord_FT] \
       if (strcmp(target_name, kickers{m}.name))
         kick_angles_sorted_FB(end+1) = kick_angles_FB(m);
         kick_angles_sorted_FT(end+1) = kick_angles_FT(m);
-        steerer_values_FB(end+1) = calcKickerValue(kickers{m}, kick_angles_FB(m), codRecord_FB.brho);
-        steerer_values_FT(end+1) = calcKickerValue(kickers{m}, kick_angles_FT(m), codRecord_FT.brho);
+        steerer_values_FB(end+1) = ib_for_kickangle(kickers{m}, kick_angles_FB(m), codRecord_FB.brho);
+        steerer_values_FT(end+1) = ib_for_kickangle(kickers{m}, kick_angles_FT(m), codRecord_FT.brho);
       endif
     endfor
   endfor

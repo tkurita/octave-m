@@ -66,7 +66,7 @@ function  out = prepare_plot(latRec, varargin);
     , chrom_h_comment, returnText\
     , chrom_v_comment];
   
-  visibleLabels = {"QF\\d","QD\\d","BM\\d","^ESD$", "^ESI$","SX\\d"};
+  visibleLabels = {"QF\\d","QD\\d","BM\\d","^ESDIN$", "^ESI$","SX\\d"};
   plot_title = "";
   if (length(varargin) > 0)
     plot_title = varargin{1};
