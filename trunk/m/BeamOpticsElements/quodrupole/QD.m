@@ -1,3 +1,4 @@
+## -*- texinfo -*-
 ## @deftypefn {Function File} {} QD(@var{property_struct})
 ## @deftypefnx {Function File} {} QD(@var{qk}, @var{ql}, @var{name} [,@var{aparture}] )
 ##

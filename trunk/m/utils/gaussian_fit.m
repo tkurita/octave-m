@@ -7,6 +7,9 @@
 ## * initial_values = [amp, sigma, mu]
 
 ##== History
+## 2008-07-02
+## * use gaussianx instead of gaussian
+## 
 ## 2008-01-09
 ## * renamed gaussian_fit into gaussian-fit
 
@@ -32,7 +35,7 @@ function result = gaussian_fit(varargin)
     initial_values = varargin{next_arg};
   endif
   
-  F = @gaussian;
+  F = @gaussianx;
   [f1, result, kvg1, iter1, corp1, covp1, covr1, stdresid1, Z1, r21] = ...
   leasqr(xlist, ylist, initial_values, F, stol, niter);
   

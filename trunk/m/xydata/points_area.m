@@ -1,7 +1,11 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} points_area(@var{xy}, [@var{smoothing_level}])
 ##
-## calcluate area xy points exists
+## Calcluate area xy points exists
+##
+## @end deftypefn
 
-function area = points_area(points, varargin)
+function retval = points_area(points, varargin)
   env_iteration = 1;
   if (length(varargin) > 0)
     env_iteration = varargin{1};
@@ -21,10 +25,10 @@ function area = points_area(points, varargin)
   polar_env =  [points_sorted(:,1), up];
   polar_env = polar_env(!isnan(polar_env(:,2)),:);
   xy_env = [polar_env(:,2).*cos(polar_env(:,1)), polar_env(:,2).*sin(polar_env(:,1))];
-  xyplot(points, "@", xy_env + shift_mat(1:rows(xy_env),:) , "-");
+  xyplot(points, ".", xy_env + shift_mat(1:rows(xy_env),:) , "-");
   
   xy_env(:,end+1) = zeros(rows(xy_env),1);
   xy_env_shifted = shift(xy_env,1);
-  area = sum(cross(xy_env_shifted, xy_env)(:,3))/2;
+  retval = sum(cross(xy_env_shifted, xy_env)(:,3))/2;
 endfunction
 

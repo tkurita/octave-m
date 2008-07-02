@@ -11,6 +11,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-06-23
+## * add dp field in returned value.
+## 
 ## 2008-03-29
 ## * initial implementaion
 
@@ -33,7 +36,7 @@ function result = arrange_hits(varargin)
       if (length(val) > 0)
         if (!isfield(result, key) || isempty(result.(key)))
           result.(key) = struct("flags",[], "id", [], "n_rev", []...
-                              , "h", [], "v", []);
+                              , "h", [], "v", [], "dp", []);
         endif
         beg_rev = 1;        
 #        if (isfield(a_particle_history, "beginning_revolution"))
@@ -65,5 +68,6 @@ function hits = arrange_hit_history(hits, hit_history, beg_rev)
   np = rows(x);
   hits.h(end+1:end+np,:) = x;
   hits.v(end+1:end+np,:) = y;
+  hits.dp(end+1:end+np,:) = pmat(3,:)';
   hits.n_rev(end+1:end+np) = n_rev + (beg_rev -1);
 endfunction

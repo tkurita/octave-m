@@ -1,4 +1,10 @@
+##== History
+## 2008-06-18
+## * obsolete. Use initial_twiss_parameters
+##
+
 function twPcosMu = twissParameter(fullMatrix)
+  warning("twissParameter is deprecated. Use initial_twiss_parameters");
   cosmu = (fullMatrix(1,1)+fullMatrix(2,2))/2;
   
   if fullMatrix(1,2) >= 0

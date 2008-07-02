@@ -14,6 +14,9 @@
 ##  mean value of gaussian fit
 
 ##== History
+## 2008-07-02
+## * use gaussianx instead of gaussian
+##
 ## 2008-01-09
 ## * use load_profile_csv instead of loadProfileCVS
 ##

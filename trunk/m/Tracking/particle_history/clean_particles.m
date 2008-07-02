@@ -3,7 +3,7 @@
 ##
 ## Return a matrix removing columns which have NaN or large values at (1,:) from @var{inparticeles}
 ##
-## Every rows of @{invarticles} indicate points of each particles in the phase sepace.
+## Every rows of @var{invarticles} indicate points of each particles in the phase sepace.
 ##
 ##
 ## @end deftypefn

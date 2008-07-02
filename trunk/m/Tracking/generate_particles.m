@@ -15,10 +15,10 @@
 ##
 ## @table @code
 ## @item em.x
-## Horizontal emittance [rad *m]
+## Horizontal emittance [pi*rad *m]
 ##
 ## @item em.y
-## Vertical emittance [rad * m]
+## Vertical emittance [pi*rad * m]
 ##
 ## @item num
 ## Number of particles.

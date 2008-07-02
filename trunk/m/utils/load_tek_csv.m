@@ -1,15 +1,27 @@
-## usage : outRec = load_tek_csv(file_path)
-##      read csv data of TEKTRONICS's oscilloscope
-## 
-## = result
-## outRec
-##  .data -- cell array of matrix
+## -*- texinfo -*-
+## @deftypefn {Function File} {} load_tek_csv(@var{fname})
+##
+## read csv data of TEKTRONICS's oscilloscope
+##
+## The result is a structure which has following fields.
+##
+## @table @code
+## @item data
+## cell array of matrixes
+## @item samplerate
+## sampling rate [Hz]
+## @end table
+##
+## @end deftypefn
 
-## = History
+##== History
+## 2008-07-02
+## * add samplerate to output
+## 
 ## 2007-04-12
 ## * initial
 
-function outRec = load_tek_csv(file_path)
+function retval = load_tek_csv(file_path)
   #file_path = "TEK00000.CSV"
   [fid, msg] = fopen(file_path, "r");
   if (fid == -1)
@@ -38,9 +50,10 @@ function outRec = load_tek_csv(file_path)
   
   data = csvread(file_path, nhead, 0);
 
-  outRec.data = {};
+  retval.data = {};
   for n = 2:ndata;
-    outRec.data{end+1} = [data(:,1), data(:,n)];
+    retval.data{end+1} = [data(:,1), data(:,n)];
   endfor
-  
+
+  retval.samplerate = 1/(data(:,2) - data(:,1));
 endfunction

@@ -76,6 +76,9 @@
 
 
 ##== History
+## 2008-06-18
+## use initial_twiss_parameters instead of twissParameter
+## 
 ## 2007-10-25
 ## * add entranceTwpar field
 ## * rename twpar field into exitTwpar
@@ -107,7 +110,7 @@ function varargout = process_lattice(varargin)
   endif
   
   ##== set initile twiss parameter of horizontal
-  twPcosMu.h = twissParameter(fullCircleMat.h);
+  twPcosMu.h = initial_twiss_parameters(fullCircleMat.h);
   twp0.h = twPcosMu.h.twp;
   pretwp.h = twp0.h;
   
@@ -117,7 +120,7 @@ function varargout = process_lattice(varargin)
   preeater = eater0;
   
   ##== set initiale twiss parameter of vertical
-  twPcosMu.v = twissParameter(fullCircleMat.v);
+  twPcosMu.v = initial_twiss_parameters(fullCircleMat.v);
   twp0.v = twPcosMu.v.twp;
   pretwp.v = twp0.v;
   
