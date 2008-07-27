@@ -1,8 +1,39 @@
-## Usage : qkValue = QKValueAtTime(glPattern, blPattern, t [, "property", value, ...])
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} qk_at_time(@var{gl_pattern}, @var{bl_pattern}, @var{t}, options)
+## @deftypefnx {Function File} {@var{result} =} qk_at_time(@var{gl_pattern}, @var{brho}, t, options)
+##
+## Obtain qk [1/m*m] from @var{gl_pattern} at @var{t} [msec].
+##
+## Arguments
+## 
+## @table @code
+## @item @var{gl_pattern}
+## a pattern of the Q magnet
+## @item @var{bl_pattern}
+## a pattern of BL value of the Bending Magnet
+## @item @var{brho}
+## a Brho value. [T*m].
+## @item @var{t}
+## time [msec]
+## @end table
+##
+## Options
+##
+## @table @code
+## @item "porarity"
+## 1 : focusing Q, -1 : defocusing Q @*
+## if porarity is ommited, value is 1 ie. focusing Q is assumed.
+## @item "qlength"
+## efective length of Q magnet [m]
+## @end table
+##
+## @end deftypefn
+
+## Usage : qkValue = qk_at_time(gl_pattern, bl_pattern, t [, "property", value, ...])
 ## 
 ##== Parameters
-## * glPattern -- a pattern of the Q magnet
-## * blPattern -- a pattern of BL value of the Bending Magnet
+## * gl_pattern -- a pattern of the Q magnet
+## * bl_pattern -- a pattern of BL value of the Bending Magnet
 ## * t -- time [msec]
 ##
 ##== Optional properties
@@ -21,6 +52,10 @@
 ## * calc_lattice, process_lattice Ç™ 1/(m*m) ÇóvãÅÇµÇƒÇ¢ÇÈÇÃÇ™ó«Ç≠Ç»Ç¢Ç©ÅB
 
 ##== History
+## 2008-07-25
+## * renamed from QKValueAtTime
+## * bl_pattern can be a scalar of Brho value.
+## 
 ## 2006-11-22
 ## * optional arguments are given with "property"-value style.
 ## * add an optional argument "qlength"
@@ -29,28 +64,24 @@
 ## * change qlength to 0.21 from 0.212
 ##
 
-function qkValue = QKValueAtTime(glPattern, blPattern, t, varargin)
-  # blPattern = BMPattern;
-  # glPattern = QFPattern;
+function qkValue = qk_at_time(gl_pattern, bl_pattern, t, varargin)
+  # bl_pattern = BMPattern;
+  # gl_pattern = QFPattern;
   # t = 700;
-  brho = BrhoAtTime(blPattern,t);
-  gl = BValueAtTime(glPattern,t);
+  if (iscell(bl_pattern))
+    brho = BrhoAtTime(bl_pattern,t);
+  else
+    brho = bl_pattern;
+  endif
+  
+  gl = BValueAtTime(gl_pattern,t);
   
   porarity = 1;
   #qlength = 0.15; #[m]
   #qlength = 0.212; #[m]
   qlength = 0.21; #[m]
+  [porarity, qlength] = get_properties(varargin, {"porarity", "qlength"}, {1, 0.21});
   
-  n = 1;
-  while (n <= length(varargin))
-    switch (varargin{n})
-      case ("porarity")
-        porarity = varargin{++n};
-      case ("qlength")
-        qlength = varargin{++n};
-    endswitch
-    n++;
-  endwhile
   qkValue = porarity * gl/brho/qlength;
   
 endfunction
