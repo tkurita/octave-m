@@ -55,5 +55,5 @@ function retval = load_tek_csv(file_path)
     retval.data{end+1} = [data(:,1), data(:,n)];
   endfor
 
-  retval.samplerate = 1/(data(:,2) - data(:,1));
+  retval.samplerate = 1/(data(2,1) - data(1,1));
 endfunction

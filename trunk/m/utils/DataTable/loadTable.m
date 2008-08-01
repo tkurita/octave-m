@@ -14,3 +14,4 @@ function result = loadTable(filePath)
   result.names = csvexplode(theLine, "\t");
   result.data = load(filePath);
 endfunction
+
