@@ -21,7 +21,7 @@
 ## 2007-10-23
 ## * renamed from BrhoForFrev
 
-#function result =  BrhoForFrev(f_rev, c_length, particle)
+#function result =  brho_with_frev(f_rev, c_length, particle)
 function varargout = brho_with_frev(varargin)
   #  energy = 660 #[MeV]
   #  charge = 6;
