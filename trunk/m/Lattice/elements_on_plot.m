@@ -21,6 +21,9 @@
 ## @end deftypefn
 
 ##= History
+## 2008-07-25
+## * fix "yposition" can not accept real numbers.
+##
 ## 2008-04-30
 ## * Help written by texinfo format.
 ## * element names are specified with regular expressions.
@@ -42,7 +45,7 @@ function elements_on_plot(names, lattice, varargin)
   end
   
   if (ischar(yposition))
-    [s, e, te, m, t, nm] = regexp(yposition, "(\\w+)\\s(-?\\d*)");
+    [s, e, te, m, t, nm] = regexp(yposition, "(\\w+)\\s(-?\\d*.*)");
     if (s > 0)
       switch t{1}{1}
         case "first"

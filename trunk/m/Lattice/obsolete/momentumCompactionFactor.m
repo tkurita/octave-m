@@ -12,7 +12,7 @@
 ## * Use is_BM intead of isBendingMagnet
 
 function alpha = momentumCompactionFactor(allElements)
-  warning("momentumComactionFactor is obsolete. Use momentum_compaction_factor.";
+  warning("momentumComactionFactor is obsolete. Use momentum_compaction_factor.");
   ##calc mometum compaction factor
   alpha = 0;
   for n = 1:length(allElements)

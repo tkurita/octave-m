@@ -1,7 +1,4 @@
 ## Usage : plot_lattice(lat_record, [, plot_title ,visible_labels])
-##          or
-##         plot_lattice(allElements, betaFunction, dispersion,
-##                          visibleLabels, titleText, insertComment)
 ##
 ##    Plot beta-function and dispersion.
 ##    Names of lattice elements shown on x-axis are assign by visibleLabes.
@@ -14,6 +11,10 @@
 ##    - qdk
 
 ##== History
+## 2008-07-25
+## * support only lattice_records as arguments
+## * can multiple lattice plottings
+## 
 ## 2008-04-30
 ## * names of elements are plotted by elements_on_plot
 ## 
@@ -24,15 +25,39 @@ function retval = plot_lattice(first_arg, varargin)
   if (isstruct(first_arg))
     rest_args = prepare_plot(first_arg, varargin{:});
     retval = _plot_lattice(first_arg.lattice, rest_args{:});
-  else
-    retval = _plot_lattice(first_arg.lattice, varargin{:});
+
+  elseif (iscell(first_arg))
+    args = prepare_plot(first_arg{1}, varargin{:});
+    xyplot(args{1}.h, "-@;horizontal beta;", "linewidth", 2 ...
+      , args{1}.v, "-@;vertical beta;", "linewidth", 2 ...
+      , args{2}, "-@;dispersion;", "linewidth", 2);  
+    title(args{4});
+    ylabel("dispersion,beta [m]");
+    xlabel("Position [m]");    
+    elem_labels = args{3};
+    ins_comment = args{5};
+    for n = 2:length(first_arg)
+      args = prepare_plot(first_arg{n});
+      append_plot_lattice(args{1}, args{2});
+      ins_comment = strcat(ins_comment, "\n\n", args{5});
+    endfor
+    text("Position", [0.05, 0.95]...
+      , "Units", "normalized"...
+      , "String", ins_comment);
+    drawnow();grid on;
+    elements_on_plot(elem_labels, first_arg{1}.lattice, "yposition", "graph 0.05");
   endif
 endfunction
 
 function  out = prepare_plot(latRec, varargin);
+
+  exitPositionList = value_for_keypath(latRec.lattice, "exitPosition")';
+  betaFunc.h = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.h")'];
+  betaFunc.v = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.v")'];
+  dispersion = [exitPositionList, value_for_keypath(latRec.lattice, "exitDispersion")'];
+
   tuneText = printTune(latRec.tune);
-  # horizontal ture:1.31562
-  # vertial ture:1.18495
+  
   returnText = "\n";
   insertComment = "";
   if (isfield(latRec, "qfk"))
@@ -40,11 +65,6 @@ function  out = prepare_plot(latRec, varargin);
     qdk_comment = sprintf("qdk:%g", latRec.qdk) # ans = 1.4558
     insertComment = [qfk_comment, returnText, qdk_comment, returnText];
   endif
-  
-  exitPositionList = value_for_keypath(latRec.lattice, "exitPosition")';
-  betaFunc.h = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.h")'];
-  betaFunc.v = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.v")'];
-  dispersion = [exitPositionList, value_for_keypath(latRec.lattice, "exitDispersion")'];
   
   alpha = momentum_compaction_factor(latRec.lattice);
   alpha_comment = sprintf("momentum compaction factor:%g",alpha)
@@ -57,14 +77,15 @@ function  out = prepare_plot(latRec, varargin);
   chrom_v_comment = sprintf("vertical chromaticity:%g",chrom.v)
   # chrom_v_comment = vertical chromaticity:-0.804463
   
-  ## plotting lattice
-  
   insertComment = [insertComment\
     , tuneText(1,:),returnText\
     , tuneText(2,:),returnText\
     , alpha_comment, returnText\
     , chrom_h_comment, returnText\
     , chrom_v_comment];
+  
+  ## plotting lattice
+  
   
   visibleLabels = {"QF\\d","QD\\d","BM\\d","^ESDIN$", "^ESI$","SX\\d"};
   plot_title = "";
@@ -78,7 +99,7 @@ function  out = prepare_plot(latRec, varargin);
   out = {betaFunc, dispersion, visibleLabels ,plot_title ,insertComment};
 endfunction
 
-## Usage : plotLattice(allElements,betaFunction,dispersion,visibleLabels,titleText,insertComment)
+## Usage : _plot_lattice(allElements,betaFunction,dispersion,visibleLabels,titleText,insertComment)
 ##    Plot beta-function and dispersion.
 ##    Names of lattice elements shown on x-axis are assign by visibleLabes.
 
@@ -96,6 +117,12 @@ function retval = _plot_lattice(allElements,betaFunction,dispersion,visibleLabel
   text("Position", [0.05, 0.95]...
     , "Units", "normalized"...
     , "String", insertComment);
-  drawnow();
+  drawnow();grid on;
   elements_on_plot(visibleLabels, allElements);
 endfunction
+
+function append_plot_lattice(beta_f, dispersion)
+  append_plot(beta_f.h, "-@;horizontal beta;", "linewidth", 2);
+  append_plot(beta_f.v, "-@;vertical beta;", "linewidth", 2);
+  append_plot(dispersion, "-@;dispersion;", "linewidth", 2);
+end

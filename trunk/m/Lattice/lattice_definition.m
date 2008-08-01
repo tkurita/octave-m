@@ -10,15 +10,23 @@
 ## @end deftypefn
 
 ##== History
+## 2008-07-25
+## * add error message "No lattice definition is given."
+## * claer function always.
+## 
 ## 2007-10-25
 ## * claer laoded function when setiing of function name.
 
 function varargout = lattice_definition(varargin)
-  persistent func_name;
+  persistent func_name = "";
   if (length(varargin) > 0)
     func_name = varargin{1};
     eval(["clear ", func_name]);
   else
+    if (isempty(func_name))
+      error("No lattice definition is given.");
+    endif
+    eval(["clear ", func_name]);
     varargout{1} = str2func(func_name);
   endif
 endfunction

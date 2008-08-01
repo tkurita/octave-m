@@ -30,20 +30,26 @@
 ## @end deftypefn
 
 ##== History
+## 2008-07-25
+## * Use qk_at_time instead of QKValueAtTime
+## * Add support of beta function fitting.
+## 
 ## 2007-10-18
 ## * use lattice_with_tune instead of calcLatticeForTune
 
 function lattice_rec = lattice_with_time_tune(lattice_rec)
   # lattice_rec = lat_rec_FT
-  lattice_rec.qfk = QKValueAtTime(QFPattern, BMPattern, lattice_rec.time);
-  lattice_rec.qdk = QKValueAtTime(QDPattern, BMPattern, lattice_rec.time, -1);
+  lattice_rec.qfk = qk_at_time(QFPattern, BMPattern, lattice_rec.time);
+  lattice_rec.qdk = qk_at_time(QDPattern, BMPattern, lattice_rec.time, -1);
   lattice_rec.brho = BrhoAtTime(BMPattern, lattice_rec.time);
   lattice_rec = calc_lattice(lattice_rec);
   
   if (isfield(lattice_rec, "measured_tune"))
-    lattice_rec.initial_qfk = lattice_rec.qfk;
-    lattice_rec.initial_qdk = lattice_rec.qdk;
-    lattice_rec = lattice_with_tune(lattice_rec);
+    initv = [lattice_rec.qfk, lattice_rec.qdk];
+    if (isfield(lattice_rec, "measured_beta"))
+      initv(end+1) = 0;
+    endif
+    lattice_rec = lattice_with_tune(lattice_rec, "initial", initv);
   endif
 
 endfunction
