@@ -21,6 +21,9 @@
 ## @end deftypefn
 
 ##= History
+## 2008-08-01
+## * @var{lattice} can accept lattice object.
+##
 ## 2008-07-25
 ## * fix "yposition" can not accept real numbers.
 ##
@@ -38,6 +41,9 @@
 ## * derived from setElementsOnPlot
 
 function elements_on_plot(names, lattice, varargin)
+  if (isstruct(lattice))
+    lattice = lattice.lattice;
+  endif
   [clear_flag, yposition] = get_properties(varargin, {"clear", "yposition"},...
                                                 {false, "graph 0"});
   if (clear_flag)

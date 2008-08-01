@@ -11,6 +11,9 @@
 ##    - qdk
 
 ##== History
+## 2008-08-01
+## * Use lattice_info
+## 
 ## 2008-07-25
 ## * support only lattice_records as arguments
 ## * can multiple lattice plottings
@@ -55,35 +58,8 @@ function  out = prepare_plot(latRec, varargin);
   betaFunc.h = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.h")'];
   betaFunc.v = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.v")'];
   dispersion = [exitPositionList, value_for_keypath(latRec.lattice, "exitDispersion")'];
-
-  tuneText = printTune(latRec.tune);
   
-  returnText = "\n";
-  insertComment = "";
-  if (isfield(latRec, "qfk"))
-    qfk_comment = sprintf("qfk:%g", latRec.qfk) # ans = -0.0062874
-    qdk_comment = sprintf("qdk:%g", latRec.qdk) # ans = 1.4558
-    insertComment = [qfk_comment, returnText, qdk_comment, returnText];
-  endif
-  
-  alpha = momentum_compaction_factor(latRec.lattice);
-  alpha_comment = sprintf("momentum compaction factor:%g",alpha)
-  # momentum compaction factor:0.612075
-  
-  ## calc chromaticity
-  chrom = chromaticity(latRec.lattice);
-  chrom_h_comment = sprintf("horizontal chromaticity:%g",chrom.h)
-  # chrom_h_comment = horizontal chromaticity:-0.966016
-  chrom_v_comment = sprintf("vertical chromaticity:%g",chrom.v)
-  # chrom_v_comment = vertical chromaticity:-0.804463
-  
-  insertComment = [insertComment\
-    , tuneText(1,:),returnText\
-    , tuneText(2,:),returnText\
-    , alpha_comment, returnText\
-    , chrom_h_comment, returnText\
-    , chrom_v_comment];
-  
+  insertComment = lattice_info(latRec);
   ## plotting lattice
   
   
