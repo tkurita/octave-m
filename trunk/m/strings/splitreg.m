@@ -25,3 +25,7 @@ function outList = splitreg(inStr, pattern)
 
   # outList
 endfunction
+
+
+%!test
+%! regsplit("/aaa/cccc", "/")
