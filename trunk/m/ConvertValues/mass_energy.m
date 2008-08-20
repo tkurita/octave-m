@@ -11,8 +11,15 @@
 
 function result = mass_energy(particle)
   if (isnumeric(particle))
-    amu = physical_constant("ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV");
-    result = amu * particle;
+    switch particle
+      case 1
+        result = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
+      case 4
+        result = physical_constant("ALPHA_PARTICLE_MASS_ENERGY_EQUIVALENT_IN_MEV");
+      otherwise
+        amu = physical_constant("ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV");
+        result = amu * particle;
+    endswitch
   else
     switch particle
       case "proton"
