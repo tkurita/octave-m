@@ -18,16 +18,15 @@
 ## @end deftypefn
 
 ##== History
+## 2008-08-20
+## * Use mev_with_velocity
+## 
 ## 2008-03-03
 ## * renamed from frevToMeV
  
-function result = mev_with_frev(frev, circumference, particle)
-  mass_e = mass_energy(particle);
+function retval = mev_with_frev(frev, circumference, particle)
   v = frev * circumference; #[m/s]
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
-  b = v/lv;
-  g = 1/sqrt(1-b^2);
-  result = mass_e*(g - 1);
+  retval = mev_with_velocity(v, particle);
 endfunction
 
 %!test
