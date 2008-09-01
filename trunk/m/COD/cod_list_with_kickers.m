@@ -18,6 +18,9 @@
 ##     [position, COD]
 
 ##== History
+## 2008-09-01
+## * useSteererValues option が設定されなくても、steererValues を使おうとする不具合を修正
+## 
 ## 2007.10.02
 ## * add option "noKickFactor"
 ## * rename from calcCODWithPerror
@@ -51,11 +54,11 @@ function cod_list = cod_list_with_kickers(cod_rec, varargin)
     varargin = {};
   endif
   
-  if (!use_steerer_values )
+  if (use_steerer_values )
     if (isfield(cod_rec, "steererValues") )
       varargin{end+1} = "useSteererValues";
     else
-      error("cod_rec don't have kickAngles field.");
+      error("cod_rec don't have steererValues field.");
     endif
   endif
   
