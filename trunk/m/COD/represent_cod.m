@@ -42,7 +42,7 @@ function varargout = represent_cod(varargin)
     error("target_bpms is not given.")
   endif
   
-  cod_sum = sumY(varargin{:});
+  cod_sum = sum_y(varargin{:});
   bpm_sum = lookup_cod_at_elements(cod_sum, a_lattice, base_bpm);
   bpm_diff = target_bpms.(base_bpm) - bpm_sum;
   expected_perror = bpm_diff/element_with_name(a_lattice, base_bpm).centerDispersion/1000;
