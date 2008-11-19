@@ -7,6 +7,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-08-11
+## * add "reverse"
+## 
 ## 2008-06-02
 ## * return edgek
 ##
@@ -18,10 +21,14 @@
 
 #function matrix = BMHmat(radius, bmangle, edgeangle ,varargin)
 function [matrix, edgek] = BMHmat(varargin)
+  reverse = false;
   if (isstruct(varargin{1}))
     prop = varargin{1};
     radius = prop.radius;
     bmangle = prop.bmangle;
+    if (isfield(prop, "reverse"))
+      reverse = prop.reverse;
+    endif
   else
     radius = varargin{1};
     bmangle = varargin{2};
@@ -31,7 +38,7 @@ function [matrix, edgek] = BMHmat(varargin)
     else
       pError = 0;
     endif
-    prop = tars(radius, edgeangle, pError);
+    prop = tars(radius, edgeangle, pError, reverse);
   endif
     
   #edgematrix = BME_H(radius, edgeangle, varargin{:});
@@ -40,5 +47,9 @@ function [matrix, edgek] = BMHmat(varargin)
               -sin(bmangle)/radius, cos(bmangle), sin(bmangle);
               0, 0, 1];
   matrix = edgematrix*bmmatrix*edgematrix;
+  if (reverse)
+    rm = [-1,0,0; 0,-1,0; 0,0,1];
+    matrix = rm * matrix * rm;
+  endif
   edgek = -1*edgematrix(2,1);
 endfunction

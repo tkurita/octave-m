@@ -82,6 +82,14 @@ function bm_struct = BM(varargin)
   mathalf_h = BMHmat(radius, bm_struct.bmangle/2, 0);
   bm_struct.mat_half.h = mathalf_h * edgemat_h;
   bm_struct.mat_rest.h = edgemat_h * mathalf_h;
+  if (isfield(bm_struct, "reverse"))
+    if (bm_struct.reverse)
+      rm = [-1,0,0; 0,-1,0; 0,0,1];
+      bm_struct.mat_half.h = rm * bm_struct.mat_half.h * rm;
+      bm_struct.mat_rest.h = rm * bm_struct.mat_rest.h * rm;
+    endif
+  endif
+  
   if (hasEfflen)
     bm_struct.mat_half.h = bm_struct.mat_half.h * DTmat(-dl);
     bm_struct.mat_rest.h = DTmat(-dl) * bm_struct.mat_rest.h;
