@@ -1,3 +1,11 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} mat_with_element(@var{element})
+##
+## @var{element} is a beam optics element object.
+##
+## Obtain 6 times 6 matrix from 'mat.h' and 'mat.v' fields of @var{element}.
+## @end deftypefn
+
 ##== History
 ## 2007-10-04
 ## * initial implementation
