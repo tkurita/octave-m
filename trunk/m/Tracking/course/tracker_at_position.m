@@ -33,6 +33,8 @@ function a_tracker = tracker_at_position(an_elem, s)
       a_tracker = an_elem;
     case "Unshifter"
       a_tracker = an_elem;
+    case "Momentum Shifter"
+      a_tracker = an_elem;
     otherwise
       error(sprintf("%s is unknown kind of element.", an_elem.kind));
   endswitch
