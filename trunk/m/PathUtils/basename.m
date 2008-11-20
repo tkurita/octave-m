@@ -10,6 +10,9 @@
 function retval = basename(fpath, suffix)
   # exist("suffix")
   pelems = regsplit(fpath, "/");
+  if (isempty(pelems{end}))
+    pelems = pelems(1:end-1);
+  endif
   retval = pelems{end};
   if (exist("suffix"))
     params = {retval};
@@ -21,4 +24,4 @@ function retval = basename(fpath, suffix)
 endfunction
 
 %!test
-%! basename("aaa/bb.text", "\\.text")
+%! basename("/aaa/bb.text", "\\.text")
