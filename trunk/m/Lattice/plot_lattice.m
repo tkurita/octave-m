@@ -1,3 +1,20 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {} plot_lattice(@var{lattice}, @var{opts})
+##
+## Plot beta-function and dispersion.
+## Names of lattice elements shown on x-axis are assign by visibleLabes.
+## 
+## Avialble options @var{OPTS} are as follows.
+## @table @code
+## @item title
+## plot title
+## @item elements
+## Names of elements to be placed on the plot.
+## Cells of regular expressions of element names.
+## The default value is @{"QF\\d","QD\\d","BM\\d","^ESDIN$", "^ESI$","SX\\d"@}.
+## @end table 
+## @end deftypefn
+
 ## Usage : plot_lattice(lat_record, [, plot_title ,visible_labels])
 ##
 ##    Plot beta-function and dispersion.
@@ -44,6 +61,7 @@ function retval = plot_lattice(first_arg, varargin)
       append_plot_lattice(args{1}, args{2});
       ins_comment = strcat(ins_comment, "\n\n", args{5});
     endfor
+    
     text("Position", [0.05, 0.95]...
       , "Units", "normalized"...
       , "String", ins_comment);
@@ -53,7 +71,8 @@ function retval = plot_lattice(first_arg, varargin)
 endfunction
 
 function  out = prepare_plot(latRec, varargin);
-
+  [plot_title, elem_names] = get_properties(varargin, {"title", "elements"}, ...
+                                {"", {"QF\\d","QD\\d","BM\\d","^ESDIN$", "^ESI$","SX\\d"}});
   exitPositionList = value_for_keypath(latRec.lattice, "exitPosition")';
   betaFunc.h = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.h")'];
   betaFunc.v = [exitPositionList, value_for_keypath(latRec.lattice, "exitBeta.v")'];
@@ -61,40 +80,28 @@ function  out = prepare_plot(latRec, varargin);
   
   insertComment = lattice_info(latRec);
   ## plotting lattice
-  
-  
-  visibleLabels = {"QF\\d","QD\\d","BM\\d","^ESDIN$", "^ESI$","SX\\d"};
-  plot_title = "";
-  if (length(varargin) > 0)
-    plot_title = varargin{1};
-  endif
-  
-  if (length(varargin) > 1)
-    visibleLabels = varargin{2};
-  endif
-  out = {betaFunc, dispersion, visibleLabels ,plot_title ,insertComment};
+
+  out = {betaFunc, dispersion, elem_names ,plot_title ,insertComment};
 endfunction
 
-## Usage : _plot_lattice(allElements,betaFunction,dispersion,visibleLabels,titleText,insertComment)
+## Usage : _plot_lattice(allElements,betaFunction,dispersion,elem_names,titleText,insertComment)
 ##    Plot beta-function and dispersion.
 ##    Names of lattice elements shown on x-axis are assign by visibleLabes.
 
-function retval = _plot_lattice(allElements,betaFunction,dispersion,visibleLabels,titleText,insertComment)
-  ##labels of name of elements on x axis
-  #__gnuplot_raw__("unset label\n");
-  
-  ##plot
+function retval = _plot_lattice(allElements,betaFunction,dispersion,elem_names,titleText,insertComment)
   retval = xyplot(betaFunction.h, "-@;horizontal beta;", "linewidth", 2 ...
     , betaFunction.v, "-@;vertical beta;", "linewidth", 2 ...
     , dispersion, "-@;dispersion;", "linewidth", 2);  
-  title(titleText);
+  if (!isempty(titleText))
+    title(titleText);
+  end
   ylabel("dispersion,beta [m]");
   xlabel("Position [m]");
   text("Position", [0.05, 0.95]...
     , "Units", "normalized"...
     , "String", insertComment);
   drawnow();grid on;
-  elements_on_plot(visibleLabels, allElements);
+  elements_on_plot(elem_names, allElements, "yposition", "graph 0.05");
 endfunction
 
 function append_plot_lattice(beta_f, dispersion)

@@ -36,9 +36,8 @@ function lattice_rec = lattice_with_time(lattice_rec, varargin)
   # lattice_rec = lat_rec_FT
   if (!isfield(lattice_rec, "brho"))
     brho_def = BrhoAtTime(BMPattern, lattice_rec.time);
-    lattice_rec.brho = get_properties(varargin, {"brho"}, {brho_def});
+    lattice_rec.brho = (get_properties(varargin, {"brho"}, {brho_def})).brho;
   endif
-  
   lattice_rec.qfk = qk_at_time(QFPattern, lattice_rec.brho, lattice_rec.time);
   lattice_rec.qdk = qk_at_time(QDPattern, lattice_rec.brho, lattice_rec.time, -1);
   
