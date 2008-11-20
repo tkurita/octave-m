@@ -50,7 +50,6 @@ function result = applyKickerAngle(codMatStruct, cod_rec, varargin)
       endif
     endfor
   endif
-  
   if (use_steerer_values)
     value_list = cod_rec.steererValues;
   else

@@ -1,3 +1,11 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} plot_traces(@var{trace_list}, @var{poroperties})
+## 
+## Plot output of particle_trace
+##
+## @seealso{particle_trace}
+## @end deftypefn
+
 function result = plot_traces(trace_list, varargin)
   plot_args = {};
   opts = get_properties(varargin, {"color"}, {[1,0,0]});

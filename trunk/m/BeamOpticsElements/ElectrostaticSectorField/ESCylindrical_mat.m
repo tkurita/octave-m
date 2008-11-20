@@ -14,15 +14,35 @@
 ## length [m] of center beam trajectory
 ## @end table
 ##
+## The structre passed as an argument can have following fields.
+##
+## @table @code
+## @item radius
+## @item beta
+## @item len
+## @item reverse
+## @end table
+##
 ## @end deftypefn
 
+##== History
+## 2008-08-13
+## * add "reverse"
+## 
+## ????-??-??
+## * first implementation
+
 #function a_mat = ESCylindrical_mat(a_radius, a_beta, len)
-function a_mat = ESCylindrical_mat(varargin)
+function retval = ESCylindrical_mat(varargin)
+  reverse = false;
   if (isstruct(varargin{1}))
     prop = varargin{1};
     a_radius = prop.radius;
     a_beta = prop.beta;
     len = prop.len;
+    if (isfield(prop, "reverse"))
+      reverse = prop.reverse;
+    endif
   else
     a_radius = varargin{1};
     a_beta = varargin{2};
@@ -31,7 +51,11 @@ function a_mat = ESCylindrical_mat(varargin)
   
   k = sqrt((2-a_beta^2)/a_radius^2);
   h = a_radius*a_beta^2/(1+sqrt(1-a_beta^2));
-  a_mat = [cos(k*len), sin(k*len)/k, (1-cos(k*len))*h;
+  retval = [cos(k*len), sin(k*len)/k, (1-cos(k*len))*h;
            -k*sin(k*len), cos(k*len), sin(k*len)*h;
            0, 0, 1];
+  if (reverse)
+    rm = [-1, 0, 0; 0,-1,0; 0,0,1];
+    retval = rm * retval * rm;
+  endif
 endfunction 

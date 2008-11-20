@@ -14,6 +14,8 @@
 ## @end deftypefn
 
 ##== History
+## 2008-11-20
+## * Fix an error when number of particles is less thar 6.
 ## 2008-06-23
 ## * improve performance
 ##  
@@ -58,7 +60,7 @@ function tracelist = particle_trace(track_result, horv, varargin)
 endfunction
 
 function out = arrange_cell(a_cell)
-  out = zeros(6*length(a_cell), length(a_cell{1}));
+  out = zeros(6*length(a_cell), columns(a_cell{1}));
   for n = 1:length(a_cell)
     ind = 1+6*(n-1);
     out(ind:ind+5,:) = a_cell{n};

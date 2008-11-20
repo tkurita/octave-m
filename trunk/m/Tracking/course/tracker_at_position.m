@@ -25,6 +25,15 @@ function a_tracker = tracker_at_position(an_elem, s)
       an_elem = BM(an_elem);
       a_tracker.mat = mat_with_element(an_elem);
       a_tracker.apply = @through_mat;
+    case "Apperture Lens"
+      a_tracker.mat = mat_with_element(an_elem);
+      a_tracker.apply = @through_mat;
+    case "Acceleration Tube"
+      an_elem.len = s;
+      an_elem = rmfield(an_elem, "ratio");
+      an_elem = AT(an_elem);
+      a_tracker.mat = mat_with_element(an_elem);
+      a_tracker.apply = @through_mat;
     case "Kicker"
       a_tracker = an_elem;
     case "Shifter"

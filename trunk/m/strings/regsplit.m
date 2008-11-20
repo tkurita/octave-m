@@ -4,6 +4,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-08-13
+## * if the sepalated is located at begging or end, the resutl has an empty string at begging or end.
+## 
 ## 2008-08-07
 ## * first implementation
 
@@ -15,8 +18,10 @@ function retval = regsplit(str, pat)
   endif
 
   retval = {};
+  empty_ended = false;
   if (E(end) == length(str))
     E(end) = [];
+    empty_ended = true;
   else
     S = [S, length(str)+1];
   endif
@@ -25,12 +30,18 @@ function retval = regsplit(str, pat)
     E = [0, E];
   else
     S(1) = [];
+    retval = {""};
   endif
+  
   E = E + 1;
   S = S - 1;
   for n = 1:length(E)
     retval{end+1} = str(E(n):S(n));
   endfor
+  
+  if (empty_ended)
+    retval{end+1} = "";
+  endif
 endfunction
 
 %!test

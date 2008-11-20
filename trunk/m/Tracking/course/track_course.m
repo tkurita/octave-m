@@ -1,8 +1,25 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} track_course(@var{a_course}, @var{initial_particles}, @var{step})
+## @deftypefn {Function File} {@var{result} =} track_course(@var{elements}, @var{initial_particles}, @var{step})
 ##
-## hit_flag(1,:) : horizontal
-## hit_flag(2,:) : vertical
+## Parameters
+##
+## @table @code
+## @item @var{elements}
+## A cell array of Beam Optics Objects making up the course.
+## The order is upper stream to down stream.
+## @item @var{initial_particles}
+## Initial particles. (number of particles)*6 matrix.
+##
+## @end table
+##
+## Result
+##
+## @table @code
+## @item hit_flag(1,:)
+## horizontal
+## @item hit_flag(2,:)
+## vertical
+## @end table
 ## 
 ## @end deftypefn
 
