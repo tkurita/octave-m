@@ -1,6 +1,9 @@
+## usage: plotMagnetPattern(patternSet1,paterrnSet2,...,ylabel)
+##
+## Deprecated. Use plot_bpattern
+
 function plotMagnetPattern(varargin)
-  ## usage: plotMagnetPattern(patternSet1,paterrnSet2,...,ylabel)
-  #varargin = {BM_p200}
+  # varargin = {BM_p200}
   narg = length(varargin);
   if (nargin < 2) 
     printf("usage: plotMagnetPattern(patternSet1,paterrnSet2,...,ylabel)\n");

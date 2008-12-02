@@ -1,5 +1,7 @@
 ## usage [bLine, tLine] = BValuesForTimes(patternSet, tStep, startTime, endTime)
 ##
+## BValuesForTimes is deprecated. Use bvalues_for_period.
+##
 ##= Parameters
 ## tStep : time interval [msec]
 ## startTime and endTime can be ommited.
@@ -8,6 +10,7 @@
 ## bLine : BL value [T*m]
 
 function [bLine, tLine] = BValuesForTimes(patternSet, varargin)
+  warning("BValuesForTimes is deprecated. Use bvalues_for_period.")
   # patternSet = BMPattern
   # timeInfo = {1,35,85}
   timeInfo = varargin;

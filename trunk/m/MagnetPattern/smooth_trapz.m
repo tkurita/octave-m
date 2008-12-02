@@ -1,6 +1,17 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{result} =} smooth_trapz(@var{t}, @var{ys}, @var{ye})
 ##
+## Obtain smooth trapezoidal slope.
+##
+## @table @code
+## @item @var{t}
+## A vector of 6 elemnts which indicate X points of trapezoidal slope.
+## @item @var{ys}
+## The first Y value
+## @item @var{ye}
+## The last Y value
+## @end table
+##
 ## @end deftypefn
 
 ##== History
@@ -8,6 +19,9 @@
 ## * first implementation
 
 function varargout = smooth_trapz(t, ys, ye);
+  if (length(t) != 6)
+    error("The length of first argument must be 6.");
+  endif
   [x1, x2, x3, x4, x5, x6] = div_elem(t);
   y1 = ys;
   y6 = ye;
@@ -38,11 +52,11 @@ function varargout = smooth_trapz(t, ys, ye);
       printf("%5.1f\t%7.5f\n", t(n), b(n));
     endfor
   else
-    varargout = {b}
+    varargout = {b};
   endif
 endfunction
 
 %!test
 %! y1 = 0.1173; y6 = 0.5635;
 %! t = [35, 60, 85, 599.2, 624.2, 649.2];
-%! y = smooth_trapz(t', y1, y6);
+%! y = smooth_trapz(t', y1, y6)
