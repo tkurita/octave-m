@@ -1,6 +1,8 @@
 ## usage: plot_bpattern(patternSet1,paterrnSet2,...,ylabel)
 
 ##== History
+## 2008-12-03
+## * use bvalues_for_period instead of BValuesForTimes
 ## 2008-07-28
 ## * renamed from plotMagnetPattern
 
@@ -16,7 +18,7 @@ function plot_bpattern(varargin)
     patternSet=varargin{j};
     startTime = patternSet{1}.tPoints(1);
     endTime = patternSet{end}.tPoints(end);
-    [bLine,tLine] = BValuesForTimes(patternSet,0.1);
+    [bLine,tLine] = bvalues_for_period(patternSet,0.1);
     tPoints = [];
     bPoints = [];
     for i = 1:length(patternSet)
