@@ -1,6 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{itobl} =} werc_kickers(@var{element})
 ##
+## Give this function handle to itobl_definition
+## 
 ## BL = @var{itobl} [T*m/A] * I
 ##
 ## @seealso{itobl_definition}

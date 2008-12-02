@@ -2,6 +2,7 @@
 ##        printKickerValues(codRecord 
 ##                         [, "kickAngles" or "calcKickAngles"
 ##                          , "units" , "rad"])
+##  Deprecated. Use "disp_kicker_values"
 ##
 ##  If codRecord is passed and no options, 
 ##        "steererValues" fields will be display.
@@ -18,6 +19,7 @@
 ##  - "factoredKickAngles" : codRecord.kickAngles./codRecord.kickFactors
 
 function printKickerValues(varargin)
+  warning("printKickerValues is deprecated. Use disp_kicker_values");
   unit_factor = 1;
   if (isstruct(varargin{1}))
     steererNames = varargin{1}.steererNames;

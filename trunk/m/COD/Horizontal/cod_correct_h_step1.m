@@ -1,5 +1,5 @@
 ## Usage : cod_rec = cod_correct_h_step1(lattice_rec, codAtBPM
-##                       [, "positions", [0.5,-1,-2.5], "units", "data"])
+##                     [, "positions", [0.5,-1,-2.5, 0], "units", "data"])
 ##  - calculate lattice with tune.
 ##  - fit COD with steerers
 ##  - fit COD with kicks at BM
@@ -11,7 +11,8 @@
 ##    - "positions" : vertical position of labels
 ##                    1: BPM*
 ##                    2: STH* and BMPe*
-##                    3: Vertical Steerer]
+##                    3: Vertical Steerer
+##                    4: ESD, SX*
 ##                    default value is [0.5, -1, -2.5]
 ##    - "units" : "data"(default) , "normalized" or "screnn"
 
@@ -48,9 +49,9 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM, varargin)
   hold off
   #setBPandSHonXaxis(cod_rec.lattice, positions, units);
   positions
-  elements_on_plot({"BPM"}, cod_rec.lattice...
+  elements_on_plot({"^BPM\\d*$"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(1)));
-  elements_on_plot({"BMPe1", "BMPe2", "STH"}, cod_rec.lattice...
+  elements_on_plot({"BMPe1$", "BMPe2$", "STH*"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(2)));
   elements_on_plot({"STV1","QD2","QD3","SM"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(3)));
