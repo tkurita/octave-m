@@ -1,4 +1,8 @@
-## usage : span_struct_list = build_pattern(pattern_cells)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} build_pattern(@var{pattern_cells})
+##
+## @seealso{span_with_cells}
+## @end deftypefn
 
 function span_struct_list = build_pattern(pattern_cells)
   beg_span = 1;
