@@ -21,17 +21,17 @@
 ## 2008-12-03
 ## * first implementation
 
-function retval = disp_kicker_pattern(t, cod_rec_FB, cod_rec_FT, varargout)
-  if (length(varargout))
-    fid = varargout{1};
+function retval = disp_kicker_pattern(t, cod_rec_FB, cod_rec_FT, varargin)
+  if (length(varargin))
+    fid = varargin{1};
   else
     fid = stdout;
   endif
   # fid = popen("pbcopy", "w")
   # file = "testout"
   kickers = cod_rec_FB.steererNames;
-  val_fb = cod_rec_FB.steererValues;
-  val_ft = cod_rec_FT.steererValues;
+  val_fb = -1*cod_rec_FB.steererValues;
+  val_ft = -1*cod_rec_FT.steererValues;
   bpat_cells = {}
   for n = 1:length(val_fb)
     bpat = trapz_pattern(t, val_fb(n), val_ft(n));
@@ -55,4 +55,4 @@ endfunction
 
 
 %!test
-%! disp_kicker_pattern(x)
+%! disp_kicker_pattern(t, cod_rec_FB, cod_rec_FT)
