@@ -26,7 +26,7 @@
 ##
 ## @end table
 ## 
-## @seealso{lattice_with_tune}
+## @seealso{lattice_with_tune, lattice_with_time, lattice_definition}
 ## @end deftypefn
 
 ##== History
