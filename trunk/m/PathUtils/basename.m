@@ -1,14 +1,22 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} basename(@var{arg})
+## @deftypefn {Function File} {@var{result} =} basename(@var{path}, @var{suffix})
+##
+## Obtain a last path component of @var{path} removing @var{suffix}.
+##
+## @var{suffix} should be regular expression or wild card "*".
+##
+## If @var{suffix} is omited, the path extension will be remained.
 ##
 ## @end deftypefn
 
 ##== History
+## 2008-11-25
+## * append help text
+##
 ## 2008-08-08
-## * first implementaion
+## * First implementaion
 
 function retval = basename(fpath, suffix)
-  # exist("suffix")
   pelems = regsplit(fpath, "/");
   if (isempty(pelems{end}))
     pelems = pelems(1:end-1);
