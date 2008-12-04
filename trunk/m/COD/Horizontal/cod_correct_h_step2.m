@@ -36,5 +36,5 @@ function cod_rec = cod_correct_h_step2(cod_rec, codAtBPM)
   cod_diff = lFitCODWithFactor(cod_diff);
   cod_diff.kickFactor
   cod_diff.steererValues = cod_rec.steererValues/cod_diff.kickFactor;
-  printKickerValues(cod_diff);
+  disp_kicker_values(cod_diff);
 endfunction
