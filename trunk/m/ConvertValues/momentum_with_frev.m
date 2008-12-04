@@ -6,13 +6,16 @@
 ##
 ## If first argument is a structure @var{lattice_rec}, the circumfernece is calculated using lattice field of the structure.
 ##
-## @var{particle} can be accept "proton" or "carbon".
+## @var{particle} can be accept "proton", "helium", "carbon".
 ##
 ## @seealso{momentum_with_velocity}
 ##
 ## @end deftypefn
 
 ##== History
+## 2008-11-26
+## * support "helium"
+## 
 ## 2007-10-23
 ## * renamed from momentumForFrev
 

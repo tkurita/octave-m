@@ -18,6 +18,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-11-26
+## support "helium"
+## 
 ## 2007-10-23
 ## * renamed from BrhoForFrev
 
@@ -33,10 +36,12 @@ function varargout = brho_with_frev(varargin)
     switch particle
       case "proton"
         charge = 1;
+      case "helium"
+        charge = 2;
       case "carbon"
         charge = 6;
       otherwise
-        error("The kind of particle must be \"proton\" or \"carbon\". \"%s\" can not be accepted.", particle);
+        error("The kind of particle must be \"proton\", \"helium\" or \"carbon\". \"%s\" can not be accepted.", particle);
     endswitch
   else
     charge = varargin{4};
