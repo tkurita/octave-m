@@ -8,12 +8,12 @@
 ## 2008-12-04
 ## * First implementation
 
-function tb = mat_with_bpattern(@var{bpattern})
+function tb = mat_with_bpattern(bpattern)
   t = bpattern{1}.tPoints(:);
   b = bpattern{1}.bPoints(:);
   for n = 2:length(bpattern)
-    t =[t; bpattern{n}.tPoints(:)];
-    b =[b; bpattern{n}.bPoints(:)];
+    t =[t; bpattern{n}.tPoints(2:end)];
+    b =[b; bpattern{n}.bPoints(2:end)];
   endfor
   tb = [t, b];
 endfunction

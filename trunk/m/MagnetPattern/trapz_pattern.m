@@ -11,6 +11,7 @@
 function retval = trapz_pattern(t, fb, ft)
   if (length(t) != 14)
     error("The length of first argument is 14.");
+  endif
   y = smooth_trapz(t(2:7), fb, ft);
   y = [y(1);y(:);flipud(y(:));y(1)];
   pattern_cells = {t(1), y(1), "linear";

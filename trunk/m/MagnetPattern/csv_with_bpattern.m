@@ -1,12 +1,14 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} csv_with_bpattern(@var{arg})
+## @deftypefn {Function File} {} csv_with_bpattern(@var{bpattern}, @var{file})
 ##
+## @seealso{build_pattern, table_with_bpattern}
 ## @end deftypefn
 
 ##== History
-##
+## 2008-12-03
+## * First implementaion
 
-function retval = csv_with_bpattern(bpattern, file)
+function csv_with_bpattern(bpattern, file)
   # bpattern = retval
   # file = "testout"
   is_open_file = false;

@@ -8,7 +8,7 @@
 ## 2008-12-04
 ## * First implementation
 
-function table_with_bpattern(@var{bpattern}, @var{file})
+function table_with_bpattern(bpattern, file)
   t = bpattern{1}.tPoints(:);
   b = bpattern{1}.bPoints(:);
   for n = 2:length(bpattern)
