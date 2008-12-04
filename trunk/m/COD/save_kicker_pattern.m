@@ -1,6 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {} save_kicker_pattern(@var{file}, @var{t}, @var{cod_rec_FB}, @var{cod_rec_FT})
-## Output pattern file of kickers from COD Record objects
+## Output pattern file of kickers from COD Record objects as CSV format.
+##
+## Kicker values are inverted in COD Record Objects.
 ## 
 ## @table @code
 ## @item @var{t}
@@ -20,8 +22,8 @@
 function retval = save_kicker_pattern(file, t, cod_rec_FB, cod_rec_FT)
   # file = "testout"
   kickers = cod_rec_FB.steererNames;
-  val_fb = cod_rec_FB.steererValues;
-  val_ft = cod_rec_FT.steererValues;
+  val_fb = -1*cod_rec_FB.steererValues;
+  val_ft = -1*cod_rec_FT.steererValues;
   [fid, msg] = fopen(file, "w");
   for n = 1:length(val_fb)
     fprintf(fid, "#\n%s,\n", convname(kickers{n}));
