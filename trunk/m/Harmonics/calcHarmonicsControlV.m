@@ -18,7 +18,7 @@ function [phaseCtrlV, ampCtrlV] =\
   proton_eV = physicalConstant("proton [eV]");
   
   ##= 偏向電磁石パターン dBL/dt の構築
-  [bLine, msecList] = BValuesForTimes(bmPattern, tStep, 0, timmings.endDataTime);
+  [bLine, msecList] = bvalues_for_period(bmPattern, tStep, 0, timmings.endDataTime);
   #plot(msecList,bLine)
   secList = msecList/1000;
   dBLdtList = gradient(bLine)./gradient(secList);
