@@ -21,7 +21,7 @@
 ## 2008-12-05
 ## * First implementation
 
-function retval = beta_with_mev(varargin)
+function retval = beta_with_mev(mev, particle)
   mass_e = mass_energy(particle);
   result = c*sqrt(mev*(mev + 2*mass_e))/(mev+mass_e);
 endfunction
