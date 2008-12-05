@@ -12,6 +12,9 @@
 ## @end deftypefn
 
 ##== History
+## 2008-12-05
+## * Fix erro when charge parameter is passed.
+##
 ## 2008-08-01
 ## * first implementation
 
@@ -30,7 +33,7 @@ function varargout = brho_with_mev(varargin)
         error("The kind of particle must be \"proton\", \"helium\" or \"carbon\". \"%s\" can not be accepted.", particle);
     endswitch
   else
-    charge = varargin{4};
+    charge = varargin{3};
   endif  
   
   p = momentum_with_mev(varargin{1:2});
