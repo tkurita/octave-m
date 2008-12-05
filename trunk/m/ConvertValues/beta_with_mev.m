@@ -23,7 +23,7 @@
 
 function retval = beta_with_mev(mev, particle)
   mass_e = mass_energy(particle);
-  result = c*sqrt(mev*(mev + 2*mass_e))/(mev+mass_e);
+  result = sqrt(mev*(mev + 2*mass_e))/(mev+mass_e);
 endfunction
 
 %!test
