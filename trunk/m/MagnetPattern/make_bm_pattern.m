@@ -1,5 +1,26 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} make_bm_pattern(@var{bmin}, @var{bmax}, @var{bgrad}, @var{tstep}, @var{smoothstep})
+## @deftypefn {Function File} {} make_bm_pattern(@var{bmin}, @var{bmax}, @var{bgrad}, @var{smoothstep}, @var{tstart}, [@var{tend}])
+##
+## @table @code
+## @item @var{bmin}
+## The magnetic value at flat base.
+##
+## @item @var{bmax}
+## The magnetic value at flat top.
+##
+## @item @var{bgrad}
+## The gradient of straight region.
+##
+## @item @var{smoothstep}
+## The time step at smooth region
+## 
+## @item @var{tstart}
+## The time of beginning of changing value
+##
+## @item @var{tend}
+## The time of endding of changing value. Optional
+##
+## @end table
 ##
 ## @end deftypefn
 
@@ -7,7 +28,7 @@
 ## 2008-08-05
 ## * first implementation
 
-function varargout = make_bm_pattern(bmin, bmax, bgrad, tstart, smoothstep)
+function varargout = make_bm_pattern(bmin, bmax, bgrad, smoothstep, tstart, tend)
   trange1 = tstart:smoothstep:(tstart+smoothstep*2);
   b1 = cubic_sloop_base(trange1, [bmin, 0,0], [bgrad, 0]);
   
@@ -15,6 +36,14 @@ function varargout = make_bm_pattern(bmin, bmax, bgrad, tstart, smoothstep)
   b2 = cubic_sloop_top(trange2, [bgrad, 0], [bmax, 0, 0]);
   trange2 = trange2 + trange1(end) + (b2(1) - b1(end))/bgrad;
   retval = [[trange1';trange2'], [b1'; b2']];
+  
+  if exist("tend", "var") 
+    flipped_pattern = flipud(retval);
+    flipped_pattern(:,1) *= -1;
+    flipped_pattern(:,1) += tstart+tend;
+    retval = [retval;flipped_pattern];
+  endif
+  
   if (nargout < 1)
     for n = 1:rows(retval)
       printf("%5.1f\t%7.5f\n", retval(n,1), retval(n,2));
@@ -68,5 +97,6 @@ function retval = cubic_sloop_top(t, ys, ye)
 endfunction
 
 %!test
-%! bmin=0.3662; bmax=1.7067; bgrad=0.002375924; tstart=35; smoothstep=25;
-%! make_bm_pattern(bmin, bmax, bgrad, tstart, smoothstep)
+%! bmin=0.3662; bmax=1.7067; bgrad=0.002375924; smoothstep=25;
+%! tstart=35; tstop=1790;
+%! make_bm_pattern(bmin, bmax, bgrad, smoothstep, tstart, tstop)

@@ -1,14 +1,33 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} trapz_pattern(@var{arg})
+## @deftypefn {Function File} {@var{result} =} trapz_pattern(@var{t}, @var{ft}, @var{fb})
+##
+## Make pattern object of smooth half trapzoid.
+##
+## @table @code
+## @item @var{t}
+## A list of times. The length must be 14.
+##
+## @item @var{ft}
+## The value at flat top.
+##
+## @item @var{fb}
+## The value at flat base.
+##
+## @end table
 ##
 ## @seealso{smooth_trapz}
 ##
 ## @end deftypefn
 
 ##== History
-##
+## 2009-05-22
+## * Add description to the function help.
+## * When no arguments, execute print_usage()
 
 function retval = trapz_pattern(t, fb, ft)
+  if (nargin == 0)
+    print_usage();
+  endif
   if (length(t) != 14)
     error("The length of first argument is 14.");
   endif

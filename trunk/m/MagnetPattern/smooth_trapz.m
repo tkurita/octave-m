@@ -1,7 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{result} =} smooth_trapz(@var{t}, @var{ys}, @var{ye})
 ##
-## Obtain smooth trapezoidal slope.
+## Make pattern object of smooth trapezoidal slope.
 ##
 ## @table @code
 ## @item @var{t}
@@ -12,16 +12,25 @@
 ## The last Y value
 ## @end table
 ##
+## @seealso{trapz_pattern}
+##
 ## @end deftypefn
 
 ##== History
+## 2009-05-22
+## * When no arguments, execute print_usage();
+## 
 ## 2008-08-05
 ## * first implementation
 
 function varargout = smooth_trapz(t, ys, ye);
+  if (nargin == 0)
+    print_usage();
+  endif
   if (length(t) != 6)
     error("The length of first argument must be 6.");
   endif
+  
   [x1, x2, x3, x4, x5, x6] = div_elem(t);
   y1 = ys;
   y6 = ye;
