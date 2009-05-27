@@ -26,7 +26,9 @@
 function varargout = smooth_trapz(t, ys, ye);
   if (nargin == 0)
     print_usage();
+    return;
   endif
+  
   if (length(t) != 6)
     error("The length of first argument must be 6.");
   endif

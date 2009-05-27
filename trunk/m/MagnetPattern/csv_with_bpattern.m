@@ -12,19 +12,24 @@ function csv_with_bpattern(bpattern, file)
   # bpattern = retval
   # file = "testout"
   is_open_file = false;
-  if (ischar(file))
-    [fid , msg] = fopen(file, "w");
-    if (fid < 0)
-      error(msg);
+  if (exist("file", "var"))
+    if (ischar(file))
+      [fid , msg] = fopen(file, "w");
+      if (fid < 0)
+        error(msg);
+      endif
+      is_open_file = true;
+    elseif (isfid(file))
+      fid = file;
+    else
+      error("File specification is invalid.");
     endif
-    is_open_file = true;
-  elseif (isfid(file))
-    fid = file;
   else
-    error("File specification is invalid.");
+    fid = stdout;
   endif
   
   for n = 1:length(bpattern)
+    #n = 3
     switch bpattern{n}.funcType
       case "linear"
         b = bpattern{n}.bPoints;
@@ -53,11 +58,11 @@ function csv_with_bpattern(bpattern, file)
 endfunction
 
 function template = template_for_mat(a)
-  precision = "%.4g";
+  precision = "%.4f";
   newline = "\n";
   delim = ",";
   if (iscomplex (a))
-    cprecision = regexprep (precision, '^%([-\d.])','%+$1');
+    cprecision = regexprep(precision, '^%([-\d.])','%+$1');
     template = [precision, cprecision, "i", ...
     repmat([delim, precision, cprecision, "i"], 1, ...
     columns(a) - 1), newline ];

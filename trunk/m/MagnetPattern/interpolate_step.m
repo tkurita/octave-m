@@ -9,7 +9,12 @@
 ## 2009-05-22
 ## * renamed from stepInterpolate
 
-function result = interpolate_step(p1, p2)
+function varargout = interpolate_step(p1, p2)
+  if (nargin == 0)
+    print_usage();
+    return;
+  endif
+  
   tmin = p1(1);
   tmax = p2(1);
   bmin = p1(2);
@@ -24,6 +29,13 @@ function result = interpolate_step(p1, p2)
   b1 = bmin + (bmax-bmin).*br1;
   b2 = bmin + (bmax-bmin).*br2;
   result = [p1;t1,b1;t2,b2;p2];
+  if (nargout < 1)
+    for n = 1:rows(result)
+      printf("%5.1f\t%7.5f\n", result(n,1), result(n,2));
+    endfor
+  else
+    varargout = {result};
+  endif    
 endfunction
 
 #function result = standardThirdSplieStep(x)

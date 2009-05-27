@@ -1,14 +1,14 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} make_bm_pattern(@var{bmin}, @var{bmax}, @var{bgrad}, @var{smoothstep}, @var{tstart}, [@var{tend}])
+## @deftypefn {Function File} {} make_bm_pattern(@var{bmbase}, @var{bmtop}, @var{bmgrad}, @var{smoothstep}, @var{tstart}, [@var{tend}])
 ##
 ## @table @code
-## @item @var{bmin}
+## @item @var{bmbase}
 ## The magnetic value at flat base.
 ##
-## @item @var{bmax}
+## @item @var{bmtop}
 ## The magnetic value at flat top.
 ##
-## @item @var{bgrad}
+## @item @var{bmgrad}
 ## The gradient of straight region.
 ##
 ## @item @var{smoothstep}
@@ -28,13 +28,39 @@
 ## 2008-08-05
 ## * first implementation
 
-function varargout = make_bm_pattern(bmin, bmax, bgrad, smoothstep, tstart, tend)
+function varargout = make_bm_pattern(varargin)
+  if (!nargin)
+    print_usage();
+    return;
+  endif
+  
+  if isstruct(varargin{1})
+    pat_info = varargin{1};
+    bmbase = pat_info.bmbase;
+    bmtop = pat_info.bmtop;
+    bmgrad = pat_info.bmgrad;
+    smoothstep = pat_info.smoothstep;
+    tstart = pat_info.tstart;
+    if (isfield(pat_info, "tend"))
+      tend = pat_info.tend;
+    endif
+  else
+    bmbase = varargin{1};
+    bmtop = varargin{2};
+    bmgrad = varargin{3};
+    smoothstep = varargin{4};
+    tstart = varargin{5};
+    if (length(varargin) > 5)
+      tend = varargin{6};
+    endif
+  endif
+  
   trange1 = tstart:smoothstep:(tstart+smoothstep*2);
-  b1 = cubic_sloop_base(trange1, [bmin, 0,0], [bgrad, 0]);
+  b1 = cubic_sloop_base(trange1, [bmbase, 0,0], [bmgrad, 0]);
   
   trange2 = 0:smoothstep:(0+smoothstep*2);
-  b2 = cubic_sloop_top(trange2, [bgrad, 0], [bmax, 0, 0]);
-  trange2 = trange2 + trange1(end) + (b2(1) - b1(end))/bgrad;
+  b2 = cubic_sloop_top(trange2, [bmgrad, 0], [bmtop, 0, 0]);
+  trange2 = trange2 + trange1(end) + (b2(1) - b1(end))/bmgrad;
   retval = [[trange1';trange2'], [b1'; b2']];
   
   if exist("tend", "var") 
@@ -97,6 +123,6 @@ function retval = cubic_sloop_top(t, ys, ye)
 endfunction
 
 %!test
-%! bmin=0.3662; bmax=1.7067; bgrad=0.002375924; smoothstep=25;
+%! bmbase=0.3662; bmtop=1.7067; bmgrad=0.002375924; smoothstep=25;
 %! tstart=35; tstop=1790;
-%! make_bm_pattern(bmin, bmax, bgrad, smoothstep, tstart, tstop)
+%! make_bm_pattern(bmbase, bmtop, bmgrad, smoothstep, tstart, tstop)

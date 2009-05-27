@@ -36,6 +36,15 @@ endfunction
 %!test
 %! pattern_cells = ...
 %! {\
+%! 607.1, 1.6473, "spline";
+%! 632.1, 1.6968, "";
+%! 657.1, 1.7067, 0};
+%! build_pattern(pattern_cells)
+
+
+%test
+%! pattern_cells = ...
+%! {\
 %! 0    , 0.3473, "linear";
 %! 35   , 0.3473, "spline";
 %! 60   , 0.3572, "";
