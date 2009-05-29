@@ -28,6 +28,9 @@
 ##    - qdk
 
 ##== History
+## 2009-05-26
+## * If no arguments, execute print_usage()
+##
 ## 2008-08-01
 ## * Use lattice_info
 ## 
@@ -42,6 +45,11 @@
 ## * update for 2.9.14
 
 function retval = plot_lattice(first_arg, varargin)
+  if (!nargin)
+    print_usage();
+    return;
+  endif
+  
   if (isstruct(first_arg))
     rest_args = prepare_plot(first_arg, varargin{:});
     retval = _plot_lattice(first_arg.lattice, rest_args{:});

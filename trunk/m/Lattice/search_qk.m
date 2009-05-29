@@ -29,6 +29,8 @@
 ## @end deftypefn
 
 ##== History
+## 2009-05-29
+## "use_vedge" option is required to include vedge as a fitting parameter.
 ## 2008-07-25
 ## * Suppoort beta functions for fitting values.
 ## * Drop support lattice_rec.initial_qfk and lattice_rec.initial_qdk.
@@ -42,15 +44,26 @@
 
 function varargout = search_qk(farg, varargin)
   #disp("start search_qk")
-  value_names = {"tune_h", "tune_v"};
+  #value_names = {"tune_h", "tune_v"};
   global _qfd_ratio; # qfd/qfk
   _qfd_ratio = 0;
   
   if (isstruct(farg))
+    value_names = {};
+    target_values = [];
     lattice_rec = farg;
-    tune_h = lattice_rec.measured_tune.h;
-    tune_v = lattice_rec.measured_tune.v;
-    target_values = [tune_h, tune_v];
+    if (isfield(lattice_rec, "measured_tune"))
+      tune_rec = lattice_rec.measured_tune;
+      if (isfield(tune_rec, "h"))
+        value_names{end+1} = "tune_h";
+        target_values(end+1) = tune_rec.h;
+      endif
+      if (isfield(tune_rec, "v"))
+        value_names{end+1} = "tune_v";
+        target_values(end+1) = tune_rec.v;
+      endif
+    endif
+    
     if (isfield(lattice_rec, "measured_beta"))
       mbeta = lattice_rec.measured_beta;
       if (isfield(mbeta, "qf"))
@@ -80,6 +93,7 @@ function varargout = search_qk(farg, varargin)
       _qfd_ratio = lattice_rec.qfd_ratio;
     endif
   else
+    target_names = {"tune_h", "tune_v"};
     target_values = farg;    
   endif
   
@@ -87,13 +101,15 @@ function varargout = search_qk(farg, varargin)
     initv = [1.3, 0];
   else
     initv = [1.3, 1.3];
-    if (length(target_values) > 2)
-      initv(end+1) = 0;
-    endif
   endif
   
-  [initv, value_names] = get_properties(varargin, ...
-                    {"initial", "value_names"}, {initv, value_names});
+  [initv, value_names, use_vedge] = get_properties(varargin, ...
+                        {"initial", "value_names", "use_vedge"}, 
+                        {initv, value_names, false});
+  #if (length(target_values) > 2)
+  if (use_vedge)
+    initv(end+1) = 0;
+  endif
   global _value_names;
   _value_names = value_names;
   

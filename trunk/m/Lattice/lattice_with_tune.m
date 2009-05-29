@@ -1,7 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{lattice_rec} =} lattice_with_tune(@var{lattice_rec})
 ## 
-## Calculate lattice with evaluating qfk, qdk to mead 'measured_tune'.
+## Calculate lattice with evaluating qfk, qdk to meat 'measured_tune'.
 ##
 ## Input @var{lattice_rec} can have following fields.
 ##
