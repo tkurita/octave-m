@@ -1,6 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{lattice_rec} =} lattice_with_tune(@var{lattice_rec})
 ## 
+## deprecated. Use lattice_with_optim
+##
 ## Calculate lattice with evaluating qfk, qdk to meat 'measured_tune'.
 ##
 ## Input @var{lattice_rec} can have following fields.
@@ -56,6 +58,7 @@
 ## * vedge の値を 0にした。
 
 function lattice_rec = lattice_with_tune(lattice_rec, varargin)
+  warning("lattice_with_tune is obsolete. Use lattice_wtih_optim.");
   lattice_rec = search_qk(lattice_rec, varargin{:});
   lattice_rec = calc_lattice(lattice_rec);
 endfunction

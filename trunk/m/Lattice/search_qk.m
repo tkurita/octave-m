@@ -30,7 +30,9 @@
 
 ##== History
 ## 2009-05-29
-## "use_vedge" option is required to include vedge as a fitting parameter.
+## * "use_vedge" option is required to include vedge as a fitting parameter.
+## * tune parameters must not be required.
+## 
 ## 2008-07-25
 ## * Suppoort beta functions for fitting values.
 ## * Drop support lattice_rec.initial_qfk and lattice_rec.initial_qdk.
