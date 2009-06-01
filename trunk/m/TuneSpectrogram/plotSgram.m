@@ -1,3 +1,7 @@
+##== History
+## 2009-06-01
+## * support ver. 3
+
 function plotSgram(sGramRec, xval, yval);
   
   if (nargin < 3)
@@ -13,14 +17,13 @@ function plotSgram(sGramRec, xval, yval);
     endif
     [x, y, z] = getfields(sGramRec, xval, yval, "dBm");
   endif
-  prevalue = automatic_replot;
-  automatic_replot = false;
+  #cblabel("dBm")
+  #__gnuplot_raw__("set palette rgbformulae 30,13,-31\n");
+  #contourMap3d(x, y, z);
+  imagesc(x, y, z);
   ylabel_text = sprintf("[%s]",yval);
   ylabel(ylabel_text);
   xlabel_text = sprintf("[%s]",xval);
   xlabel(xlabel_text);
-  cblabel("dBm")
-  __gnuplot_raw__("set palette rgbformulae 30,13,-31\n");
-  contourMap3d(x, y, z);
-  automatic_replot = prevalue;
+  colorbar();
 endfunction
