@@ -1,11 +1,13 @@
 ## usage : result = containStr(cells, string)
 ##
+## "containStr is deprecated. Use contain_str"
+##
 ##= Parameters
 ## * cells -- cell array
 ## * string
 ##
 ##= Result
-## cells ‚ª string ‚ğŠÜ‚ñ‚Å‚¢‚½‚ç true
+## cells ãŒ string ã‚’å«ã‚“ã§ã„ãŸã‚‰ true
 
 ##== History
 ## 2008-03-08

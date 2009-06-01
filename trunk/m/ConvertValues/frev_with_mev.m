@@ -15,11 +15,18 @@
 ## @end deftypefn
 
 ##== History
+## 2009-05-22
+## * If no arguments, execute print_usage();
+##
 ## 2008-03-03
 ## * renamed from frevForMeV
 
 function result = frev_with_mev(mev, circumference, particle)
-  v = velocity_with_meV(mev, particle);
+  if (!nargin)
+    print_usage();
+    return;
+  endif
+  v = velocity_with_mev(mev, particle);
   result = v/circumference;
 endfunction
 

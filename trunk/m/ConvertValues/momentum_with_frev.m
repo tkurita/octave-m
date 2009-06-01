@@ -13,6 +13,9 @@
 ## @end deftypefn
 
 ##== History
+## 2009-05-28
+## * if no arguments, print_usage().
+##
 ## 2008-11-26
 ## * support "helium"
 ## 
@@ -20,6 +23,11 @@
 ## * renamed from momentumForFrev
 
 function result = momentum_with_frev(varargin)
+  if (!nargin)
+    print_usage();
+    return;
+  endif
+  
   if (isstruct(varargin{1}))
     c_length = circumference(varargin{1});
     f_rev = varargin{2};
@@ -29,9 +37,9 @@ function result = momentum_with_frev(varargin)
   endif
   
   #energy = 660 #[MeV]
-  #f_rev = 1.316875
-  #c_length = 33.02
-  #particle = "proton"
+  #f_rev = 11.9125
+  #c_length = 33.2
+  #particle = "carbon"
   velocity = c_length*f_rev*1e6;
   result = momentum_with_velocity(velocity, varargin{3});
 endfunction

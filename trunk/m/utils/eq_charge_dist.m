@@ -1,8 +1,12 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} eq_charge_dist(@var{z}, @var{particle}, @var{mev})
+## @deftypefn {Function File} {@var{qflist} =} eq_charge_dist(@var{z}, @var{particle}, @var{mev})
+## 
+## Obtain fractions of charge states around equilibrium charge state.
+## The charge states of which fraction is above 0.05 are outputed.
+## If output variable is not specified, 
+## print distribution of equilibirium charge state.
 ##
-## Print distribution of equilibirium charge state
-##
+## Input parameters are follows.
 ## @table @code
 ## @item @var{z}
 ## Atomic number
@@ -12,10 +16,17 @@
 ## Kinetic Energy in MeV
 ## @end table
 ##
+## Here is the structure of output.
+## @example
+## [charge1, fractoion1; charge2, fraction2; ...]
+## @end example
+##
 ## @seealso{eq_charge}
 ## @end deftypefn
 
 ##== History
+## 2009-04-09
+## * can have an output argument.
 ## 2008-12-09
 ## * First implementation
 
@@ -33,12 +44,16 @@ function retval = eq_charge_dist(z, particle, mev)
   #[qlist(:), fracs(:)]
   fracs = fracs/sum(fracs);
   #[qlist(:), fracs(:)]
-  for n=1:length(qlist)
-    if (fracs(n) > 0.05)
-      printf("%2d+ : %.3f\n", qlist(n), fracs(n));
-    endif
-  endfor
-  
+  if (nargout > 0)
+    retval = [qlist(:), fracs(:)];
+    retval(retval(:,2) <= 0.05, :) = [];
+  else
+    for n=1:length(qlist)
+      if (fracs(n) > 0.05)
+        printf("%2d+ : %.3f\n", qlist(n), fracs(n));
+      endif
+    endfor
+  endif
 endfunction
 
 %!test

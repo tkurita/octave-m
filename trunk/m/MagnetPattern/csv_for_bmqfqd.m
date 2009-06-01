@@ -66,7 +66,7 @@ function retval = csv_for_bmqfqd(pat_info, varargin)
     t_qd(2) += pat_info.qd_delay;
     t_qd(3) = t_qd(2)+pat_info.qd_smoothstep;
     t_qd(4) = t_qd(3)+pat_info.qd_smoothstep;
-    bpat_qd = trapz_pattern([0;t_qd;2000], pat_info.qdbase, pat_info.qdtop);
+    bpat_qd = trapz_pattern(t_qd, pat_info.qdbase, pat_info.qdtop);
     csv_with_bpattern(bpat_qd, fid);
   endif
   

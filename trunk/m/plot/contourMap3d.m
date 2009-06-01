@@ -43,7 +43,7 @@ function contourMap3d(x, y, z)
         error (size_msg);
       endif
     endif
-    __gnuplot_set__("nosurface");
+    #__gnuplot_set__("nosurface");
     __gnuplot_set__("pm3d map");
     __gnuplot_set__("parametric");
     #__gnuplot_set__ view 0, 0, 1, 1;

@@ -21,7 +21,7 @@ function retval = mevalue_with_brho(varargin)
   m0 = physical_constant("ATOMIC_MASS_CONSTANT");
   e0 = physical_constant("ELEMENTARY_CHARGE");
   a = 1000*sqrt(2*m0/e0);
-  retval = (brho/a)^2
+  retval = (brho/a)^2;
 endfunction
 
 %!test

@@ -14,12 +14,13 @@
 ## @end deftypefn
 
 function dnu = dgl_to_dnu(dgl, qf_beta, qd_beta, brho, varargin)
+  # brho = brho_FT
   nq = 4;
   dgl = dgl(:);
   dk = dgl./brho;
-  beta_mat = [qf_beta.h, -qd_beta.h;
-              -qf_beta.v, qd_beta.v];
-  dnu = (nq/(4*pi))*beta_mat*dk;
+  beta_mat = (nq/(4*pi))*[qf_beta.h, -qd_beta.h;
+                         -qf_beta.v, qd_beta.v];
+  dnu = beta_mat*dk;
   
   n = 1;
   as_struct = false;

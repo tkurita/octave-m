@@ -17,15 +17,24 @@
 ## @end deftypefn
 
 ##== History
+## 2009-05-28
+## * fix invalid result
+##
 ## 2009-05-26
-## * renamed from deltaNuToDeltaGL
+## * renamed from dnuToDeltaGL
 
-function deltaGL = dnu_to_dgl(deltaNu, qfBeta, qdBeta, nq, brho)
+function deltaGL = dnu_to_dgl(dnu, qf_beta, qd_beta, nq, brho)
+  if (isstruct(dnu))
+    dnu = [dnu.h; dnu.v];
+  endif
   #nq = 4; #それぞれのQ magnet の数
-  beta_mat = [qfBeta.h, qdBeta.h;
-             -qfBeta.v, -qdBeta.v];
+  beta_mat = [qf_beta.h, -qd_beta.h;
+             -qf_beta.v, qd_beta.v];
 
-  beta_mat = (nq/4*pi).*beta_mat;
-  delta_k = beta_mat\deltaNu;
+  beta_mat = (nq/(4*pi)).*beta_mat;
+  delta_k = beta_mat\dnu;
+#  mat = [qd_beta.v, qd_beta.h;
+#        qf_beta.v, qf_beta.h];
+#  delta_k = (4*pi/nq)/(qf_beta.h*qd_beta.v - qd_beta.h*qf_beta.v)*mat*dnu;
   deltaGL = delta_k * brho;
 endfunction

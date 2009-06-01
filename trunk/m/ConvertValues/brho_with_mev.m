@@ -12,6 +12,9 @@
 ## @end deftypefn
 
 ##== History
+## 2009-05-22
+## * When no arguments, execute print_usage().
+## 
 ## 2008-12-05
 ## * Fix erro when charge parameter is passed.
 ##
@@ -19,6 +22,9 @@
 ## * first implementation
 
 function varargout = brho_with_mev(varargin)
+  if (nargin == 0)
+    print_usage();
+  endif
   
   if (ischar(varargin{2}))
     particle = varargin{2};

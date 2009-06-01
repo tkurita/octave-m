@@ -33,7 +33,7 @@ function result = gaussianx(x, amp, sigma, mu)
   if (!amp)
     amp = (1/(sigma*sqrt(2*pi)));
   endif
-  result = amp*exp(-1*(x - mu).^2/(2*sigma^2));
+  result = amp.*exp(-1.*(x - mu).^2/(2.*sigma^2));
 endfunction
 
   
