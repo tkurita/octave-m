@@ -1,8 +1,24 @@
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{result} =} plot_spectrum(@var{specdata}, @var{xkind}, @var{ykind})
+##
+## Plot spectrum data @var{specdata} which is returned by load_spectrum_csv.
+##
+## @table @code
+## @item @var{xkind}
+## "MHz" or "Hz"
+## @item @var{ykind}
+## "frame" or "msec"
+## @end table
+## 
+##
+## @end deftypefn
+
 ##== History
 ## 2009-06-01
+## * renamed from plotSgram
 ## * support ver. 3
 
-function plotSgram(sGramRec, xval, yval);
+function plot_spectrum(sGramRec, xval, yval);
   
   if (nargin < 3)
     yval = "msec";

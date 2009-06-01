@@ -9,9 +9,11 @@
 
 ##== History
 ## 2009-06-01
+## * deprecated. Use load_spectrum_csv
 ## * support ver. 3
 
 function sGramRec = loadSgram(file)
+  warning("loadSgram is obsolete. Use load_spectrum_csv")
   mat = csvread(file);
   Hz = mat(1, 2:end);
   MHz = Hz/1e6;
