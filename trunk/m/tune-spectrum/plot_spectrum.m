@@ -1,15 +1,21 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} plot_spectrum(@var{specdata}, @var{xkind}, @var{ykind})
+## @deftypefn {Function File} {} plot_spectrum(@var{specdata}, @var{options})
 ##
 ## Plot spectrum data @var{specdata} which is returned by load_spectrum_csv.
 ##
+## Options
+##
 ## @table @code
-## @item @var{xkind}
-## "MHz" or "Hz"
-## @item @var{ykind}
-## "frame" or "msec"
+## @item "x"
+## A field name of @var{specdata}. "MHz" or "Hz".
+## The default is "MHz".
+## @item "y"
+## A field name of @var{specdata} (ex. "msec") or "frame".
+## The default is "msec".
+## @item "gpscript"
+## A fiel name to output to a gnuplot script file instead of plot. 
+## Because octave can't deal with uneven 3d data.
 ## @end table
-## 
 ##
 ## @end deftypefn
 
@@ -18,28 +24,59 @@
 ## * renamed from plotSgram
 ## * support ver. 3
 
-function plot_spectrum(sGramRec, xval, yval);
-  
-  if (nargin < 3)
-    yval = "msec";
+function plot_spectrum(specdata, varargin);
+  if (!nargin)
+    print_usage();
   endif
   
-  if (strcmp(yval, "frame"))
-    [x, z] = getfields(sGramRec, xval, "dBm");
+  opts = get_properties(varargin,...
+                        {"x", "y", "gpscript", "frametime", "colorbar"},...
+                        {"MHz", "msec", NA, NA, true});
+                        
+  if (strcmp(opts.y, "frame"))
+    [x, z] = getfields(specdata, opts.x, "dBm");
     y = 1:rows(z);    
   else
-    if (!isfield(sGramRec, yval))
-      error(sprintf("%s is unknown Y value", yval));
+    if (!isfield(specdata, opts.y))
+      error(sprintf("%s is unknown Y value", opts.y));
     endif
-    [x, y, z] = getfields(sGramRec, xval, yval, "dBm");
+    [x, y, z] = getfields(specdata, opts.x, opts.y, "dBm");
   endif
   #cblabel("dBm")
   #__gnuplot_raw__("set palette rgbformulae 30,13,-31\n");
   #contourMap3d(x, y, z);
-  imagesc(x, y, z);
-  ylabel_text = sprintf("[%s]",yval);
-  ylabel(ylabel_text);
-  xlabel_text = sprintf("[%s]",xval);
-  xlabel(xlabel_text);
-  colorbar();
+  if (isna(opts.gpscript))
+    #imagesc(x, y, z);
+    pcolor(x, y, z);
+    ylabel_text = sprintf("[%s]",opts.y);
+    ylabel(ylabel_text);
+    xlabel_text = sprintf("[%s]",opts.x);
+    xlabel(xlabel_text);
+    if opts.colorbar
+      colorbar();
+    endif
+    return;
+  endif
+  
+  fid = fopen(opts.gpscript, "w");
+  #set palette rgbformulae 30,13,-31
+  fprintf(fid, "%s\n", "set palette rgbformulae 22,13,-31");
+  fprintf(fid, "%s\n", "set pm3d map");
+  fprintf(fid, "%s\n", "set parametric");
+  fprintf(fid, "%s \"[%s]\"\n", "set xlabel", opts.x);
+  fprintf(fid, "%s \"[%s]\"\n", "set ylabel", opts.y);
+  fprintf(fid, "%s\n", "set yrange [*:*] reverse");
+  fprintf(fid, "%s\n", "splot \"-\"");
+  
+  for n = 1:rows(z)
+    # n = 1;
+    # fid = stdout;
+    outmat = [x(:)';
+              ones(1,length(x))*y(n);
+              z(n, :)];
+    outmat(:,any(isna(outmat),1)) = [];
+    fprintf(fid, "%g\t%g\t%g\n",outmat);
+    fprintf(fid, "\n");
+  endfor
+  fclose(fid);
 endfunction
