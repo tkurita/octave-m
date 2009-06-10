@@ -1,9 +1,14 @@
-function b = interpRegion(bRegion,t)
-  ## useage : b = interpRegion(bRegion,t)
-  ## t : [msec] can accept vector data
-  ## bRegion have a structure which have following members
-  ##   .funcType,tPoints,bPoints
-  ## require splinecomplete.m
+## useage : b = interp_in_region(bRegion,t)
+## t : [msec] can accept vector data
+## bRegion have a structure which have following members
+##   .funcType,tPoints,bPoints
+## require splinecomplete.m
+
+##== History
+## 2009-06-10
+## * renamed form interpRegion
+
+function b = interp_in_region(bRegion,t)
   
   # bRegion = patternSet{n}
   # csape(bRegion.tPoints, bRegion.bPoints, "complete", bRegion.grad)
