@@ -18,6 +18,6 @@ function brho = BrhoAtTime(blPattern,t)
   
   bl = BValueAtTime(blPattern,t);
   ## BL 積が出射エネルギーの Brho と一致しないので、
-  ## 一致させるために、factor 1.0.1 で割る。
+  ## 一致させるために、factor 1.01 で割る。
   brho = bl/(pi/4)/1.01; 
 endfunction
