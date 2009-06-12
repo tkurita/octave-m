@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{qflist} =} eq_charge_dist(@var{z}, @var{particle}, @var{mev})
+## @deftypefn {Function File} {@var{qflist} =} eq_charge_dist(@var{z}, @var{particle}, @var{mev}, [@var{opts}])
 ## 
 ## Obtain fractions of charge states around equilibrium charge state.
 ## The charge states of which fraction is above 0.05 are outputed.
@@ -16,6 +16,14 @@
 ## Kinetic Energy in MeV
 ## @end table
 ##
+##
+## Here is labels of options.
+## @table @code
+## @item "minq"
+## @item "maxq"
+## @item "threshold"
+## @end table
+## 
 ## Here is the structure of output.
 ## @example
 ## [charge1, fractoion1; charge2, fraction2; ...]
@@ -25,31 +33,57 @@
 ## @end deftypefn
 
 ##== History
+## 2009-06-11
+## * add options "minq", "maxq", "threshold"
 ## 2009-04-09
 ## * can have an output argument.
 ## 2008-12-09
 ## * First implementation
 
-function retval = eq_charge_dist(z, particle, mev)
+function retval = eq_charge_dist(z, particle, mev, varargin)
+  if (nargin < 3)
+    print_usage();
+  endif
   # mev = 15
   # z = 29
   # particle = 64
+  # 
+  
+  opts = get_properties(varargin, {"minq", "maxq", "threshold"}, 
+                                {NA, NA, 0.05});
   [q, dq] = eq_charge(z, particle, mev);
-  minq = q-3*dq; 
-  if (minq < 0)
-    minq = 0;
+  
+  # obtain minimum charge state to evaluate
+  if isna(opts.minq)
+    minq = q-3*dq; 
+    if (minq < 0)
+      minq = 0;
+    endif
+  else
+    minq = opts.minq;
   endif
-  qlist = floor(minq):1:ceil(q+3*dq);
+  
+  # obtain max charge state to evaluate
+  if isna(opts.maxq)
+    maxq = q+3*dq;
+    if (maxq > z)
+      maxq = z;
+    endif
+  else
+    maxq = opts.maxq;
+  endif
+  
+  qlist = floor(minq):1:ceil(maxq);
   fracs = gaussianx(qlist, 0, dq, q);
   #[qlist(:), fracs(:)]
   fracs = fracs/sum(fracs);
   #[qlist(:), fracs(:)]
   if (nargout > 0)
     retval = [qlist(:), fracs(:)];
-    retval(retval(:,2) <= 0.05, :) = [];
+    retval(retval(:,2) <= opts.threshold, :) = [];
   else
     for n=1:length(qlist)
-      if (fracs(n) > 0.05)
+      if (fracs(n) > opts.threshold)
         printf("%2d+ : %.3f\n", qlist(n), fracs(n));
       endif
     endfor

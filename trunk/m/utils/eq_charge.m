@@ -18,6 +18,9 @@
 ## @item @var{dq}
 ## width of charge state distribution
 ## @end table
+## 
+## equilibrium charge state : R.O.Sayer Review. de. Phys. App. 12('77)1543
+## distribution width : I.S.Dmitrie and Nkolaev JETP 20('65)409
 ## @end deftypefn
 
 ##== History
