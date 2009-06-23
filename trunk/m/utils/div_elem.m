@@ -19,11 +19,22 @@
 ## @end deftypefn
 
 ##== History
+## 2009-06-12
+## * accept cells
 ## 2008-08-05
 ## * first implementation
 
 function varargout = div_elem(x)
-  for n = 1:nargout
-    varargout{n} = x(n);
-  endfor
+  if nargout > length(x)
+    error("Number of output arguments is few.");
+  endif
+  if iscell(x)
+    for n = 1:nargout
+      varargout{n} = x{n};
+    endfor
+  else
+    for n = 1:nargout
+      varargout{n} = x(n);
+    endfor
+  endif
 endfunction

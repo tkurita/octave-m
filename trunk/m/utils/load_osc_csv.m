@@ -1,20 +1,147 @@
-## usage : outRec = load_osc_csv(file_path)
-##      read csv data of YOKOGAWA's oscilloscope
+## -*- texinfo -*-
+## @deftypefn {Function File} {} load_osc_csv(@var{file}, "model", @var{modelname})
+##
+## Read csv data of Oscilloscpe.
 ## 
-## = result
-## outRec
-##  .data -- cell array of matrix
+## Model list.
+##
+## @table @code
+## @item "DL1400"
+## YOKOGAWA
+## @item "TDS3000"
+## Tektronics
+## @item "DPS4000"
+## Tektronics
+## @end table
+## Here is a list of an output structure.
+##
+## @table @code
+## @item data
+## cell array of matrix
+## @end table
+##
+## @seealso{default_osc_model}
+## @end deftypefn
 
-## = History
-
+##== History
+## 2009-06-22
+## * add "model" property to support multiple makers and models.
 ## 2007-04-12
 ## * support octave 2.9.9 
 ## 2006-??-??
 ## * first implementaion
 
-function outRec = load_osc_csv(file_path)
-  #file_path = "001.CSV"
-  [fid, msg] = fopen(file_path, "r");
+function retval = load_osc_csv(filepath, varargin)
+  opts = get_properties(varargin,...
+                        {"model"}, {NA});
+  if isna(opts.model)
+    opts.model = default_osc_model();
+  endif    
+  switch opts.model
+    case "DL1500"
+      retval = _yokogawa1(filepath);
+    case "TDS3000"
+      retval = _tek1(filepath)
+    case "DPO4000"
+      retval = _tek2(filepath)
+  endswitch
+endfunction
+
+function retval = _tex2(filepath)
+  #filepath = "tek0002ALL.csv";
+  [fid, msg] = fopen(filepath, "r");
+  if (fid == -1)
+    error(msg);
+  endif
+  
+  ## skip 3 lines
+  for (n = 1:3)
+    fgetl(fid);
+  endfor
+  
+  ## read header
+  nhead = 2;
+  aline = deblank(fgetl(fid));
+  ndata = 2;
+  while (aline != -1)
+    nhead++;
+    if (length(aline) == 1)
+      #break;
+    endif
+    cells = csvexplode(aline);
+    
+    if (!ischar(cells{1}))
+      ndata = length(cells);
+      break;
+    endif
+    if strcmp(cells{1}, "Label")
+      aline = fgetl(fid);
+      cells = csvexplode(aline);
+      retval.("Label") = cells;
+      nhead++;
+    else
+      alabel = strrep(cells{1}, " ", "_");
+      retval.(alabel) = cells{2};
+    endif
+    aline = deblank(fgetl(fid));
+  endwhile
+  fclose(fid);
+  
+  data = csvread(filepath, nhead, 0);
+  data = data(1:end-1,:);
+  retval.data = {};
+  retval.samplerate = 1/(data(2,1) - data(1,1));
+  t = data(:,1);
+  switch (retval.Horizontal_Units)
+    case ("S")
+      t = t*1e3;
+  endswitch
+  
+  for n = 2:ndata;
+    retval.data{end+1} = [t, data(:,n)];
+  endfor
+
+endfunction
+
+function retval = tek1(filepath)
+  #filepath = "TEK00000.CSV"
+  [fid, msg] = fopen(filepath, "r");
+  if (fid == -1)
+    error(msg);
+  endif
+  
+  ## read header
+  nhead = 1;
+  aline = deblank(fgetl(fid));
+  ndata = 2;
+  while (aline != -1)
+    nhead++;
+    if (length(aline) == 1)
+      break;
+    endif
+    cells = csvexplode(aline);
+    
+    if (!ischar(cells{1}))
+      ndata = length(cells);
+      break;
+    endif
+      
+    aline = deblank(fgetl(fid));
+  endwhile
+  fclose(fid);
+  
+  data = csvread(filepath, nhead, 0);
+
+  retval.data = {};
+  for n = 2:ndata;
+    retval.data{end+1} = [data(:,1), data(:,n)];
+  endfor
+
+  retval.samplerate = 1/(data(2,1) - data(1,1));
+endfunction
+
+function retval = _yokogawa1(filepath)
+  [fid, msg] = fopen(filepath, "r");
   if (fid == -1)
     error(msg);
   endif
@@ -38,27 +165,26 @@ function outRec = load_osc_csv(file_path)
       endif
       
     endfor
-    outRec.(cells{1}) = cells(2:end);
+    retval.(cells{1}) = cells(2:end);
     aline = deblank(fgetl(fid));
   endwhile
   fclose(fid);
   
-  data = csvread(file_path, nhead, 0);
-  block_size = outRec.BlockSize{1};
-  sample_rate = outRec.SampleRate{1};
-  switch (outRec.SampleRate{2})
+  data = csvread(filepath, nhead, 0);
+  block_size = retval.BlockSize{1};
+  sample_rate = retval.SampleRate{1};
+  switch (retval.SampleRate{2})
     case ("MHz")
       sample_rate = sample_rate*1e6;
     case ("kHz")
       sample_rate = sample_rate*1e3;
   endswitch
-  trigger_point = outRec.TriggerPointNo{1};
+  trigger_point = retval.TriggerPointNo{1};
   time = (-1*(trigger_point-1)):(block_size - trigger_point);
   msec = time/sample_rate*1e3;
-  outRec.data = {};
-  for n = 1:length(outRec.TraceName);
-    outRec.data{end+1} = [msec(:), data(:,n)];
-    #outRec.data = {[msec(:), data(:,1)], [msec(:), data(:,2)]};
+  retval.data = {};
+  for n = 1:length(retval.TraceName);
+    retval.data{end+1} = [msec(:), data(:,n)];
+    #retval.data = {[msec(:), data(:,1)], [msec(:), data(:,2)]};
   endfor
-  
 endfunction

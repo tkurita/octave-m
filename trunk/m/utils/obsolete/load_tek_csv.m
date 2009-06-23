@@ -22,6 +22,7 @@
 ## * initial
 
 function retval = load_tek_csv(file_path)
+  warning("load_tek_csv is deprecated. Use load_osc_csv");
   #file_path = "TEK00000.CSV"
   [fid, msg] = fopen(file_path, "r");
   if (fid == -1)

@@ -33,6 +33,8 @@
 ## @end deftypefn
 
 ##== History
+## 2009-06-12
+## * use Sayer's distribution. R.O.Sayer Review. de. Phys. App. 12(’77)1543
 ## 2009-06-11
 ## * add options "minq", "maxq", "threshold"
 ## 2009-04-09
@@ -40,7 +42,7 @@
 ## 2008-12-09
 ## * First implementation
 
-function retval = eq_charge_dist(z, particle, mev, varargin)
+function retval = eq_charge_dist(varargin)
   if (nargin < 3)
     print_usage();
   endif
@@ -48,35 +50,32 @@ function retval = eq_charge_dist(z, particle, mev, varargin)
   # z = 29
   # particle = 64
   # 
-  
-  opts = get_properties(varargin, {"minq", "maxq", "threshold"}, 
-                                {NA, NA, 0.05});
-  [q, dq] = eq_charge(z, particle, mev);
-  
-  # obtain minimum charge state to evaluate
-  if isna(opts.minq)
-    minq = q-3*dq; 
-    if (minq < 0)
-      minq = 0;
-    endif
-  else
-    minq = opts.minq;
-  endif
-  
-  # obtain max charge state to evaluate
-  if isna(opts.maxq)
-    maxq = q+3*dq;
-    if (maxq > z)
-      maxq = z;
-    endif
-  else
-    maxq = opts.maxq;
-  endif
-  
-  qlist = floor(minq):1:ceil(maxq);
-  fracs = gaussianx(qlist, 0, dq, q);
+  # z, particle, mev, 
+  [args, prop] = parseparams(varargin);
+  [z, particle, mev] = div_elem(args);
+  opts = get_properties(prop, {"stripper", "minq", "maxq", "threshold"}, 
+                                {"gas", 1, z, 0.05});
+  b = beta_with_mev(mev, particle);
+  switch (opts.stripper)
+    case "gas"
+      q0 = z*(1-1.08*exp(-80.1*z.^(-0.504)*b.^0.996));
+      rho = 0.35*z^0.55*((q0/z)*(1-q0/z))^0.27;
+      epsi = rho*(0.17+0.0012*z-3.3*b);
+    case "carbon"
+      q0 = z*(1-1.03*exp(-47.3*z^(-0.38)*b^0.86))
+      rho = 0.48*z^0.45*((q0/z)*(1-q0/z))^0.26;
+      epsi = rho*(0.0007*z-0.7*b);
+    otherwise
+      error("stripper must be \"gas\" or \"carbon\".");
+  endswitch
+  #[q, dq] = eq_charge(z, particle, mev)
+  #rho
+  qlist = floor(opts.minq):1:ceil(opts.maxq);
+  t = (qlist - q0)/rho;
+  fq = exp(-0.5*t.^2./(1 + epsi*t));
+  #fracs = gaussianx(qlist, 0, dq, q);
   #[qlist(:), fracs(:)]
-  fracs = fracs/sum(fracs);
+  fracs = fq/sum(fq);
   #[qlist(:), fracs(:)]
   if (nargout > 0)
     retval = [qlist(:), fracs(:)];
@@ -91,4 +90,4 @@ function retval = eq_charge_dist(z, particle, mev, varargin)
 endfunction
 
 %!test
-%! eq_charge_dist(x)
+%! eq_charge_dist(6, 12, 25, "stripper", "gas")
