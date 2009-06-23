@@ -36,18 +36,20 @@ function retval = load_osc_csv(filepath, varargin)
                         {"model"}, {NA});
   if isna(opts.model)
     opts.model = default_osc_model();
-  endif    
+  endif
   switch opts.model
     case "DL1500"
       retval = _yokogawa1(filepath);
     case "TDS3000"
-      retval = _tek1(filepath)
+      retval = _tek1(filepath);
     case "DPO4000"
-      retval = _tek2(filepath)
+      retval = _tek2(filepath);
+    otherwise
+      error([opts.model, "is unknow model."]);
   endswitch
 endfunction
 
-function retval = _tex2(filepath)
+function retval = _tek2(filepath)
   #filepath = "tek0002ALL.csv";
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)

@@ -18,7 +18,7 @@ function retval = default_osc_model(varargin)
   if length(varargin)
     modelname = varargin{1};
   endif
-  return modelname;
+  retval = modelname;
 endfunction
 
 %!test
