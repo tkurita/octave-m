@@ -33,3 +33,4 @@ endfunction
 
 %!test
 %! basename("/aaa/bb.text", "\\.text")
+%! basename("/aaa/bb.text", "*")
