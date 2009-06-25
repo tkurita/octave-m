@@ -1,9 +1,9 @@
 ## Usage : ctrlVList = HzToAmpControlV(hzList, A2_PM2)
-##          ‚Q”{‚’²”gM†ˆ—‘•’u‚Ì“dˆ³İ’è‚Ìü”g”“Á«
+##          ï¼’å€é«˜èª¿æ³¢ä¿¡å·å‡¦ç†è£…ç½®ã®é›»åœ§è¨­å®šã®å‘¨æ³¢æ•°ç‰¹æ€§
 ##
 ## = Parameters
 ## * hzlist -- [Hz]
-## * A2_PM2 -- ü”g”“Á«ƒf[ƒ^
+## * A2_PM2 -- å‘¨æ³¢æ•°ç‰¹æ€§ãƒ‡ãƒ¼ã‚¿
 
 function ctrlVList = HzToAmpControlV(hzList, A2_PM2)
   #global A2_PM2;

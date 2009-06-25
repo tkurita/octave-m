@@ -1,21 +1,32 @@
 
 ##shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2倍高調波/特性データ/HP FG用データ/9200_10_180-280-400/HarmonicsControlV4.m
 
-function [phaseCtrlV, ampCtrlV] =\
+#function varargout =\
   calcHarmonicsControlV(bmPattern, vPattern, captureFreq, timmings)
+  # timmings.tStep = 1; #[msec] HP FG 用
+  # timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
+  # timmings.startCaptureTime = 25; #[msec] 捕獲開始タイミング
+  # timmings.stopAmpTime = 290; #[msec] 高調波振幅停止
+  # timmings.stopSecondRFTime = 300; #[msec] 高調波停止
+  # timmings.stopPhaseTime = 310; #[msec] 高調波位相停止
+  # Proton7To200MeVMagnet
+  # Proton200MeVRFPattern
   # bmPattern = BMPattern;
-  # vPattern = rfPattern_9_200_1;
-  ##= タイミングデータをインデックスに変換
+  # vPattern = rfPattern_7200_10_50_300_400_50_20090624;
+  # captureFreq = 1098216.05 #[Hz] 捕獲周波数
+  ##== タイミングデータをインデックスに変換
   tStep = timmings.tStep;
   startCapIndex = timmings.startCaptureTime/tStep+1; # 加速電圧が発生しはじめる最初の時系列データのindex
   stopRFIndex = timmings.stopSecondRFTime/tStep+1;
   stopAmpIndex = timmings.stopAmpTime/tStep+1;
   #stopPhaseIndex = stopPhaseTime/tStep+1;
   
-  ##= 定数
+  ##== 定数
   C = 33.201; #[m] 周長
-  lv = physicalConstant("light velocity");
-  proton_eV = physicalConstant("proton [eV]");
+  #lv = physicalConstant("light velocity");
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM" );
+  #proton_eV = physicalConstant("proton [eV]");
+  proton_eV = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
   
   ##= 偏向電磁石パターン dBL/dt の構築
   [bLine, msecList] = bvalues_for_period(bmPattern, tStep, 0, timmings.endDataTime);
@@ -31,23 +42,25 @@ function [phaseCtrlV, ampCtrlV] =\
   vList=interp1(vPattern(1,:), vPattern(2,:), msecList, "linear"); #加速RF電圧
   #plot(msecList,vList);
   
-  ##= 加速RF周波数の計算--偏向電磁石の磁場変化量から
-  preVelocity = C*captureFreq;
-  velocityList = [];
-  dvdtList = [];
-  for dBLdt = dBLdtList
-    v = preVelocity;
-    #theBeta = betaFromV(v);
-    the_beta = v/lv;
-    thedBrhodt = dBLdt/(pi/4);
-    the_gamma =  (1 - the_beta^2)^(-1/2);
-    dvdt = (lv^2 * thedBrhodt)/(proton_eV * (the_gamma + the_beta^2 * (1- the_beta^2 )^(-3/2) ));
-    dvdtList = [dvdtList; dvdt];
-    preVelocity = preVelocity + dvdt*(tStep/1000);
-    velocityList = [velocityList;preVelocity];
-  endfor
+  ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から-- うまくいっていない 2009-06-25
+  #  preVelocity = C*captureFreq;
+  #  velocityList = [];
+  #  dvdtList = [];
+  #  for dBLdt = dBLdtList
+  #    v = preVelocity
+  #    #theBeta = betaFromV(v);
+  #    b = v/lv;
+  #    dbrho_dt = dBLdt/(pi/4);
+  #    the_gamma =  (1 - b^2)^(-1/2);
+  #    dvdt = (lv^2 * dbrho_dt)/(proton_eV * (the_gamma + b^2 * (1- b^2 )^(-3/2) ));
+  #    dvdtList = [dvdtList; dvdt];
+  #    preVelocity = preVelocity + dvdt*(tStep/1000);
+  #    velocityList = [velocityList;preVelocity];
+  #  endfor
   
   #plot(secList,dvdtList,";dvdt;",secList,velocityList,";velocity;")
+   ##== 加速RF周波数の計算--偏向電磁石の磁場から
+  velocityList = velocity_with_brho(bLine/(pi/4), "proton", 1);
   rfHzList = velocityList./C;
   #plot(msecList,rfHzList,";RF [Hz];")
   
@@ -104,4 +117,10 @@ function [phaseCtrlV, ampCtrlV] =\
   ##saveDataBuffer = 2.*ampCtrlV;
   ##save ampCtrlV2Time.dat saveDataBuffer;
   #save AmpCtrlV.dat ampCtrlV
+  if nargout == 2
+    varargout = {phaseCtrlV, ampCtrlV};
+  else
+    argout = tars(phaseCtrlV, ampCtrlV, rfHzList, phiList);
+    varargout = {argout};
+  endif
 endfunction
