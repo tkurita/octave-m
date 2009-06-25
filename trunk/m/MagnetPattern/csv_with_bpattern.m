@@ -1,6 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {} csv_with_bpattern(@var{bpattern}, @var{file})
 ##
+## Convert @{bpattern} object to server's CSV format.
+##
 ## @seealso{build_pattern, table_with_bpattern}
 ## @end deftypefn
 

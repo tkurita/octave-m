@@ -34,8 +34,10 @@ function varargout = make_bm_pattern(varargin)
     return;
   endif
   
-  if isstruct(varargin{1})
-    pat_info = varargin{1};
+  [args, prop] = parseparams(varargin);
+  
+  if isstruct(args{1})
+    pat_info = args{1};
     bmbase = pat_info.bmbase;
     bmtop = pat_info.bmtop;
     bmgrad = pat_info.bmgrad;
@@ -45,13 +47,13 @@ function varargout = make_bm_pattern(varargin)
       tend = pat_info.tend;
     endif
   else
-    bmbase = varargin{1};
-    bmtop = varargin{2};
-    bmgrad = varargin{3};
-    smoothstep = varargin{4};
-    tstart = varargin{5};
-    if (length(varargin) > 5)
-      tend = varargin{6};
+    bmbase = args{1};
+    bmtop = args{2};
+    bmgrad = args{3};
+    smoothstep = args{4};
+    tstart = args{5};
+    if (length(args) > 5)
+      tend = args{6};
     endif
   endif
   
@@ -71,9 +73,11 @@ function varargout = make_bm_pattern(varargin)
   endif
   
   if (nargout < 1)
-    for n = 1:rows(retval)
-      printf("%5.1f\t%7.5f\n", retval(n,1), retval(n,2));
-    endfor
+#    for n = 1:rows(retval)
+#      printf("%5.1f\t%7.5f\n", retval(n,1), retval(n,2));
+#    endfor
+    #printf("%5.1f\t%7.5f\n", retval(:,1)', retval(:,2)');
+    printf("%5.1f\t%7.5f\n", retval');
   else
     varargout = {retval};
   endif

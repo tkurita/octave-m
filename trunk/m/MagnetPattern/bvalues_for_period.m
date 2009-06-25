@@ -19,7 +19,7 @@ function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
   
   tPoints = patternSet{1}.tPoints;
   tLine = timeLine(tPoints,tStep);
-  bLine = interpRegion(patternSet{1},tLine);
+  bLine = interp_in_region(patternSet{1},tLine);
   
   nRegion = length(patternSet);
   for n = 2:nRegion
@@ -28,7 +28,7 @@ function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
     # 
     tPoints = patternSet{n}.tPoints;
     tLineTmp = timeLine(tPoints,tStep);
-    bLineTmp = interpRegion(patternSet{n},tLineTmp);
+    bLineTmp = interp_in_region(patternSet{n},tLineTmp);
     tLine = [tLine,tLineTmp];
     bLine = [bLine,bLineTmp];
   endfor
