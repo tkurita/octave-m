@@ -21,9 +21,9 @@ function result = mev_with_momentum(p, particle)
   mass_e = mass_energy(particle);
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
   x = lv*p/mass_e; # beta/(sqrt(1-beta^2))
-  b2 = x^2/(1+x^2);
-  g = 1/sqrt(1-b2);
-  result = mass_e*(g-1);
+  b2 = x.^2./(1+x.^2);
+  g = 1./sqrt(1-b2);
+  result = mass_e.*(g-1);
 endfunction
 
 %!test

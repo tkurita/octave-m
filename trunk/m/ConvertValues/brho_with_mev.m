@@ -25,7 +25,7 @@ function varargout = brho_with_mev(varargin)
   if (nargin == 0)
     print_usage();
   endif
-  
+  charge = NA;
   if (ischar(varargin{2}))
     particle = varargin{2};
     switch particle
@@ -38,10 +38,13 @@ function varargout = brho_with_mev(varargin)
       otherwise
         error("The kind of particle must be \"proton\", \"helium\" or \"carbon\". \"%s\" can not be accepted.", particle);
     endswitch
-  else
-    charge = varargin{3};
   endif  
-  
+  if length(varargin) > 2
+    charge = varargin{3};
+  endif
+  if isna(charge)
+    error("Charge is not specifeid.");
+  endif
   p = momentum_with_mev(varargin{1:2});
   brho = p*1e6./charge;
   
