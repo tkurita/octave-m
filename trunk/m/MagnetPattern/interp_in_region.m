@@ -9,7 +9,6 @@
 ## * renamed form interpRegion
 
 function b = interp_in_region(bRegion,t)
-  
   # bRegion = patternSet{n}
   # csape(bRegion.tPoints, bRegion.bPoints, "complete", bRegion.grad)
   switch (bRegion.funcType)
