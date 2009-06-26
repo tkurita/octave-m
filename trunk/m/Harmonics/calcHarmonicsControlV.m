@@ -1,7 +1,7 @@
 
 ##shareTerm /Users/tkurita/WorkSpace/シンクロトロン/2倍高調波/特性データ/HP FG用データ/9200_10_180-280-400/HarmonicsControlV4.m
 
-#function varargout =\
+function varargout =\
   calcHarmonicsControlV(bmPattern, vPattern, captureFreq, timmings)
   # timmings.tStep = 1; #[msec] HP FG 用
   # timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
@@ -43,24 +43,24 @@
   #plot(msecList,vList);
   
   ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から-- うまくいっていない 2009-06-25
-  #  preVelocity = C*captureFreq;
-  #  velocityList = [];
-  #  dvdtList = [];
-  #  for dBLdt = dBLdtList
-  #    v = preVelocity
-  #    #theBeta = betaFromV(v);
-  #    b = v/lv;
-  #    dbrho_dt = dBLdt/(pi/4);
-  #    the_gamma =  (1 - b^2)^(-1/2);
-  #    dvdt = (lv^2 * dbrho_dt)/(proton_eV * (the_gamma + b^2 * (1- b^2 )^(-3/2) ));
-  #    dvdtList = [dvdtList; dvdt];
-  #    preVelocity = preVelocity + dvdt*(tStep/1000);
-  #    velocityList = [velocityList;preVelocity];
-  #  endfor
+    preVelocity = C*captureFreq;
+    velocityList = [];
+    dvdtList = [];
+    for dBLdt = dBLdtList
+      v = preVelocity
+      #theBeta = betaFromV(v);
+      b = v/lv
+      dbrho_dt = dBLdt/(pi/4);
+      g =  (1 - b^2)^(-1/2);
+      dvdt = (lv^2 * dbrho_dt)/(proton_eV * (g + b^2 * (1- b^2 )^(-3/2) ));
+      dvdtList = [dvdtList; dvdt];
+      preVelocity = preVelocity + dvdt*(tStep/1000);
+      velocityList = [velocityList;preVelocity];
+    endfor
   
   #plot(secList,dvdtList,";dvdt;",secList,velocityList,";velocity;")
    ##== 加速RF周波数の計算--偏向電磁石の磁場から
-  velocityList = velocity_with_brho(bLine/(pi/4), "proton", 1);
+  #velocityList = velocity_with_brho(bLine/(pi/4), "proton", 1)';
   rfHzList = velocityList./C;
   #plot(msecList,rfHzList,";RF [Hz];")
   
@@ -120,7 +120,7 @@
   if nargout == 2
     varargout = {phaseCtrlV, ampCtrlV};
   else
-    argout = tars(phaseCtrlV, ampCtrlV, rfHzList, phiList);
+    argout = tars(phaseCtrlV, ampCtrlV, rfHzList, phiList, bLine);
     varargout = {argout};
   endif
 endfunction
