@@ -24,9 +24,6 @@ function varargout =\
   if !nargin
     print_usage();
   endif
-  opts = get_properties(varargin, ...
-                  {"bmangle", "circumference","freq_base", "freq_top"}, ...
-                  {pi/4, 33.201, NA, NA});
   # timmings.tStep = 1; #[msec] HP FG 用
   # timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
   # timmings.startCaptureTime = 25; #[msec] 捕獲開始タイミング
@@ -34,10 +31,14 @@ function varargout =\
   # timmings.stopSecondRFTime = 300; #[msec] 高調波停止
   # timmings.stopPhaseTime = 310; #[msec] 高調波位相停止
   # Proton7To200MeVMagnet
+  # blpattern = BMPattern;
   # Proton200MeVRFPattern
-  # blpattern = blpattern;
   # rfvpattern = rfPattern_7200_10_50_300_400_50_20090624;
-  # captureFreq = 1098216.05 #[Hz] 捕獲周波数
+  # varargin = {"freq_base", 1102886.68, "freq_top", 5106800}
+  opts = get_properties(varargin, ...
+                  {"bmangle", "circumference","freq_base", "freq_top"}, ...
+                  {pi/4, 33.201, NA, NA});
+
   ##== タイミングデータをインデックスに変換
   tStep = timmings.tStep;
   startCapIndex = timmings.startCaptureTime/tStep+1; # 加速電圧が発生しはじめる最初の時系列データのindex
@@ -50,13 +51,14 @@ function varargout =\
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM" );
   proton_ev = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV")*1e6;
   
-  ##= 偏向電磁石パターン dBL/dt の構築
+  ##== 偏向電磁石パターン dBL/dt の構築
   [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
   #plot(msecList,bLine)
   secList = msecList/1000;
   #plot(secList,dBLdtList,";dBLdt;");
-  
-  ##= 加速電圧パターンの構築
+  dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
+  #dBLdtList = gradient(bLine)./gradient(secList);
+  ##== 加速電圧パターンの構築
   for n = 2:length(rfvpattern)
     rfvpattern(1,n) += rfvpattern(1, n-1);
   end
@@ -69,7 +71,6 @@ function varargout =\
   elseif isna(opts.freq_top)
     ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から
     # maximum error about 5kHz when time step is 1msec.
-    dBLdtList = gradient(bLine)./gradient(secList);
     preVelocity = C*opts.freq_base;
     velocityList = [];
     dvdtList = [];
