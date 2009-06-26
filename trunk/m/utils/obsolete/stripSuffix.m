@@ -10,6 +10,7 @@
 ## * version 2.9 用に書き換え
 
 function result = stripSuffix(filename)
+  warning("stripSuffix is deprecated. Use basename.");
   #filename = "hello.dataa"
   #match = regexp(".[A-Za-z0-9]*$", filename); v 2.1
   match = regexp(filename,".[A-Za-z0-9]*$");

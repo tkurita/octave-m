@@ -47,6 +47,7 @@ function retval = load_osc_csv(filepath, varargin)
     otherwise
       error([opts.model, "is unknow model."]);
   endswitch
+  retval.filepath = filepath;
 endfunction
 
 function retval = _tek2(filepath)
@@ -102,7 +103,6 @@ function retval = _tek2(filepath)
   for n = 2:ndata;
     retval.data{end+1} = [t, data(:,n)];
   endfor
-
 endfunction
 
 function retval = tek1(filepath)
