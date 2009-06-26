@@ -1,5 +1,9 @@
 ## usage [bLine, tLine] = bvalues_for_period(patternSet, tStep, startTime, endTime)
 ##
+## stat points of each region are always included.
+## 最初の region を無視している。なんで？
+## 前後に外挿するときは、一定値とする。
+##
 ##= Parameters
 ## tStep : time interval [msec]
 ## startTime and endTime can be ommited.

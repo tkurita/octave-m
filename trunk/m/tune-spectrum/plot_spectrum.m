@@ -20,6 +20,10 @@
 ## @end deftypefn
 
 ##== History
+## 2009-06-08
+## * add "usepcolor" option
+## * add "frameindex" and "frametime" options.
+##
 ## 2009-06-01
 ## * renamed from plotSgram
 ## * support ver. 3
@@ -28,10 +32,9 @@ function plot_spectrum(specdata, varargin);
   if (!nargin)
     print_usage();
   endif
-  
   opts = get_properties(varargin,...
-                        {"x", "y", "gpscript", "frametime", "colorbar"},...
-                        {"MHz", "msec", NA, NA, true});
+  {"x", "y", "gpscript", "frametime", "frameindex", "colorbar", "usepcolor"},...
+  {"MHz", "msec", NA, NA, NA, true, false});
                         
   if (strcmp(opts.y, "frame"))
     [x, z] = getfields(specdata, opts.x, "dBm");
@@ -46,8 +49,29 @@ function plot_spectrum(specdata, varargin);
   #__gnuplot_raw__("set palette rgbformulae 30,13,-31\n");
   #contourMap3d(x, y, z);
   if (isna(opts.gpscript))
-    #imagesc(x, y, z);
-    pcolor(x, y, z);
+    if (!isna(opts.frameindex))
+      subplot(2,1,1);
+      xyplot(frame_spectrum_at(specdata, "frame", opts.frameindex), "-");
+      ylabel("[dBm]");
+      subplot(2,1,2);
+      opts.colorbar = false;
+    elseif (!isna(opts.frametime))
+      subplot(2,1,1);
+      xyplot(frame_spectrum_at(specdata, "time", opts.frametime), "-");
+      ylabel("[dBm]");
+      subplot(2,1,2);
+      opts.colorbar = false;
+    endif
+    
+    if opts.usepcolor
+      pcolor(x, y, z);
+      shading("flat");
+      view(0, -90);
+      tics("z", [], []);
+    else
+      imagesc(x, y, z);
+    endif
+    colormap(jet());
     ylabel_text = sprintf("[%s]",opts.y);
     ylabel(ylabel_text);
     xlabel_text = sprintf("[%s]",opts.x);

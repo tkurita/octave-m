@@ -4,11 +4,17 @@
 ## @end deftypefn
 
 ##== History
+## 2009-06-09
+## * If enough arguments are not given, print_usage().
+##
 ## 2009-05-20
 ## * First implementaion. Will replace factoryX/Y shift_xy
 
+##== To Do
+## * accept inline function or function handle as an argument.
+
 function xy = calc_xy(xy, varargin)
-  if (nargin < 4)
+  if (nargin < 3)
     print_usage();
   endif
   

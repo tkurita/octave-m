@@ -10,13 +10,19 @@
 ##
 ## @end deftypefn
 
-## 
-
 ##== History
+## 2009-06-02
+## * If no arguments, print_usage().
+##
 ## 2008-03-10
 ## * first implementaion
 
 function result = append_plot(varargin)
+  if (!nargin)
+    print_usage();
+    return;
+  endif
+  
   persistent _colororder = [];
   persistent _data_index = 1;
   arg_ind = 1;

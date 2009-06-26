@@ -53,7 +53,7 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
   # varargin = {"starttime", 0, "endtime", 40}
   # specdata = specdata07_v;
   opts = get_properties(varargin, {"starttime", "endtime", "skipfreq"},...
-                        {specdata.msec(1), specdata.msec(end)}, []);
+                        {specdata.msec(1), specdata.msec(end), []});
   sindex = find(specdata.msec >= opts.starttime)(1);
   eindex = find(specdata.msec >= opts.endtime)(1);
   flist = [];
@@ -73,7 +73,6 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
     yi = NA;
     ntry = 1;
     while (isna(maxxy))
-      f
       [maxxy, yi] = _find_peak(xy, f-fwidth, f+fwidth);
       if isna(yi)
         error("fail to find peak at frame %d.",n );
@@ -82,9 +81,9 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
         if (ntry > 5)
           error("fail to find peak at frame %d.",n );
         endif
-        f = f+yi*fwidth
+        f = f+yi*fwidth;
         ntry++;
-      endif        
+      endif
     endwhile
     
     retval.t(m) = specdata.msec(n);
