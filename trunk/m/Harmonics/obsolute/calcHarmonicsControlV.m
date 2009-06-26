@@ -3,6 +3,7 @@
 
 function varargout =\
   calcHarmonicsControlV(bmPattern, vPattern, captureFreq, timmings)
+  warning("calcHarmonicsControlV is deperecated. Use harmonics_control_voltage.");
   # timmings.tStep = 1; #[msec] HP FG 用
   # timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
   # timmings.startCaptureTime = 25; #[msec] 捕獲開始タイミング
