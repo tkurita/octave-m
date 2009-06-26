@@ -26,7 +26,7 @@ function varargout =\
   #lv = physicalConstant("light velocity");
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM" );
   #proton_eV = physicalConstant("proton [eV]");
-  proton_eV = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV");
+  proton_eV = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV")*1e6;
   
   ##= 偏向電磁石パターン dBL/dt の構築
   [bLine, msecList] = bvalues_for_period(bmPattern, tStep, 0, timmings.endDataTime);
@@ -42,14 +42,15 @@ function varargout =\
   vList=interp1(vPattern(1,:), vPattern(2,:), msecList, "linear"); #加速RF電圧
   #plot(msecList,vList);
   
-  ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から-- うまくいっていない 2009-06-25
+  ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から
+  # maximum error about 5kHz when time step is 1msec.
     preVelocity = C*captureFreq;
     velocityList = [];
     dvdtList = [];
     for dBLdt = dBLdtList
-      v = preVelocity
+      v = preVelocity;
       #theBeta = betaFromV(v);
-      b = v/lv
+      b = v/lv;
       dbrho_dt = dBLdt/(pi/4);
       g =  (1 - b^2)^(-1/2);
       dvdt = (lv^2 * dbrho_dt)/(proton_eV * (g + b^2 * (1- b^2 )^(-3/2) ));
