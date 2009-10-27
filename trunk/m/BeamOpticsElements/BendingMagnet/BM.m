@@ -13,7 +13,7 @@
 ## @item edgeangle
 ## [rad] edge angle.
 ## @item efflen
-## [m] effective length. Optional.
+## [m] effective length. Optional. If this value is given radius = efflen/bmangle
 ## @end table
 ##
 ## @end deftypefn
