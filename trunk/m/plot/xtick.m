@@ -6,10 +6,19 @@
 ## @end deftypefn
 
 ##== History
+## 2009-07-01
+## * If no arguments, print current xtick and current xtickmode.
+##
 ## 2008-08-19
 ## * first implementation
 
-function retval = xtick(arg)
+function xtick(arg)
+  if !(nargin)
+    printf("xtick : %f\n", get(gca, "xtick"));
+    printf("xtickmode : %s\n", get(gca, "xtickmode"));
+    return;
+  endif
+  
   if ischar(arg)
     switch arg
       case "on"

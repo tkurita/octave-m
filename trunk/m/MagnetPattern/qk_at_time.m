@@ -74,7 +74,7 @@ function qkValue = qk_at_time(gl_pattern, bl_pattern, t, varargin)
     brho = bl_pattern;
   endif
   
-  gl = BValueAtTime(gl_pattern,t);
+  gl = value_at_time(gl_pattern,t);
   
   porarity = 1;
   #qlength = 0.15; #[m]

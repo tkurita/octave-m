@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{lattice_rec} =} lattice_with_optim(@var{lattice_rec})
-## 
+## @deftypefnx {Function File} {@var{lattice_rec} =} lattice_with_optim(@var{lattice_rec}, "initial", @var{initqk})
+##
 ## Obtain lattice with optimizeng qfk, qdk for 'measured_tune' or 'measured_beta'.
 ##
 ## Input @var{lattice_rec} can have following fields.

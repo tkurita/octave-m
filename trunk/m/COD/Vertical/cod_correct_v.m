@@ -37,26 +37,22 @@ function [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT, vararg
   cod_rec_FB.correctCOD = cod_list_with_kickers(cod_rec_FB);
   cod_rec_FT.correctCOD = cod_list_with_kickers(cod_rec_FT);
   
-  xlabel("Position [m]");
-  ylabel("COD [mm]");
-  grid on;
-  visibleLabels = {"BM", "STV1", "QF", "QD", "SM"};
-  #elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "first 0");
-  elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
-  elements_on_plot({"BPM3", "BPM6", "PR1","PR2"}, cod_rec_FB.lattice, "yposition", "graph 0.1");
-  
   xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"\
     , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;"\
     , cod_rec_FB.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FB;"\
     , cod_rec_FT.targetCOD, "-@;Measured COD at Flat Top;"\
     , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;"\
     , cod_rec_FT.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FT;");
-  grid on;
-  
+  grid on;xlabel("Position [m]");ylabel("COD [mm]");
+  visibleLabels = {"^BM\\d$", "^STV1$", "^QF\\d$", "^QD\\d$", "SM"};
+  elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
+  #elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "first 0");
+  elements_on_plot({"^BPM3$", "^BPM6$", "^PR1$","^PR2$"}, cod_rec_FB.lattice, "yposition", "graph 0.1");
+
   printf("At Flat Base\n");
-  printKickerValues(cod_rec_FB);
+  disp_kicker_values(cod_rec_FB);
   printf("At Flat Top\n");
-  printKickerValues(cod_rec_FT);  
+  disp_kicker_values(cod_rec_FT);  
 endfunction
 
 function cod_rec = setup_cod_rec_v(cod_rec)

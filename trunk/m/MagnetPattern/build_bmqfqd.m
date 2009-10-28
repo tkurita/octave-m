@@ -3,7 +3,7 @@
 ##
 ## @end deftypefn
 
-function [bmpat, qfpat, qdpat] = csv_for_bmqfqd(pat_info)
+function [bmpat, qfpat, qdpat] = build_bmqfqd(pat_info)
   if (!nargin)
     print_usage();
   endif

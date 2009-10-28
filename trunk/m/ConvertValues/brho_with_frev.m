@@ -26,6 +26,9 @@
 
 #function result =  brho_with_frev(f_rev, c_length, particle)
 function varargout = brho_with_frev(varargin)
+  if !nargin
+    print_usage();
+  endif
   #  energy = 660 #[MeV]
   #  charge = 6;
   #particle = "proton";

@@ -12,6 +12,9 @@
 ## @end deftypefn
 
 ##== History
+## 2009-07-01
+## * Fix ivalid value when helium.
+##
 ## 2009-05-22
 ## * When no arguments, execute print_usage().
 ## 

@@ -84,7 +84,7 @@ function cod_rec = lFitCOD(cod_rec, varargin);
   
   refCODList = refCODList/1000; # convert unit from [m] to [mm]
   
-  if isfield(cod_rec, "weights")
+  if (isfield(cod_rec, "weights") && (length(refCODList) > 2))
     dy = [];
     weights = cod_rec.weights;
     for theName = refNameList

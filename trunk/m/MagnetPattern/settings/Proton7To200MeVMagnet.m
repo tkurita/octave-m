@@ -65,24 +65,37 @@ endfunction
 
 function patternSet = BMPattern
   timeSet = timeRegion;
-  ## capture period
-  ## [msec], [T*m]
-  region1 = makeRegion(timeSet.capture,[0.3039,0.3039],"linear");
+  ## [msec], [(T/m)*m]
+  pattern_cells = {...
+  timeSet.capture(1),    0.3039, "linear";
+  timeSet.initialAcc(1), 0.3039, "spline";
+  timeSet.initialAcc(2), 0.3138, "";
+  timeSet.acc(1),        0.3633, "linear";
+  timeSet.postAcc(1),    1.6473, "spline";
+  timeSet.postAcc(2),    1.6968, "";
+  timeSet.flatTop(1),    1.7067, "linear";
+  timeSet.flatTop(2),    1.7067, 0 };
   
-  ## initial acceleration period
-  region2 = makeRegion(timeSet.initialAcc, [0.3039, 0.3138, 0.3633], "spline");
-  
-  ## acceleration period
-  region3 = makeRegion(timeSet.acc, [0.3633, 1.6473], "linear");
-  
-  region2 = setSplineGrad(region2,region1,region3);
-  
-  ## end of acceleration period
-  region4 = makeRegion(timeSet.postAcc, [1.6473, 1.6968, 1.7067], "spline");
-  region4 = setSplineGrad(region4, region3);
-  
-  ## flat top
-  region5 = makeRegion(timeSet.extract, [1.7067, 1.7067], "linear");
-  
-  patternSet = {region1, region2, region3, region4, region5};
+  patternSet = build_pattern(pattern_cells);
+#  timeSet = timeRegion;
+#  ## capture period
+#  ## [msec], [T*m]
+#  region1 = makeRegion(timeSet.capture,[0.3039, 0.3039],"linear");
+#  
+#  ## initial acceleration period
+#  region2 = makeRegion(timeSet.initialAcc, [0.3039, 0.3138, 0.3633], "spline");
+#  
+#  ## acceleration period
+#  region3 = makeRegion(timeSet.acc, [0.3633, 1.6473], "linear");
+#  
+#  region2 = setSplineGrad(region2,region1,region3);
+#  
+#  ## end of acceleration period
+#  region4 = makeRegion(timeSet.postAcc, [1.6473, 1.6968, 1.7067], "spline");
+#  region4 = setSplineGrad(region4, region3);
+#  
+#  ## flat top
+#  region5 = makeRegion(timeSet.flatTop, [1.7067, 1.7067], "linear");
+#  
+#  patternSet = {region1, region2, region3, region4, region5};
 endfunction

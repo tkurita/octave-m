@@ -1,4 +1,5 @@
-## ceil ‚ğg‚¤
+## ceil ã‚’ä½¿ã†
 function result =roundup(theValue)
+  warning("roundup is dprecated. Use ceil.");
   result = round(theValue+0.5);
 endfunction

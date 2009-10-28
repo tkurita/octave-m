@@ -56,9 +56,9 @@ function varargout\
     case  0
       kick_factor
       printf("At Flat Base\n");
-      printKickerValues(cod_diff_FB);
+      disp_kicker_values(cod_diff_FB);
       printf("At Flat Top\n");
-      printKickerValues(cod_diff_FT);  
+      disp_kicker_values(cod_diff_FT);  
       
     case  1
       varargout = {kick_factor};

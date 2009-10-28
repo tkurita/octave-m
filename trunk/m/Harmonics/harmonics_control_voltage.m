@@ -1,6 +1,6 @@
 
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{arg})
+## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{blpattern}, @{rfvpattern}. @{timmings}, @var{opts})
 ## 
 ## Calc harmonics control voltage pattern.
 ##
@@ -13,6 +13,12 @@
 ## RF frequency at Flat Top in Hz.
 ## @end table
 ## 
+## If "freq_base" and "freq_top" are omitted, frequency of RF are calculated with @var{blpattern}.
+## 
+## If "freq_top" is omitted and "freq_base" is given, frequency of RF are calculated with "freq_base" and dBLdt derived from @{blpattern}.
+##
+## If both of "freq_base" ans "freq_top" are given, frequecy of RF is calculated with scaled @var{blpattern}.
+##
 ## @end deftypefn
 
 ##== History
@@ -24,17 +30,17 @@ function varargout =\
   if !nargin
     print_usage();
   endif
-  # timmings.tStep = 1; #[msec] HP FG 用
-  # timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
-  # timmings.startCaptureTime = 25; #[msec] 捕獲開始タイミング
-  # timmings.stopAmpTime = 290; #[msec] 高調波振幅停止
-  # timmings.stopSecondRFTime = 300; #[msec] 高調波停止
-  # timmings.stopPhaseTime = 310; #[msec] 高調波位相停止
-  # Proton7To200MeVMagnet
-  # blpattern = BMPattern;
-  # Proton200MeVRFPattern
-  # rfvpattern = rfPattern_7200_10_50_300_400_50_20090624;
-  # varargin = {"freq_base", 1102886.68, "freq_top", 5106800}
+#   timmings.tStep = 1; #[msec] HP FG 用
+#   timmings.endDataTime  = 800; #[msec] 高調波パターンデータ終了
+#   timmings.startCaptureTime = 25; #[msec] 捕獲開始タイミング
+#   timmings.stopAmpTime = 290; #[msec] 高調波振幅停止
+#   timmings.stopSecondRFTime = 300; #[msec] 高調波停止
+#   timmings.stopPhaseTime = 310; #[msec] 高調波位相停止
+#   Proton7To200MeVMagnet
+#   blpattern = BMPattern;
+#   Proton200MeVRFPattern
+#   rfvpattern = rfPattern_7200_10_50_300_400_50_20090624;
+#   varargin = {"freq_base", 1102886.68, "freq_top", 5106800}
   opts = get_properties(varargin, ...
                   {"bmangle", "circumference","freq_base", "freq_top"}, ...
                   {pi/4, 33.201, NA, NA});
@@ -53,10 +59,11 @@ function varargout =\
   
   ##== 偏向電磁石パターン dBL/dt の構築
   [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
-  #plot(msecList,bLine)
+  #plot(msecList,bLine, "-*")
   secList = msecList/1000;
   #plot(secList,dBLdtList,";dBLdt;");
   dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
+  # plot(dBLdtList)
   #dBLdtList = gradient(bLine)./gradient(secList);
   ##== 加速電圧パターンの構築
   for n = 2:length(rfvpattern)
@@ -64,6 +71,7 @@ function varargout =\
   end
   vList=interp1(rfvpattern(1,:), rfvpattern(2,:), msecList, "linear"); #加速RF電圧
   #plot(msecList,vList);
+  #plot(vList, "-", msecList, vList,"-")
 
   if isna(opts.freq_base)
     ##== 加速RF周波数の計算--偏向電磁石の磁場から
@@ -87,8 +95,8 @@ function varargout =\
   else
     bbase = bLine(1)/opts.bmangle;
     btop = bLine(end)/opts.bmangle;
-    b_fbase = brho_with_frev(opts.freq_base, C, "proton");
-    b_ftop = brho_with_frev(opts.freq_top, C, "proton");
+    b_fbase = brho_with_frev(opts.freq_base/1e6, C, "proton");
+    b_ftop = brho_with_frev(opts.freq_top/1e6, C, "proton");
     A = (b_fbase - b_ftop)/(bbase-btop);
     B = b_fbase- A*bbase;
     brholist = A*(bLine/(pi/4))+B;
@@ -103,7 +111,7 @@ function varargout =\
   sinphi = (C.*dBLdtList'./(pi/4))./vList';
   sinphi(1:startCapIndex) = zeros(startCapIndex,1); # 電圧が発生されるまでを強制的に 0 にする。
   phiList=asin(sinphi);
-  
+  #plot(phiList)
   #plot(tList,phiList*306/(2*pi),"")
   #plot(degreeToControlV(phiList*306/(2*pi)))
   
@@ -113,18 +121,21 @@ function varargout =\
   
   ##= 2倍高調波位相の計算
   #PolyFit_PhaseShifter
-  load(file_in_loadpath("A2_PM2.dat"))
+  #load(file_in_loadpath("A2_PM2.dat"))
+  #A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090706.csv"));
+  A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090713.csv"));
+  A2_PM2(1,:) = [];
   biasControlV = HzToPhaseControlV(rfHzList, A2_PM2);
-  
+
   phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #特性データ
   bias_rad = controlVToRad(biasControlV, phase_shifter);
   phaseCtrlV = radToControlV(bias_rad + phiList, phase_shifter);
-  
+  #phaseCtrlV2 = biasControlV + radToControlV(phiList, phase_shifter);
+  #plot(phaseCtrlV, "-;1;", phaseCtrlV2, "-;2;")
   ##== stopPhaseTime以降を一定にする。
   phaseCtrlV(stopRFIndex:length(phaseCtrlV)) = phaseCtrlV(stopRFIndex);
   
-#  plot(msecList,biasControlV,";biasControlV;", msecList,phaseCtrlV,";phaseCtrlV;")
-  
+  #plot(msecList,phaseCtrlV,";phaseCtrlV;")
 
   ##= 2倍高調波の振幅の制御電圧を計算
   ampCtrlV = HzToAmpControlV(rfHzList, A2_PM2);
@@ -155,7 +166,7 @@ function varargout =\
   if nargout == 2
     varargout = {phaseCtrlV, ampCtrlV};
   else
-    argout = tars(phaseCtrlV, ampCtrlV, rfHzList, phiList, bLine);
+    argout = tars(phaseCtrlV, ampCtrlV, rfHzList, phiList, bLine, vList, sinphi, dBLdtList, msecList);
     varargout = {argout};
   endif
 endfunction

@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} beta_with_mev(@{mev}, @var{particle})
-## @deftypefnx {Function File} {@var{result} =} beta_with_mev(@{mev}, @var{amu})
+## @deftypefn {Function File} {@var{result} =} beta_with_mev(@var{mev}, @var{particle})
+## @deftypefnx {Function File} {@var{result} =} beta_with_mev(@var{mev}, @var{amu})
 ## 
 ## Return beta [velocity/c] of a paticle from its energy.
 ##

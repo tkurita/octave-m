@@ -1,4 +1,4 @@
-## usage : result = subtract_cod(cod1,cod2)
+## usage : result = subtract_cod(codAtBPM1 ,codAtBPM2)
 ## 
 ## COD の 差分を計算する。
 ## cod1 - cod2

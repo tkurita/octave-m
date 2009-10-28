@@ -24,6 +24,9 @@
 ##      kickAngles is orderd with order of kicker elements in a ring.
 
 ##== History
+## 2009-10-23
+## * If no kickAngles field in cod_rec, use steererValues.
+## 
 ## 2008-05-09
 ## * used kick_angle instead of calcSteerAngle
 ## 
@@ -50,6 +53,11 @@ function result = applyKickerAngle(codMatStruct, cod_rec, varargin)
       endif
     endfor
   endif
+  
+  if (!isfield(cod_rec, "kickAngles"))
+    use_steerer_values = true;
+  endif
+  
   if (use_steerer_values)
     value_list = cod_rec.steererValues;
   else
@@ -64,18 +72,16 @@ function result = applyKickerAngle(codMatStruct, cod_rec, varargin)
       if (strcmp(target_kicker.name, cod_rec.steererNames{m}))
         if (use_steerer_values)
           kickAngles = [kickAngles;...
-          kick_angle(target_kicker, value_list(m), cod_rec.brho)];
+                kick_angle(target_kicker, value_list(m), cod_rec.brho)];
         else
           kickAngles = [kickAngles; value_list(m)];
         endif
       endif
     endfor
   endfor
-  #kickAngles
   if (use_kickfactor && isfield(cod_rec, "kickFactor"))
-    kickAngles *= cod_rec.kickFactor;
+    kickAngles .*= cod_rec.kickFactor(:);
   endif
-  
   result = codMatStruct.mat * kickAngles;
 endfunction
 

@@ -48,14 +48,14 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM, varargin)
   xyplot(cod_rec_BM.correctCOD, ";fit with kicks at BM;")
   hold off
   #setBPandSHonXaxis(cod_rec.lattice, positions, units);
-  positions
+  #positions
   elements_on_plot({"^BPM\\d*$"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(1)));
   elements_on_plot({"BMPe1$", "BMPe2$", "STH*"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(2)));
   elements_on_plot({"STV1","QD2","QD3","SM"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(3)));
-  elements_on_plot({"ESD","SX"}, cod_rec.lattice...
+  elements_on_plot({"ESD1","^SX\\d$"}, cod_rec.lattice...
               ,"yposition", sprintf("first %f", label_pos));
   grid on;
 endfunction

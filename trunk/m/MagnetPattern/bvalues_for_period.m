@@ -1,7 +1,6 @@
 ## usage [bLine, tLine] = bvalues_for_period(patternSet, tStep, startTime, endTime)
 ##
 ## stat points of each region are always included.
-## 最初の region を無視している。なんで？
 ## 前後に外挿するときは、一定値とする。
 ##
 ##= Parameters
@@ -17,7 +16,7 @@
 
 function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
   # patternSet = BMPattern
-  # timeInfo = {1,35,85}
+  # timeInfo = {1,675,730}
   timeInfo = varargin;
   tStep = timeInfo{1};
   
@@ -27,8 +26,7 @@ function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
   
   nRegion = length(patternSet);
   for n = 2:nRegion
-    #patternSet{i}
-    # n = 2;
+    # n = 5;
     # 
     tPoints = patternSet{n}.tPoints;
     tLineTmp = timeLine(tPoints,tStep);
@@ -36,6 +34,7 @@ function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
     tLine = [tLine,tLineTmp];
     bLine = [bLine,bLineTmp];
   endfor
+  #plot(tLine)
   
   if (length(timeInfo) > 1)
     startTime = timeInfo{2};
@@ -77,7 +76,7 @@ function tLine = timeLine(tPoints,tStep)
   if (tStep < 1)
     tLine = (tPoints(1)+tStep):tStep:tPoints(end);
   else
-    tLine = roundup(tPoints(1)):tStep:rounddown(tPoints(end));
+    tLine = ceil(tPoints(1)):tStep:floor(tPoints(end));
   endif
   
 endfunction

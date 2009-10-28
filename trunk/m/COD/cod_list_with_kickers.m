@@ -1,23 +1,31 @@
-## Usage : cod_list = cod_list_with_kickers(cod_rec 
-##                                [, "useSteererValues", "noKickFactor"])
-##      Calculate COD with given kick angles of steerers.
-##      If cod_rec has kickFactor field, kickFactor is applied.
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{cod_list} =} cod_list_with_kickers(@var{cod_rec}, [, "useSteererValues", "noKickFactor"])
 ##
-## = Parameter
-## * cod_rec -- structure which have following members
-##     .steererNames
-##     .kickAngles
-##     .pError -- momentum error
-##     .lattice
-##     .tune
-##     .horv -- 水平方向と垂直方向のどちらを計算するか
-##     .kickFactor
+## Calculate COD with given kick angles of steerers.
+## If cod_rec has kickFactor field, kickFactor is applied.
 ##
-## = Result
-## * cod_list -- matrix of COD at exit position of each element. 
-##     [position, COD]
+## @var{cod_rec} is a structure which have following fields.
+## @table @code
+## @item steererNames
+## A cell array which has names of kickers.
+## @item kickAngles or steererValues
+## @item pError
+## momentum error
+## @item lattice
+## @item tune
+## @item horv 
+## 水平方向と垂直方向のどちらを計算するか
+## @item kickFactor
+## @end table
+##
+## A result @var{cod_list} is a matrix of COD at exit position of each element i.e. [position, COD].
+##
+## @end deftypefn
 
 ##== History
+## 2009-10-23
+## help を texinfo にした。
+##
 ## 2008-09-01
 ## * useSteererValues option が設定されなくても、steererValues を使おうとする不具合を修正
 ## 

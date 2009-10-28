@@ -6,13 +6,14 @@
 ## Model list.
 ##
 ## @table @code
-## @item "DL1400"
+## @item "DL1500"
 ## YOKOGAWA
 ## @item "TDS3000"
 ## Tektronics
-## @item "DPS4000"
+## @item "DPO4000"
 ## Tektronics
 ## @end table
+##
 ## Here is a list of an output structure.
 ##
 ## @table @code
@@ -32,6 +33,10 @@
 ## * first implementaion
 
 function retval = load_osc_csv(filepath, varargin)
+  if (!nargin)
+    print_usage();
+  endif
+  
   opts = get_properties(varargin,...
                         {"model"}, {NA});
   if isna(opts.model)
@@ -45,7 +50,7 @@ function retval = load_osc_csv(filepath, varargin)
     case "DPO4000"
       retval = _tek2(filepath);
     otherwise
-      error([opts.model, "is unknow model."]);
+      error([opts.model, " is unknow model."]);
   endswitch
   retval.filepath = filepath;
 endfunction
@@ -100,12 +105,18 @@ function retval = _tek2(filepath)
       t = t*1e3;
   endswitch
   
-  for n = 2:ndata;
+  # in somecase, last data is invalid
+  if (t(end) == 0) && (t(end) < t(end-1))
+    t(end) = [];
+    data = data(1:end-1,:);
+  endif
+  
+  for n = 2:ndata
     retval.data{end+1} = [t, data(:,n)];
   endfor
 endfunction
 
-function retval = tek1(filepath)
+function retval = _tek1(filepath)
   #filepath = "TEK00000.CSV"
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)

@@ -30,12 +30,12 @@ function element_rec = setup_element(element_rec, mat_func, horv)
     element_rec.mat.(horv) =  dlMat * element_rec.mat.(horv) * dlMat;
   endif
   
-  element_rec.twmat.(horv) = twpMatrix(element_rec.mat.(horv));
+  element_rec.twmat.(horv) = twp_matrix(element_rec.mat.(horv));
   
   ## half
   element_rec.mat_half.(horv) = mat_func(setfield(element_rec, "efflen", len/2));
   if (hasEfflen)
     element_rec.mat_half.(horv) = element_rec.mat_half.(horv) * dlMat;
   endif
-  element_rec.twmat_half.(horv) = twpMatrix(element_rec.mat_half.(horv));
+  element_rec.twmat_half.(horv) = twp_matrix(element_rec.mat_half.(horv));
 endfunction

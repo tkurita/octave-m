@@ -25,16 +25,12 @@
 
 function varargout = fit_profile(filepath, plot_title, horv)
   pr = load_profile_csv(filepath);
-  valid_limit = 3000;
+  valid_limit = 3277; #3276 だと satulate しているみたい
   for n = 1:rows(pr.(horv))
-    if pr.(horv)(n,2) > 3000
+    if pr.(horv)(n,2) > valid_limit
       pr.(horv)(n,2) = 0;
     endif
   endfor
-  title(plot_title);
-  xlabel("Position [mm]")
-  ylabel("")
-  axis("auto")
   xyplot(pr.(horv), "-@;;");
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
@@ -44,6 +40,12 @@ function varargout = fit_profile(filepath, plot_title, horv)
   vline(mean_value);
   gp = gravity_point(pr.(horv))
   vline(gp)
+
+  title(plot_title);
+  xlabel("Position [mm]");
+  ylabel("");
+  axis("auto");
+
   if (nargout > 0)
     varargout{1} = mean_value;
   endif

@@ -49,7 +49,7 @@ function lattice_rec = lattice_with_time_tune(lattice_rec)
     if (isfield(lattice_rec, "measured_beta"))
       initv(end+1) = 0;
     endif
-    lattice_rec = lattice_with_tune(lattice_rec, "initial", initv);
+    lattice_rec = lattice_with_optim(lattice_rec, "initial", initv);
   endif
 
 endfunction
