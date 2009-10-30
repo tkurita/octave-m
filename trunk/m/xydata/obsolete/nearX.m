@@ -1,8 +1,12 @@
 ## Usage : [near_data, index] = nearX([x, y], target_x)
 ##         near_data = nearY([x, y], target_x)
 ##      return a xy value of rearest data to target_x
+##
+## Deprecated. use xy_near_x
 
 function varargout = nearX(xydata, target_x)
+  warning("nearX is deprecated. Use xy_near_x");
+  
   target_index = 0;
   if (xydata(1,1) >= target_x)
     target_index = 1;

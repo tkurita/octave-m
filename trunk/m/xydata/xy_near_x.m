@@ -1,4 +1,4 @@
-## Usage : [near_data, index] = y_near_x([x, y], target_x)
+## Usage : [near_data, index] = xy_near_x([x, y], target_x)
 ##         near_data = nearY([x, y], target_x)
 ##      return a xy value of rearest data to target_x
 
@@ -6,7 +6,7 @@
 ## 2009-10-30
 ## * renamed from nearX
 
-function varargout = y_near_x(xydata, target_x)
+function varargout = xy_near_x(xydata, target_x)
   if (columns(xydata) != 2)
     error("First argument of y_rear_x must be two columns matrix.");
   endif
