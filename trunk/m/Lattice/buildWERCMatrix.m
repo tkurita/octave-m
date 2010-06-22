@@ -73,7 +73,8 @@ function all_elements = buildWERCMatrix(varargin)
   MRD6 = qfDuct;
   MRD7 = MRD5;
   MRD8 = [92e-3/2, 1e-3*(60.5-6)/2];
-  MRD9 = [103e-3, -76e-3, 14e-3, -14e-3];
+  #MRD9 = [103e-3, -76e-3, 14e-3, -14e-3];
+  MRD9 = [103e-3, -76e-3, qfDuct(2), -qfDuct(2)]; # 改造したので縦はもっと広い
   MRD10 = [92e-3/2, 1e-3*(60.5-6)/2];
   MRD11 = 1e-3*(139.8-2*3.4)/2;
   MRD12_1 = 1e-3*(139.8-2*3.4)/2;
@@ -222,7 +223,6 @@ function all_elements = buildWERCMatrix(varargin)
   BM(bmprop, "BM8", bmDuct1),
   DT(0.175,"BMD8OUT", bmDuct1),
   DT(0.35,"FC4", [152.4e-3/2]),
-  DT(0.875,"L31_1", [61])
-  };
- 
+  DT(0.33, "ESIChamberIN", [165e-3/2]),
+  DT(0.545, "ESIChamber", [61e-3])};
 endfunction
