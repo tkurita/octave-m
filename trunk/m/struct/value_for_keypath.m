@@ -19,6 +19,8 @@
 ## @end deftypefn
 
 ##== History
+## 2010-06-22
+## * use strsplit(from 3.2) instead of split.
 ## 2008-04-11
 ## * Texinfo で help を書いた。
 
@@ -33,10 +35,11 @@ function array = value_for_keypath(cellarray, keypath, varargin)
   
   # keypath={"exitPhase","h"};
   if (ischar(keypath))
-    keys = split(keypath, ".");
-    keypath = cellfun(@deblank...
-      , mat2cell(keys, ones(1, rows(keys)), columns(keys))...
-      , "UniformOutput", false);
+#    keys = split(keypath, ".");
+#    keypath = cellfun(@deblank...
+#      , mat2cell(keys, ones(1, rows(keys)), columns(keys))...
+#      , "UniformOutput", false);
+    keys = strsplit(keypath, ".");
   endif
   
   if (isstruct(cellarray))
