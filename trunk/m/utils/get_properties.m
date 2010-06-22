@@ -14,17 +14,6 @@
 
 function varargout = get_properties(prop_list, prop_names, default_values)
   varargout = default_values;
-
-#  n_prop = length(prop_names)
-#  for n = 1:2:length(prop_list)
-#    a_name = prop_list{n};
-#    a_value = prop_list{n+1};
-#    for m = 1:n_prop
-#      if strcmp(a_name, prop_names{m})
-#        varargout{m} = a_value;
-#      end
-#    end
-#  end
   n_args = length(prop_list);        
   n = 1;
   end_arg = false;
@@ -51,7 +40,7 @@ function varargout = get_properties(prop_list, prop_names, default_values)
     end
   end
   
-  if (nargout <= 1)
+  if ((nargout <= 1))
     varargout{1} = struct_fields_values(prop_names, varargout);
   end
 end

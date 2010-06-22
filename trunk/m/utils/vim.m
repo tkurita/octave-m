@@ -9,9 +9,10 @@
 ## 
 ## @end deftypefn
 
-## PKG_ADD: mark_as_command vim
-
 ##== History
+## 2010-04-13
+## * remove mark_as_command
+##
 ## 2008-04-16
 ## * use view command (vim -R) intead of vim.
 ## 

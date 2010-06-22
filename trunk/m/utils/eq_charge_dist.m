@@ -53,8 +53,9 @@ function retval = eq_charge_dist(varargin)
   # z, particle, mev, 
   [args, prop] = parseparams(varargin);
   [z, particle, mev] = div_elem(args);
-  opts = get_properties(prop, {"stripper", "minq", "maxq", "threshold"}, 
-                                {"gas", 1, z, 0.05});
+  opts = get_properties(prop, 
+                      {"stripper", "minq", "maxq", "threshold"}, 
+                      {"gas", 1, z, 0.05});
   b = beta_with_mev(mev, particle);
   switch (opts.stripper)
     case "gas"
@@ -68,8 +69,14 @@ function retval = eq_charge_dist(varargin)
     otherwise
       error("stripper must be \"gas\" or \"carbon\".");
   endswitch
+  if (q0 < 0) 
+    error("Out of estimation range. Energy is too small.");
+  endif
   #[q, dq] = eq_charge(z, particle, mev)
   #rho
+  # q0
+  # rho
+  # epsi
   qlist = floor(opts.minq):1:ceil(opts.maxq);
   t = (qlist - q0)/rho;
   fq = exp(-0.5*t.^2./(1 + epsi*t));
