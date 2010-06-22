@@ -73,9 +73,8 @@ function elements_on_plot(names, lattice, varargin)
     for m = 1:length(names)
       if (regexp(lattice{n}.name, names{m}))
         #yposition
-        text("Position", [lattice{n}.centerPosition, yposition] ...
-          , "Rotation", 90 ...
-          , "String", lattice{n}.name)
+        text(lattice{n}.centerPosition, yposition, lattice{n}.name ...
+          , "Rotation", 90)
       endif
     endfor
   endfor
