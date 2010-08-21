@@ -12,6 +12,8 @@
 ## Tektronics
 ## @item "DPO4000"
 ## Tektronics
+## @item "auto"
+## try model "DPO4000" and next try "TDS3000"
 ## @end table
 ##
 ## Here is a list of an output structure.
@@ -49,6 +51,12 @@ function retval = load_osc_csv(filepath, varargin)
       retval = _tek1(filepath);
     case "DPO4000"
       retval = _tek2(filepath);
+    case "auto"
+      try
+        retval = _tek2(filepath);
+      catch
+        retval = _tek1(filepath);
+      end_try_catch
     otherwise
       error([opts.model, " is unknow model."]);
   endswitch
