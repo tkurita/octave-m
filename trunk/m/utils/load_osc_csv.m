@@ -27,6 +27,8 @@
 ## @end deftypefn
 
 ##== History
+## 2010-08-26
+## * ignored last line of data in _tek1
 ## 2009-06-22
 ## * add "model" property to support multiple makers and models.
 ## 2007-04-12
@@ -64,7 +66,7 @@ function retval = load_osc_csv(filepath, varargin)
 endfunction
 
 function retval = _tek2(filepath)
-  #filepath = "tek0002ALL.csv";
+  # filepath = "tek00013CH3.csv";
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)
     error(msg);
@@ -125,7 +127,7 @@ function retval = _tek2(filepath)
 endfunction
 
 function retval = _tek1(filepath)
-  #filepath = "TEK00000.CSV"
+  # filepath = "tek00013CH3.csv";
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)
     error(msg);
@@ -136,23 +138,27 @@ function retval = _tek1(filepath)
   aline = deblank(fgetl(fid));
   ndata = 2;
   while (aline != -1)
-    nhead++;
-    if (length(aline) == 1)
-      break;
-    endif
     cells = csvexplode(aline);
     
     if (!ischar(cells{1}))
       ndata = length(cells);
       break;
     endif
-      
+
+    nhead++;
+    if (length(aline) == 1)
+      break;
+    endif
     aline = deblank(fgetl(fid));
+
   endwhile
   fclose(fid);
   
   data = csvread(filepath, nhead, 0);
-
+  if (data(end,1) < data(end-1, 1) )
+    data(end,:) = []; # remove last row ,
+                      # because last row may 0 value due to last empty line
+  endif
   retval.data = {};
   for n = 2:ndata;
     retval.data{end+1} = [data(:,1), data(:,n)];
