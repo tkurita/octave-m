@@ -9,10 +9,10 @@
 ## 2010-12-21
 ## * first implementation
 
-function retval = time_range_bpattern(bpattern)
+function varargout = time_range_bpattern(bpattern)
   ts = bpattern{1}.tPoints(1);
-  te = bpatterm{end}.tPoints(end);
-  retval = [ts, te];
+  te = bpattern{end}.tPoints(end);
+  varargout = {ts, te};
 endfunction
 
 %!test
