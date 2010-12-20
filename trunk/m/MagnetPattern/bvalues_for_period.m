@@ -1,82 +1,112 @@
-## usage [bLine, tLine] = bvalues_for_period(patternSet, tStep, startTime, endTime)
+## -*- texinfo -*-
+## @deftypefn {Function File} {[@var{blist}, @var{tlist} =} bvalues_for_period(@var{patternSet}, @var{tstep}, @var{tstart}, @var{tend})
 ##
 ## stat points of each region are always included.
 ## 前後に外挿するときは、一定値とする。
 ##
-##= Parameters
-## tStep : time interval [msec]
-## startTime and endTime can be ommited.
+## Parameters :
 ##
-##= Result
-## bLine : BL value [T*m]
+## @table @code
+## @item @var{tstep}
+## time interval [msec]
+## @item @var{tstart}
+## Optional
+## @item @var{tend}
+## Optional
+## @end table
+##
+## Result :
+##
+## @table @code
+## @item @var{blist}
+## values genelated form @var{patternSet}. May BL [T*m] or GL [(T/m)*m].
+## @item @var{tlist}
+## tiems [msec]
+## @end table
+## @end deftypefn
 
 ##== History
+## 2009-10-30
+## * avoided duplicatoion in tlist
+##
+## 2009-10-29
+## * result is column wise vector 
+## * help is written by texinfo.
+##
 ## 2008-12-03
 ## * renamed from BValuesForTimes
 
-function [bLine, tLine] = bvalues_for_period(patternSet, varargin)
+function [blist, tlist] = bvalues_for_period(patternSet, varargin)
   # patternSet = BMPattern
   # timeInfo = {1,675,730}
   timeInfo = varargin;
-  tStep = timeInfo{1};
+  tstep = timeInfo{1};
   
-  tPoints = patternSet{1}.tPoints;
-  tLine = timeLine(tPoints,tStep);
-  bLine = interp_in_region(patternSet{1},tLine);
+  tpoints = patternSet{1}.tPoints;
+  tlist = timeLine(tpoints,tstep);
+  blist = interp_in_region(patternSet{1},tlist);
   
   nRegion = length(patternSet);
   for n = 2:nRegion
     # n = 5;
     # 
-    tPoints = patternSet{n}.tPoints;
-    tLineTmp = timeLine(tPoints,tStep);
-    bLineTmp = interp_in_region(patternSet{n},tLineTmp);
-    tLine = [tLine,tLineTmp];
-    bLine = [bLine,bLineTmp];
+    tpoints = patternSet{n}.tPoints;
+    tlist_tmp = timeLine(tpoints, tstep);
+    blist_tmp = interp_in_region(patternSet{n}, tlist_tmp);
+    if (length(tlist_tmp) > 0)
+      if (tlist(end) == tlist_tmp(1))
+        tlist_tmp = tlist_tmp(2:end);
+        blist_tmp = blist_tmp(2:end);
+      endif
+      tlist = [tlist,tlist_tmp];
+      blist = [blist,blist_tmp];
+    endif
   endfor
-  #plot(tLine)
+  #plot(tlist)
   
   if (length(timeInfo) > 1)
-    startTime = timeInfo{2};
-    if (tLine(1) > startTime)
-      headdingTime = startTime:tStep:(tLine(1)-tStep);
-      tLine = [headdingTime,tLine];
-      headdingB(1:length(headdingTime)) = bLine(1);
-      bLine = [headdingB, bLine];
-    elseif (tLine(1) < startTime)
+    tstart = timeInfo{2};
+    if (tlist(1) > tstart)
+      headdingTime = tstart:tstep:(tlist(1)-tstep);
+      tlist = [headdingTime,tlist];
+      headdingB(1:length(headdingTime)) = blist(1);
+      blist = [headdingB, blist];
+    elseif (tlist(1) < tstart)
       n = 1;
-      while(tLine(n) < startTime)
+      while(tlist(n) < tstart)
         n++;
       endwhile
-      tLine = tLine(n:length(tLine));
-      bLine = bLine(n:length(bLine));
+      tlist = tlist(n:length(tlist));
+      blist = blist(n:length(blist));
     endif
   endif
   
   if (length(timeInfo) > 2)
-    endTime = timeInfo{3};
-    if (tLine(end) < endTime)
-      enddingTime = (tLine(end)+tStep):tStep:endTime;
-      tLine = [tLine,enddingTime];
-      enddingB(1:length(enddingTime)) = bLine(end);
-      bLine = [bLine,enddingB];
-    elseif (tLine(end) > endTime)
-      n = length(tLine)-1;
-      while(tLine(n) > endTime)
+    tend = timeInfo{3};
+    if (tlist(end) < tend)
+      enddingTime = (tlist(end)+tstep):tstep:tend;
+      tlist = [tlist,enddingTime];
+      enddingB(1:length(enddingTime)) = blist(end);
+      blist = [blist,enddingB];
+    elseif (tlist(end) > tend)
+      n = length(tlist)-1;
+      while(tlist(n) > tend)
         n--;
       endwhile
-      tLine = tLine(1:n);
-      bLine = bLine(1:n);
+      tlist = tlist(1:n);
+      blist = blist(1:n);
     endif
     
   endif
+  tlist = tlist(:);
+  blist = blist(:);
 endfunction
 
-function tLine = timeLine(tPoints,tStep)
-  if (tStep < 1)
-    tLine = (tPoints(1)+tStep):tStep:tPoints(end);
+function tlist = timeLine(tpoints, tstep)
+  if (tstep < 1)
+    tlist = (tpoints(1)+tstep):tstep:tpoints(end);
   else
-    tLine = ceil(tPoints(1)):tStep:floor(tPoints(end));
+    tlist = ceil(tpoints(1)):tstep:floor(tpoints(end));
   endif
   
 endfunction

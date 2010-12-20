@@ -1,7 +1,9 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{result} =} table_with_bpattern(@var{bpattern}, @var{opts})
-##
+## 
 ## Print @var{bpattern} with simple table format.
+## 
+## If returned value is given, a matrix is returned instead of print to a screen.
 ##
 ## @seealso{build_pattern, csv_with_bpattern}
 ##
@@ -14,7 +16,7 @@
 ## 2008-12-04
 ## * First implementation
 
-function table_with_bpattern(bpattern, varargin)
+function varargout = table_with_bpattern(bpattern, varargin)
   if !nargin
     print_usage();
   endif
@@ -41,13 +43,14 @@ function table_with_bpattern(bpattern, varargin)
     error("File specification is invalid.");
   endif
   
-#  template = ftemplate_for_mat(tb(1,:));
-#  for n = 1:rows(tb);
-#    fprintf(fid, template, tb(n, :));
-#  endfor
-  fprintf(fid, opts.format, tb');
-  if (is_open_file)
-    fclose(fid);
+  
+  if (nargout > 0)
+    varargout = {tb};
+  else
+    fprintf(fid, opts.format, tb');
+    if (is_open_file)
+      fclose(fid);
+    endif
   endif
 endfunction
 

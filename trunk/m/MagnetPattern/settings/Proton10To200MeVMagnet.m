@@ -1,6 +1,10 @@
 ## BM pattern of H+ 10MeV -> 200MeV H20E
 1; #script file
 
+##== Hisotory
+## 2009-10-30
+## * Fiexed flat top time of BMPattern
+
 function timeSet = timeRegion
   timeSet.capture = [0,35];
   timeSet.initialAcc = [35,60,85];
@@ -82,7 +86,7 @@ function patternSet = BMPattern
   region4 = setSplineGrad(region4,region3);
   
   ## flat top
-  region5 = makeRegion(timeSet.extract, [1.7067, 1.7067], "linear");
+  region5 = makeRegion(timeSet.flatTop, [1.7067, 1.7067], "linear");
   
   patternSet = {region1,region2,region3,region4, region5};
 endfunction

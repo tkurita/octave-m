@@ -35,10 +35,16 @@ function [bmpat, qfpat, qdpat] = build_bmqfqd(pat_info)
   
   ## QD
   t_qd = [0;bmpattern(:,1);2000];
-  t_qd(2) += pat_info.qd_delay;
-  t_qd(3) = t_qd(2)+pat_info.qd_smoothstep;
-  t_qd(4) = t_qd(3)+pat_info.qd_smoothstep;
+#  t_qd(2) += pat_info.qd_delay;
+#  t_qd(3) = t_qd(2)+pat_info.qd_smoothstep;
+#  t_qd(4) = t_qd(3)+pat_info.qd_smoothstep;
   qdpat = trapz_pattern(t_qd, pat_info.qdbase, pat_info.qdtop);  
+  # タイミングの遅れは後から足し込まないと、既存のパターンと一致しない。
+  qdpat{1}.tPoints(2) += pat_info.qd_delay;
+  qdpat{2}.tPoints(1) = qdpat{1}.tPoints(2);
+  qdpat{2}.tPoints(2) = qdpat{2}.tPoints(1)+pat_info.qd_smoothstep;
+  qdpat{2}.tPoints(3) = qdpat{2}.tPoints(2)+pat_info.qd_smoothstep;
+  qdpat{3}.tPoints(1) = qdpat{2}.tPoints(3);
 endfunction
 
 %!test
