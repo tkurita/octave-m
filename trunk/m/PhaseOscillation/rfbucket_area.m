@@ -1,4 +1,4 @@
-## usage : [eArea,eArea2,deltaEmax,phi1] = RFbucketEArea(
+## usage : [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(
 ##                                vList, nM, Ee, eta, h, phi_s, C)
 ## parameters : 
 ## vList : RF Voltage Pattern, must be (voltage * charge state)
@@ -13,16 +13,20 @@
 ## deltaEmax : bucket height [eV]
 ## phi1 : unstable fixed point
 
-function [eArea,eArea2,deltaEmax,phi1] = RFbucketEArea(vList, nM, Ee, eta, h, phi_s,C)
+##== History
+## 2010-12-21
+## * renamed from RFBucketEArea
+
+function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vList, nM, Ee, eta, h, phi_s,C)
   global proton_eV;
-  global lv;
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
 
   for n = 1:length(phi_s)
 	fs = phi_s(n);
 	[alphaArea(n),yHeight(n), phi1(n)] = calcBucketSize(fs);
   endfor
 
-  m0c2 = nM*proton_eV;
+  m0c2 = mass_energy(particle)*1e6; # [eV]
   beta2 = 1 - (m0c2^2)./(Ee.^2);
   eArea = 16.*sqrt(vList .* beta2 .*Ee./(2*pi*h.*abs(eta))).*alphaArea;
 ##  omega_rev = 2*pi.*sqrt(beta2).*lv./C;

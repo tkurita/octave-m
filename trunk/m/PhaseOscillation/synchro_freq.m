@@ -6,10 +6,12 @@
 ## sihPhi_s : sin(phi_s) 
 ## phi_s : synchronus particle の RF phase angle
 ## vList : 電圧パターン
+## C : シンクロトロンの周長 [m]
+##
 ## omega_s : シンクロトロン周波数[rad/sec]
 ## Ee : 磁場に対応する全エネルギー
 ## eta : alpha - 1/gamma^2 
-## C : シンクロトロンの周長 [m]
+
 
 ##== History
 ## 2010-12-21
