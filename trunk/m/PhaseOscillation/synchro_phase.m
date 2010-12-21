@@ -6,11 +6,20 @@
 ## C : 周長 [m] WERC は 33.201mm
 
 ##== History
+## 2010-12-21
+## * renamed from synchronusRFPhase
+## * fixed for Octave 3.2
+##
 ## 2009-10-30
 ## * It looks that gradient(tLine/1000) is needed. gradient was changed ?
 
 function [phi_s,sinPhi_s] = synchro_phase(bLine,tLine,vList,C)
-  bGrad=gradient(bLine, gradient(tLine/1000)); #time difference of BM magnetic field
+  # bLine = bline
+  # tLine = tline
+  # vList = vlist
+  # C = 33.201
+  # bGrad=gradient(bLine, gradient(tLine/1000)); #time difference of BM magnetic field
+  bGrad=gradient(bLine, (tLine/1000));
   sinPhi_s = (C*bGrad/(pi/4))./vList;
   nanList = isnan(sinPhi_s);
   sinPhi_s(isnan(sinPhi_s)) = 0;
