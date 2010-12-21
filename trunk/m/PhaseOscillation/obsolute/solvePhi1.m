@@ -10,6 +10,7 @@
 ## * renamed to solve_phi1
 
 function [phi1,info] = solvePhi1(phi_s)
+  warning("Use solve_phi1 instead of solvePhi1.")
   ## debug
   #printf("start solvePhi1\n")
   #phi_s
