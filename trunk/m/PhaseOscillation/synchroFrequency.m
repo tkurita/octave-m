@@ -1,7 +1,7 @@
-function [omega_s,Ee,eta] = synchroFrequency(alpha, nM, bLine, h, sinPhi_s, vList,C)
+function [omega_s,Ee,eta] = synchroFrequency(alpha, particle, bLine, h, sinPhi_s, vList,C)
   ## シンクロトロン周波数を計算
   ## alpha : momentum compaction factor;
-  ## nM: mass number 
+  ## particle: mass number or "proton", "helium", "carbon"
   ## bLine : 磁場パターン
   ## h : harmonic number
   ## sihPhi_s : sin(phi_s) 
@@ -11,10 +11,9 @@ function [omega_s,Ee,eta] = synchroFrequency(alpha, nM, bLine, h, sinPhi_s, vLis
   ## Ee : 磁場に対応する全エネルギー
   ## eta : alpha - 1/gamma^2 
   ## C : シンクロトロンの周長 [m]
-  #global C; # シンクロトロンの周長 [m]
-  global lv; #光速
-  global proton_eV; #陽子の質量 [eV]
-  m0c2 = nM * proton_eV; #[eV]
+
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
+  m0c2 = mass_energy(particle)*1e6; #[eV]
   Ee2 = m0c2^2 + (bLine./(pi/4)).^2 .*lv^2; #[ev2]
   Ee = sqrt(Ee2); #[eV]
   eta = alpha - m0c2^2./Ee2; #

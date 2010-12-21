@@ -17,14 +17,13 @@
 ## delpp : delta p/p momentum spread coresponding to deltaE
 
 function [deltaE,delEE,delpp] = RFbucketHeight2ForPhase(...
-						  V, nM, Ee, eta, h, phi_s, C, rV, phi2 , phi)
-  global proton_eV;
-  global lv;
+                                V, nM, Ee, eta, h, phi_s, C, rV, phi2, phi)
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速;
 
   bucketPot_c = relativeBucketPotential(rV, phi_s, phi2, phi );
   bucketPot_s = relativeBucketPotential(rV, phi_s, phi2, phi_s );
 
-  m0c2 = nM*proton_eV;
+  m0c2 = mass_energy(nM)*1e6; #[eV]
   beta2 = 1 - (m0c2^2)./(Ee.^2);
   
   bucketFactor = (Ee.*V.*beta2)./(pi.*eta.*h);

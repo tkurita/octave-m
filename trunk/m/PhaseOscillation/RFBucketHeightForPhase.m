@@ -1,10 +1,10 @@
-## usage : [deltaE,delEE,delpp] = RFbucketHeightForPhase(
-##                                V, nM, Ee, eta, h, phi_s, C, phi)
+## usage : [deltaE,delEE,delpp] = RFBucketHeightForPhase(
+##                                V, particle, Ee, eta, h, phi_s, C, phi)
 ## parameters : 
 ## V : RF Voltage Pattern, must be (voltage * charge state)
 ## phi_s : phase angle of synchronus particle
 ## Ee : Total energy
-## nM : mass number of the particle
+## particle : mass number or name of the particle
 ## C : シンクロトロンの周長
 ## phi : この位相でのbucket height を計算する。 
 ## 
@@ -13,15 +13,18 @@
 ## delEE : delta E/E total energy spread correspoding to deltaE
 ## delpp : delta p/p momentum spread coresponding to deltaE
 
+##== History
+## 2009-10-30
+## * Used physical_constants instead of using global variables.
+## * nM parameter is replaced with particle
 
-function [deltaE,delEE,delpp] = RFbucketHeightForPhase(V, nM, Ee, eta, h, phi_s, C, phi)
-  global proton_eV;
-  global lv;
+function [deltaE,delEE,delpp] = RFBucketHeightForPhase(V, particle, Ee, eta, h, phi_s, C, phi)
+  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
 
   bucketPot_c = cos(phi) + phi.*sin(phi_s);
   bucketPot_s = cos(phi_s) + phi.*sin(phi_s);
 
-  m0c2 = nM*proton_eV;
+  m0c2 = mass_energy(particle)*1e6; # [eV]
   beta2 = 1 - (m0c2^2)./(Ee.^2);
   
   bucketFactor = (Ee.*V.*beta2)./(pi.*eta.*h);
