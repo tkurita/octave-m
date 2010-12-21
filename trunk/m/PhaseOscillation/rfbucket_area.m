@@ -22,7 +22,7 @@ function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vList, nM, Ee, eta, h, ph
 
   for n = 1:length(phi_s)
 	fs = phi_s(n);
-	[alphaArea(n),yHeight(n), phi1(n)] = calcBucketSize(fs);
+	[alphaArea(n),yHeight(n), phi1(n)] = rfbucket_size(fs);
   endfor
 
   m0c2 = mass_energy(particle)*1e6; # [eV]

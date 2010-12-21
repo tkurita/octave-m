@@ -1,13 +1,13 @@
-## usage : [alphaArea,yHeight, phi1]=calcBucketSize(fs)
+## usage : [alphaArea,yHeight, phi1]=rfbucket_size(fs)
 ## fs : RF phase angle of synchronus particle
 ##      can not accept matrix, fs must be a scaler value
 ## results 
 ## alphaArea : normalized bucket area
 ## yHeight : normalized bukcket half height
 
-function [alphaArea, yHeight, phi1]=calcBucketSize(fs)
+function [alphaArea, yHeight, phi1]=rfbucket_size(fs)
   ## debug
-#   printf("start calcBucketSize\n");
+#   printf("start rfbucket_size\n");
 #   fs
   
   [phi1,info] = solvePhi1(fs);
@@ -26,5 +26,5 @@ function [alphaArea, yHeight, phi1]=calcBucketSize(fs)
   alphaArea = (1/(4*sqrt(2))).*alphaArea;
   yHeight=halfHeight(fs);
 
-  #printf("end calcBucketSize\n");
+  #printf("end rfbucket_size\n");
 endfunction
