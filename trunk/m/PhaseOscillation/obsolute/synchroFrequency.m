@@ -1,4 +1,6 @@
 function [omega_s,Ee,eta] = synchroFrequency(alpha, particle, bLine, h, sinPhi_s, vList,C)
+  warning("Use synchro_freq instead of synchroFrequency");
+  
   ## シンクロトロン周波数を計算
   ## alpha : momentum compaction factor;
   ## particle: mass number or "proton", "helium", "carbon"
