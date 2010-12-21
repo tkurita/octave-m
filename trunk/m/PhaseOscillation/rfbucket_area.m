@@ -18,7 +18,6 @@
 ## * renamed from RFBucketEArea
 
 function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vList, nM, Ee, eta, h, phi_s,C)
-  global proton_eV;
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
 
   for n = 1:length(phi_s)
