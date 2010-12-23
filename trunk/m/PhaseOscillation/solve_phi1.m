@@ -5,21 +5,26 @@
 ## info : fhiEq(x) = 0 が解けたら 1
 ## saddle point : phi_2 = pi- phi_s
 
-function [phi1,info] = solvePhi1(phi_s)
-  ## debug
-  #printf("start solvePhi1\n")
-  #phi_s
+##== History
+## 2010-12-23
+## * phi_s = 0.26 の解き、正負がひっくり返った答えが返される。
+##   初期値を僅かに(+0.01)ずらすと解決した。
+
+function [phi1,info] = solve_phi1(phi_s)
+  # phi_s = 0.26
 
   ## start code
   if (phi_s < pi/2) 
-	initialValue = -(pi - phi_s); # after transition
+    # phi_init = -(pi - phi_s); # below transition
+    phi_init = - (pi- phi_s)+0.01; # below transition
   else
-	initialValue = pi+phi_s; # before transition
+    phi_init = pi+phi_s; # above transition
   endif
 
   global _phi_s;
   _phi_s = phi_s;
-  [phi1,info] = fsolve("fhiEq", initialValue);
+  # fhiEq(phi_init);
+  [phi1,info] = fsolve(@fhiEq, phi_init);
   #printf("end solvePhi1\n")
 endfunction
 
