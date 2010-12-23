@@ -1,18 +1,20 @@
 ## useage : zeroaxis(axisname)
-## axisname : x|y|x2|y2
+## axisname : x|y|
 ## no arguments set xrange to autoscale
 
-function zeroaxis(axisname)
+##== History
+## 2010-12-23
+## *reimplemented for octave 3.2
 
-  eval (sprintf ("__gnuplot_set__ %szeroaxis;",axisname));
-#   if (nargin == 0)
-# 	__gnuplot_set__ autoscale;
-#   else
-# 	eval (sprintf ("__gnuplot_set__ &szeroaxis [%g:%g];",axisname, xmax));
-#   endif
-
-  if (automatic_replot)
-    replot ();
+function zeroaxis(axisname, varargin)
+  if ! nargin 
+    axisname = "xy";
+  endif
+  if (strfind(axisname, "x"))
+    vline(0, varargin{:});
+  endif
+  if (strfind(axisname, "y"))
+    hline(0, varargin{:});
   endif
 
 endfunction
