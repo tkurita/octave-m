@@ -4,6 +4,10 @@
 ## global _phi_s; #phase angle of shychronus particle
 ## global _phi_1; #phase angle which give separatrix
 
+##== History
+## 2010-12-23
+## * y2 ~ 0 で y2 がマイナスになることがある。abs をとってからsqrt する。
+
 function y = halfHeight(x)
   global _phi_s;
   global _phi_1;
@@ -12,5 +16,6 @@ function y = halfHeight(x)
   else
 	transitionFlag = -1;
   endif
-  y = sqrt(transitionFlag.*(cos(x) - cos(_phi_1) + (x - _phi_1).*sin(_phi_s)) );
+  y2 = transitionFlag.*(cos(x) - cos(_phi_1) + (x - _phi_1).*sin(_phi_s));
+  y = sqrt(abs(y2)); # abs をとらないと、y2 ~ 0 でマイナスになることがある。
 endfunction
