@@ -5,7 +5,12 @@
 ## alphaArea : normalized bucket area
 ## yHeight : normalized bukcket half height
 
+##==History
+## 2010-12-21
+## * obsolute
+
 function [alphaArea, yHeight, phi1]=calcBucketSize(fs)
+  warning("Use rfbucket_size instead of calcBucketSize.");
   ## debug
 #   printf("start calcBucketSize\n");
 #   fs

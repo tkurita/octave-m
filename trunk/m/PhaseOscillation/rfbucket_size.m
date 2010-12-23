@@ -5,12 +5,15 @@
 ## alphaArea : normalized bucket area
 ## yHeight : normalized bukcket half height
 
+##== History
+## 2010-12-21
+## * renamed from calcBucketSize
+## * used solve_phi1 instead of solvePhi1
+
 function [alphaArea, yHeight, phi1]=rfbucket_size(fs)
-  ## debug
-#   printf("start rfbucket_size\n");
-#   fs
+  # fs = 0.26
   
-  [phi1,info] = solvePhi1(fs);
+  [phi1,info] = solve_phi1(fs);
 
   global _phi_s;
   _phi_s = fs; #halfHeight で必要
@@ -19,9 +22,9 @@ function [alphaArea, yHeight, phi1]=rfbucket_size(fs)
   
   #printf("start quad\n");
   if (fs < pi/2)
-	[alphaArea, IER, NFUN, ERR] = quad("halfHeight", phi1, (pi-fs));
+    [alphaArea, IER, NFUN, ERR] = quad(@halfHeight, phi1, (pi-fs));
   else
-	[alphaArea, IER, NFUN, ERR] = quad("halfHeight", (pi-fs), phi1);
+    [alphaArea, IER, NFUN, ERR] = quad(@halfHeight, (pi-fs), phi1);
   endif
   alphaArea = (1/(4*sqrt(2))).*alphaArea;
   yHeight=halfHeight(fs);
