@@ -1,8 +1,17 @@
-## usage : xyplot([X,Y], format ...)
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{h} =} xyplot(@var{XY}, @var{format},...)
 ##
-## accept column wise 2 dimensional matrix as X-Y data
+## plot column wise 2 dimensional matrix @var{XY} as X-Y data.
+##
+## returned values are handles of line objects.
+##
+## @end deftypefn
 
-function result = xyplot(varargin)
+##== History
+## 2010-12-28
+## * add help of texinfo format.
+
+function lh = xyplot(varargin)
   plotarg = {};
   for i = 1:length(varargin)
     item = varargin{i};
@@ -16,5 +25,5 @@ function result = xyplot(varargin)
       endif
     endif
   endfor
-  result = plot(plotarg{:});
+  lh = plot(plotarg{:});
 endfunction
