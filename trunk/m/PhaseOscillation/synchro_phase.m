@@ -13,7 +13,7 @@
 ## 2009-10-30
 ## * It looks that gradient(tLine/1000) is needed. gradient was changed ?
 
-function [phi_s,sinPhi_s] = synchro_phase(bLine,tLine,vList,C)
+function [phi_s,sinPhi_s] = synchro_phase(bLine, tLine, vList, C)
   # bLine = bline
   # tLine = tline
   # vList = vlist
