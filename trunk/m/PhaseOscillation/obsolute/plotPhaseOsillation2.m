@@ -6,8 +6,10 @@
 ##==History
 ## 2011-01-07
 ## * reimplemented for Octave 3.2
+## * renamed to plot_phase_oscillation2
 
 function plotPhaseOsillation2(tline,bline,bPoints_set,vlist,omega_s,phi_s,e_area2)
+  warning("Use plot_phase_oscillation2 instead of plotPhaseOsillation2.");
   # bPoints_set = bp;
   # phi_s = ps;
   #   

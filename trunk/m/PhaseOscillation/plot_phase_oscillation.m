@@ -9,8 +9,9 @@
 
 ##= History
 ## * reimplemented for Octave 3.2
+## * renamed from plotPhaseOsillation
 
-function plotPhaseOsillation(tline,bline,bPoints_set,vlist,omega_s,phi_s,deltaEFromB,e_area, d_emax,nM,totalEnergy,phi1)
+function plot_phase_oscillation(tline,bline,bPoints_set,vlist,omega_s,phi_s,deltaEFromB,e_area, d_emax,nM,totalEnergy,phi1)
   # phi_s = ps;
   # deltaEFromB = d_e;
   # totalEnergy = Ee;
