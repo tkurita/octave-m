@@ -6,7 +6,8 @@
 ## @end deftypefn
 
 ##== History
-##
+## 2011-01-06
+## * fixed : "fontsize" are applied to plots in multiplot
 
 function retval = print_pdf(fname, varargin)
   [fs, ps, pp, ax_pos, device] = get_properties(varargin,...
@@ -32,45 +33,54 @@ function retval = print_pdf(fname, varargin)
   endif
   
   ##=== ticks label
-  pre_ticks = get(gca, "fontsize");
-  set(gca, "fontsize", fs); # axis ticks label
-
+  ax = findobj(gcf, "type", "axes");
+  #pre_ticks = get(gca, "fontsize");
+  pre_axfontsize = get(ax, "fontsize");
+  #set(gca, "fontsize", fs); # axis ticks label
+  set(ax, "fontsize", fs);
+  
   ##=== xlabel
-  xl = get(gca, "xlabel");
+  xlabel_handles = findobj(cell2mat(get(ax, "xlabel")), "visible", "on");
   pre_xls = NA;
-  if (strcmp(get(xl, "visible"), "on"))
-    pre_xsl = get(xl, "fontsize");
-    set(xl, "fontsize", fs);
-  endif
-
-  #=== ylabel
-  yl = get(gca, "ylabel");
-  pre_yls = NA;
-  if (strcmp(get(yl, "visible"), "on"))
-    pre_ysl = get(yl, "fontsize");
-    set(yl, "fontsize", fs);
+  if (length(xlabel_handles) > 0)
+    pre_xls = get(xlabel_handles, "fontsize");
+    set(xlabel_handles, "fontsize", fs);
   endif
   
+
+  #=== ylabel
+  ylabel_handles = findobj(cell2mat(get(ax, "ylabel")), "visible", "on");
+  pre_yls = NA;
+  if (length(ylabel_handles) > 0)
+    pre_yls = get(ylabel_handles, "fontsize");
+    set(ylabel_handles, "fontsize", fs);
+  endif
+
   print(["-F:", num2str(fs)], ["-d",device], fname); 
     # gnuplot 4.2
     #  -F は legend だけに効く 
   
   ##=== recorver fontsize
-  set(gca, "fontsize", pre_ticks);
-  if (!isna(pre_xsl))
-    set(xl, "fontsize", pre_xsl);
+  recover_property(ax, "fontsize", pre_axfontsize);
+  if (iscell(pre_xls))
+    recover_property(xlabel_handles, "fontsize", pre_xls);
   endif
-  if (!isna(pre_ysl))
-    set(yl, "fontsize", pre_ysl);
+  if (iscell(pre_yls))
+    recover_property(ylabel_handles, "fontsize", pre_yls);
   endif
-  set(gca, "fontsize", pre_ticks);
-  if (!isnan(pre_axpos))
+  if (iscell(pre_axpos))
     pre_axpos
     set(gca, "position", pre_axpos);
   endif
   set(gcf, "papersize", pre_ps);
   set(gcf, "paperposition", pre_pp);
   orient(pre_orient);
+endfunction
+
+function recover_property(hs, propname, fs)
+  for n = 1:length(hs)
+    set(hs(n), propname, fs{n});
+  endfor
 endfunction
 
 %!test
