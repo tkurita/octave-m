@@ -10,6 +10,10 @@
 ## * mass_energy can accelpt mass number
 
 function result = mass_energy(particle)
+  if (nargin < 1)
+    usage();
+  endif
+  
   if (isnumeric(particle))
     switch particle
       case 1

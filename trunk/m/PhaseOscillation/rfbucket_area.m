@@ -19,6 +19,7 @@
 
 function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vlist, particle, Ee, eta, h, phi_s,C)
   # particle = 1
+  # phi_s = ps;
   
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
 
@@ -27,6 +28,9 @@ function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vlist, particle, Ee, eta,
     fs = phi_s(n);
     [alphaArea(n),yHeight(n), phi1(n)] = rfbucket_size(fs);
   endfor
+  alphaArea = alphaArea';
+  yHeight = yHeight';
+  phi1 = phi1';
 
   m0c2 = mass_energy(particle)*1e6; # [eV]
   beta2 = 1 - (m0c2^2)./(Ee.^2);

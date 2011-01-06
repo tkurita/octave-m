@@ -6,6 +6,7 @@
 
 function writeDataForFG(filename, data, varargin)
   #filename  = exchangeSuffix(filename, ".dat");
+  data = data(:);
   [dirname, bname, suffix] = fileparts(filename);
   matfile = fullfile(dirname, [bname,".mat"]);
   save(matfile, "data");

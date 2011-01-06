@@ -39,7 +39,7 @@ function array = value_for_keypath(cellarray, keypath, varargin)
 #    keypath = cellfun(@deblank...
 #      , mat2cell(keys, ones(1, rows(keys)), columns(keys))...
 #      , "UniformOutput", false);
-    keys = strsplit(keypath, ".");
+    keypath = strsplit(keypath, ".");
   endif
   
   if (isstruct(cellarray))

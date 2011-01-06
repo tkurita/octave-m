@@ -73,7 +73,7 @@ function bm_struct = BM(varargin)
     bm_struct.mat.h = DTmat(-dl) * bm_struct.mat.h * DTmat(-dl);
   endif
   
-  bm_struct.twmat.h = twpMatrix(bm_struct.mat.h);
+  bm_struct.twmat.h = twp_matrix(bm_struct.mat.h);
   bm_struct.k.h = 1/radius^2;
   bm_struct.k.v = 0;
   
@@ -94,7 +94,7 @@ function bm_struct = BM(varargin)
     bm_struct.mat_half.h = bm_struct.mat_half.h * DTmat(-dl);
     bm_struct.mat_rest.h = DTmat(-dl) * bm_struct.mat_rest.h;
   endif
-  bm_struct.twmat_half.h = twpMatrix(bm_struct.mat_half.h);
+  bm_struct.twmat_half.h = twp_matrix(bm_struct.mat_half.h);
   
   ##== vertical
   ##=== full
@@ -121,7 +121,7 @@ function bm_struct = BM(varargin)
     bm_struct.mat.v = DTmat(-dl) * bm_struct.mat.v * DTmat(-dl);
   endif
   
-  bm_struct.twmat.v = twpMatrix(bm_struct.mat.v);
+  bm_struct.twmat.v = twp_matrix(bm_struct.mat.v);
   
   ##=== half
   bm_struct.mat_half.v = DTmat(len/2) * edgematrix;
@@ -131,7 +131,7 @@ function bm_struct = BM(varargin)
     bm_struct.mat_rest.v = bm_struct.mat_rest.v*DTmat(-dl);
   endif
   
-  bm_struct.twmat_half.v = twpMatrix(bm_struct.mat_half.v);
+  bm_struct.twmat_half.v = twp_matrix(bm_struct.mat_half.v);
   
   bm_struct.kind = "BM";
 endfunction

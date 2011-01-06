@@ -1,5 +1,7 @@
 ## useage : xrange(xmin,xmax)
 ## no arguments set xrange to autoscale
+##
+## xrange is obsolete. Use xlim.
 
 function xrange(varargin)
   ca = gca();

@@ -21,7 +21,7 @@ function retval = bucket_envelop(phi_s)
 	  phi_range = [phi_range,phi_1];
 	endif
   endif
-  
+
   bucketEnvelopList =  (1/(8*sqrt(2))).*rfbucket_half_height(phi_range, phi_s, phi_1);
   retval = [phi_range(:), bucketEnvelopList(:)];
 endfunction

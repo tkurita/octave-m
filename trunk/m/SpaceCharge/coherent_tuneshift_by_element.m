@@ -42,14 +42,19 @@ function retval = coherent_tuneshift_by_element(elem, C, bt, Bf, N, eqname)
       retval.v = - (l/C)*(N*r*avgb.v/(pi*gm*bt^2))*(...
                     (ic.ep1.v/h^2 + ic.ep2.v/g^2)...
                     + (ic.xi1.v/h^2)*(1-bt^2-eta)/Bf);               
-    otherwise # "CERN"
+    case ("CERN1") # near an integral resonance
       F1.h = ic.xi1.h*(1+Bf*(gm^2-1)) + ic.xi2.h*Bf*(gm^2-1)*h^2/g^2;
       F1.v = ic.xi1.v*(1+Bf*(gm^2-1)) + ic.xi2.v*Bf*(gm^2-1)*h^2/g^2;
+      F = F1;
+      retval.h = - (l/C)*(N*r*F.h*avgb.h)/(pi*h^2*gm^3*bt^2*Bf);
+      retval.v = - (l/C)*(N*r*F.v*avgb.v)/(pi*h^2*gm^3*bt^2*Bf);      
+    case ("CERN2") # near a half-integral resonance
       F2.h = ic.xi1.h*(1+Bf*(gm^2-1)) + ic.xi2.h*Bf*(gm^2-1)*h^2/g^2;
       F2.v = ic.xi1.v*(1+Bf*(gm^2-1)) + ic.xi2.v*Bf*(gm^2-1)*h^2/g^2;
       F = F2;
       retval.h = - (l/C)*(N*r*F.h*avgb.h)/(pi*h^2*gm^3*bt^2*Bf);
-      retval.v = - (l/C)*(N*r*F.v*avgb.v)/(pi*h^2*gm^3*bt^2*Bf);
+      retval.v = - (l/C)*(N*r*F.v*avgb.v)/(pi*h^2*gm^3*bt^2*Bf);      
+    otherwise # "CERN"
   endswitch
 endfunction
 

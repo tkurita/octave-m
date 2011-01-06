@@ -3,8 +3,6 @@
 ##         reveal -- reveal current directory in Finder
 ##      Reveal a function file, a file or current directory in Finder
 
-## PKG_ADD: mark_as_command reveal
-
 function reveal(func_name)
   if (nargin == 0)
     system("open ./")
