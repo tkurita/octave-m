@@ -6,6 +6,8 @@
 ## @end deftypefn
 
 ##== History
+## 2011-01-13
+## * fixed : errors when one plot.
 ## 2011-01-06
 ## * fixed : "fontsize" are applied to plots in multiplot
 
@@ -40,7 +42,11 @@ function retval = print_pdf(fname, varargin)
   set(ax, "fontsize", fs);
   
   ##=== xlabel
-  xlabel_handles = findobj(cell2mat(get(ax, "xlabel")), "visible", "on");
+  lh = get(ax, "xlabel");
+  if iscell(lh)
+    lh = cell2mat(lh);
+  endif
+  xlabel_handles = findobj(lh, "visible", "on");
   pre_xls = NA;
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
@@ -49,7 +55,11 @@ function retval = print_pdf(fname, varargin)
   
 
   #=== ylabel
-  ylabel_handles = findobj(cell2mat(get(ax, "ylabel")), "visible", "on");
+  lh = get(ax, "ylabel");
+  if iscell(lh)
+    lh = cell2mat(lh);
+  endif
+  ylabel_handles = findobj(lh, "visible", "on");
   pre_yls = NA;
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
@@ -78,6 +88,9 @@ function retval = print_pdf(fname, varargin)
 endfunction
 
 function recover_property(hs, propname, fs)
+  if !iscell(fs)
+    fs = {fs};
+  endif
   for n = 1:length(hs)
     set(hs(n), propname, fs{n});
   endfor
