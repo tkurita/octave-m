@@ -21,7 +21,6 @@ function [phi_s,sinPhi_s] = synchro_phase(bLine, tLine, vList, C)
   # bGrad=gradient(bLine, gradient(tLine/1000)); #time difference of BM magnetic field
   bGrad=gradient(bLine, (tLine/1000));
   sinPhi_s = (C*bGrad/(pi/4))./vList;
-  nanList = isnan(sinPhi_s);
   sinPhi_s(isnan(sinPhi_s)) = 0;
   phi_s =asin(sinPhi_s);
 endfunction

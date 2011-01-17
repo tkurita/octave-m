@@ -25,7 +25,7 @@
 ##
 ## @end table
 ## 
-## @seealso{lattice_with_tune}
+## @seealso{lattice_with_optim, lattice_with_tune, disp_tune}
 ## @end deftypefn
 
 ##== History
@@ -33,6 +33,12 @@
 ## * use lattice_with_tune instead of calcLatticeForTune
 
 function lattice_rec = lattice_with_time(lattice_rec, varargin)
+  if (nargin < 1)
+    print_usage();
+  endif
+  if !isstruct(lattice_rec)
+    print_usage();
+  endif
   # lattice_rec = lat_rec_FT
   if (!isfield(lattice_rec, "brho"))
     brho_def = BrhoAtTime(BMPattern, lattice_rec.time);
