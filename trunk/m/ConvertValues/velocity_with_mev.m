@@ -1,15 +1,15 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} velocity_with_mev(@{mev}, @var{particle})
-## @deftypefnx {Function File} {@var{result} =} velocity_with_mev(@{mev}, @var{amu})
+## @deftypefn {Function File} {@var{result} =} velocity_with_mev(@var{mev}, @var{particle})
+## @deftypefnx {Function File} {@var{result} =} velocity_with_mev(@var{mev}, @var{amu})
 ## 
 ## Return velocity [m/s] of a paticle from its energy.
-##
-## @table @code
-## @item @var{mev}
+## 
+## @table @var
+## @item mev
 ## Kinetic Energy in MeV
-## @item @var{particle}
+## @item particle
 ## name of particle, "proton", "helium" or "carbon"
-## @item @var{amu}
+## @item amu
 ## Mass number
 ## @end table
 ##
@@ -17,6 +17,9 @@
 ## @end deftypefn
 
 ##== History
+## 2011-01-26
+## * @var{mev} can be matrix.
+##
 ## 2008-12-05
 ## * Help comment is rewritten as texinfo format.
 ##
@@ -25,9 +28,13 @@
 ## * Use physical_constant instead of physicalConstant
 
 function result = velocity_with_mev(mev, particle)
+  if !nargin
+    print_usage();
+    return;
+  endif
   mass_e = mass_energy(particle);
   c = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
-  result = c*sqrt(mev*(mev + 2*mass_e))/(mev+mass_e);
+  result = c*sqrt(mev.*(mev + 2*mass_e))./(mev+mass_e);
 endfunction
 
 %!test
