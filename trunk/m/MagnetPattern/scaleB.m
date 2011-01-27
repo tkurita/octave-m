@@ -12,20 +12,17 @@
 ##= Result
 ## targetE に対応した磁場
 ##
-function result = scaleB(refB, refEnergy, targetE, kind)
-  global proton_MeV;
-  global amu;
-  switch kind
-    case "proton"
-      mass = proton_MeV;
-    case "carbon"
-      mass = amu * 12;
-  endswitch
-    
+
+##== History
+## 2011-01-26
+## * avoid global variables
+
+function result = scaleB(refB, refEnergy, targetE, particle)
+  mass = mass_energy(particle);
   result = sqrt(targetE.*(2.*mass + targetE)./(refEnergy.*(2.*mass + refEnergy))) .* refB;
 endfunction
 
-#PhysicalParameters
-#scaleB(1.7067, 200, 180, "proton")
+%!test
+% scaleB(1.7067, 200, 180, "proton")
 #scaleB(1.7232, 660, 264, "carbon")
 #scaleB(1.7232, 660, 264, "carbon")
