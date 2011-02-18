@@ -27,6 +27,7 @@
 function retval = mev_with_frev(frev, circumference, particle)
   if !nargin
     print_usage();
+    return;
   endif
   v = frev * circumference; #[m/s]
   retval = mev_with_velocity(v, particle);

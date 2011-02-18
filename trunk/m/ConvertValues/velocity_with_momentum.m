@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} velocity_with_momentum(@var{p}, @var{particle}, @var{charge})
+## @deftypefn {Function File} {@var{result} =} velocity_with_momentum(@var{p}, @var{particle})
 ##
 ## @table @var
 ## @item p
@@ -29,4 +29,4 @@ function retval = velocity_with_momentum(p, particle)
 endfunction
 
 %!test
-%! velocity_with_momentum(x)
+%! velocity_with_momentum(momentum_with_mev(200, "proton"))
