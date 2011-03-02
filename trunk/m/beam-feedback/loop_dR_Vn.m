@@ -66,16 +66,16 @@ function varargout = loop_dR_Vn(varargin)
   wr = 2*pi*fr; # [rad/s] 周回周波数
   w_norm = linspace(1e-2, 1e2, 5000);
   w = w_norm * ws;
+  s = i*w;
   if (isnumeric(config.gr))
     gr = config.gr;
   else
-    gr = config.gr(w);
+    gr = config.gr(s);
   endif
 
   D = G0*Nr*xp.*gr./(h*eta*wr); # D =  1.6761
   P = G0*Gp*gp;
   
-  s = i*w;
   trf = -(ws^2.*G0.*e.^(-(Lc + Ld).*s).*xp/(h*eta*wr))./(s.^2+P*e.^(-Lc.*s).*s+ws^2.*(1+D.*e.^(-(2*Lc + Ld).*s)));
   m = abs(trf);
   p = angle(trf);

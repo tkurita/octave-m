@@ -26,7 +26,7 @@ opts = get_properties(varargin...
 margs = {};
 for n = 1:2:length(plargs)
   margs{end+1} = plargs{n}.w_norm;
-  margs{end+1} = 20*log(plargs{n}.mag);
+  margs{end+1} = 20*log10(plargs{n}.mag);
   margs{end+1} = plargs{n+1};
 endfor
 

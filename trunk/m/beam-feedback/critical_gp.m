@@ -38,7 +38,6 @@ function gp = critical_gp(config)
   fr = config.fr;
   alp = config.alpha; # momentum compaction factor
   gr = config.gr; # -0.03
-  gp = config.gp; # 1e-2: phase feedback gain
   h = config.h; # harmonics
   ws = config.ws; # [rad/sec] syncrotoron frequency
 

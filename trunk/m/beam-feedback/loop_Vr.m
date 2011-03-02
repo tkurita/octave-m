@@ -66,17 +66,17 @@ function varargout = loop_Vr(varargin)
   wr = 2*pi*fr; # [rad/s] 周回周波数
   w_norm = linspace(1e-2, 1e2, 5000);
   w = w_norm * ws;
+  s = i*w;
   if (isnumeric(config.gr))
     gr = config.gr;
   else
-    gr = config.gr(w);
+    gr = config.gr(s);
   endif
   
   D = G0*Nr*xp.*gr./(h*eta*wr); # D =  1.6761
   P = G0*Gp*gp;
   # P/ws; # ans =  2.5106
   
-  s = i*w;
   trf = (-ws^2.*D.*e.^(-(2*Lc+Ld).*s))./(s.^2+P*e.^(-Lc*s).*s + ws^2);
   m = abs(trf);
   p = angle(-1*trf); # Vr' は Vr に対して極性が反転しているから

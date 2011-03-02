@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} loop_Vp(@var{config})
+## @deftypefn {Function File} {@var{retval} =} loop_dR_Vx(@var{config})
 ## description
 ## @strong{Inputs}
 ## @table @var
@@ -18,7 +18,7 @@
 ##== History
 ##
 
-function varargout = loop_Vp(varargin)
+function varargout = loop_dR_Vx(varargin)
   if !nargin
     print_usage();
     return;
@@ -42,7 +42,7 @@ function varargout = loop_Vp(varargin)
     gr = config.gr; # -0.03
     gp = config.gp; # 1e-2: phase feedback gain
     h = config.h; # harmonics
-    ws = config.ws; # [rad/sec] synchrotoron frequency
+    ws = config.ws; # [rad/sec] syncrotoron frequency
     Lc = 0; # [sec] cable delay
     Ld = 0; # [sec] degital delay in feedback circuit
     if isfield(config, "delay")
@@ -76,14 +76,14 @@ function varargout = loop_Vp(varargin)
   D = G0*Nr*xp.*gr./(h*eta*wr); # D =  1.6761
   P = G0*Gp*gp;
   
-  trf = - s.*P.*e.^(-Lc.*s)./(s.^2 + ws^2.*(1+D.*e.^(-(2*Lc+Ld).*s)));
+  trf = -(ws^2.*D.*e.^(-(2*Lc + Ld).*s)/Nr)./(s.^2+P*e.^(-Lc.*s).*s+ws^2.*(1+D.*e.^(-(2*Lc + Ld).*s)));
   m = abs(trf);
-  p = angle(-1*trf); # Vp' は Vp に対して極性が反転しているから
-#  tf1 = tf([-P/ws, 0], [1, 0, 1+D]);
-#  [m, p, w] = bode(tf1, linspace(1e-2, 1e1, 200));
+  p = angle(-trf);
+  # vr = tf([-D/(Nr*gr)], [1, P/ws, (1+D)]);
+  # [m, p, w] = bode(vr, linspace(1e-2, 1e1, 200));
   if !nargout
     semilogx(w,20*log10(m));xlim([1e-2,1e1]);grid on;...
-    ylabel("{/Symbol D}R / V_n [dB]");xlabel("{/Symbol w}/{/Symbol w}_s");
+    ylabel("{/Symbol D}R / V_x [dB]");xlabel("{/Symbol w}/{/Symbol w}_s");
   elseif nargout == 3
     varargout = {m, p, w};
   else
@@ -92,12 +92,12 @@ function varargout = loop_Vp(varargin)
     config.w = w;
     config.P = P;
     config.D = D;
+    config.eta = eta;
     config.w_norm = w_norm;
-    config.trf = trf;
     varargout = {config};
   endif
 
 endfunction
 
 %!test
-%! loop_dR_Vn(x)
+%! loop_dR_Vx(x)
