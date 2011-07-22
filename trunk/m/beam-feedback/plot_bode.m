@@ -16,7 +16,8 @@
 ## @end deftypefn
 
 ##== History
-##
+## 2011-07-22
+## * first argument can have properties for plot command.
 
 function retval = plot_bode(plargs, varargin)
 
@@ -25,16 +26,26 @@ opts = get_properties(varargin...
 
 margs = {};
 for n = 1:2:length(plargs)
-  margs{end+1} = plargs{n}.w_norm;
-  margs{end+1} = 20*log10(plargs{n}.mag);
-  margs{end+1} = plargs{n+1};
+  if ischar(plargs{n})
+    margs{end+1} = plargs{n};
+    margs{end+1} = plargs{n+1};
+  else
+    margs{end+1} = plargs{n}.w_norm;
+    margs{end+1} = 20*log10(plargs{n}.mag);
+    margs{end+1} = plargs{n+1};
+  endif
 endfor
 
 pargs = {};
 for n = 1:2:length(plargs)
-  pargs{end+1} = plargs{n}.w_norm;
-  pargs{end+1} = plargs{n}.phase;
-  pargs{end+1} = plargs{n+1};
+  if ischar(plargs{n})
+    pargs{end+1} = plargs{n};
+    pargs{end+1} = plargs{n+1};
+  else
+    pargs{end+1} = plargs{n}.w_norm;
+    pargs{end+1} = plargs{n}.phase;
+    pargs{end+1} = plargs{n+1};
+  endif
 endfor
 
 clf;
