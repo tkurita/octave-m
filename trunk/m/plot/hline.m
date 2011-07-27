@@ -3,10 +3,16 @@
 ## arguments
 
 ##== History
+## 2011-07-27
+## * first argument can accept axes object.
 ## 2008-03-10
 ## * reimplement fo version 3.0
 
 function hline(varargin)
+  if (ishandle(varargin{1}))
+    set(gcf, "currentaxes", varargin{1});
+    varargin(1) = [];
+  endif
   ca = gca();
   ##global __xlim;
   _hline("xlim", get(ca, "xlim"));
