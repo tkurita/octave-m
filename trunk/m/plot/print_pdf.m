@@ -6,6 +6,8 @@
 ## @end deftypefn
 
 ##== History
+## 2011-07-28
+## * "position" property can be cell array for multi-plot
 ## 2011-01-13
 ## * fixed : errors when one plot.
 ## 2011-01-06
@@ -29,13 +31,24 @@ function retval = print_pdf(fname, varargin)
 
   ##=== axes position
   pre_axpos = NA;
-  if (!isna(ax_pos))
-    pre_axpos = get(gca, "position");
-    set(gca, "position", ax_pos);
+  ax = findobj(gcf, "type", "axes");
+  if (iscell(ax_pos))
+    pre_axpos = get(ax, "position");
+    apply_property(ax, "position", ax_pos);
+#
+#    if length(ax_list) > 1
+#      pre_axpos = [];
+#      for n = 1:length(ax)
+#        pre_axpos(n,:) = get(ax{n}, "position");
+#        set(ax{n}, "position", ax_pos(n,:));
+#      endfor
+#    else
+#      pre_axpos = get(gca, "position");
+#      set(gca, "position", ax_pos);
+#    endif
   endif
   
   ##=== ticks label
-  ax = findobj(gcf, "type", "axes");
   #pre_ticks = get(gca, "fontsize");
   pre_axfontsize = get(ax, "fontsize");
   #set(gca, "fontsize", fs); # axis ticks label
@@ -71,23 +84,24 @@ function retval = print_pdf(fname, varargin)
     #  -F は legend だけに効く 
   
   ##=== recorver fontsize
-  recover_property(ax, "fontsize", pre_axfontsize);
+  apply_property(ax, "fontsize", pre_axfontsize);
   if (iscell(pre_xls))
-    recover_property(xlabel_handles, "fontsize", pre_xls);
+    apply_property(xlabel_handles, "fontsize", pre_xls);
   endif
   if (iscell(pre_yls))
-    recover_property(ylabel_handles, "fontsize", pre_yls);
+    apply_property(ylabel_handles, "fontsize", pre_yls);
   endif
+  
   if (iscell(pre_axpos))
-    pre_axpos
-    set(gca, "position", pre_axpos);
+    apply_property(ax, "position", pre_axpos);
+    # set(gca, "position", pre_axpos);
   endif
   set(gcf, "papersize", pre_ps);
   set(gcf, "paperposition", pre_pp);
   orient(pre_orient);
 endfunction
 
-function recover_property(hs, propname, fs)
+function apply_property(hs, propname, fs)
   if !iscell(fs)
     fs = {fs};
   endif
