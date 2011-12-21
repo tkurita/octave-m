@@ -16,7 +16,7 @@
 function retval = print_pdf(fname, varargin)
   [fs, ps, pp, ax_pos, device] = get_properties(varargin,...
     {"fontsize", "papersize", "paperposition", "position", "device"},
-    {10, [8,5], NA, NA, "pdf"});
+    {8, [8,5], NA, NA, "pdf"});
   #xy = [11, 8.5];
   #papersize = [8, 5];
   pre_orient = orient;
@@ -79,6 +79,7 @@ function retval = print_pdf(fname, varargin)
     set(ylabel_handles, "fontsize", fs);
   endif
 
+  #print(["-d",device], fname); 
   print(["-F:", num2str(fs)], ["-d",device], fname); 
     # gnuplot 4.2
     #  -F は legend だけに効く 
