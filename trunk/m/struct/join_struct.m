@@ -6,11 +6,27 @@
 ## @end deftypefn
 
 ##== History
+## 2012-07-14
+## * accept "key1", val1, "key2", val2, ...
 ## 2007-10-25
 ## * renamed from joinStruct
 
-function struct1 = join_struct(struct1, struct2)
-  for [val, key] = struct2
-    struct1.(key) = val;
-  endfor
+function struct1 = join_struct(struct1, varargin)
+  if ! nargin
+    print_usage();
+    return;
+  endif
+  
+  switch length(varargin)
+    case 0
+      error("Wrong argument numbers");
+    case 1
+      for [val, key] = struct2
+        struct1.(key) = val;
+      endfor
+    otherwise
+      for n = 1:2:length(varargin)
+        struct1.(varargin{n}) = varargin{n+1};
+      endfor
+  endswitch
 endfunction
