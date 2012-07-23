@@ -1,12 +1,26 @@
-## usage : vline(x , [properties])
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{h} =} vline(@var{x} , [@var{properties}])
+## Draw vertical lines.
 ##
-## Show vertival line.
+## @strong{Inputs}
+## @table @var
+## @item @var{x}
+## x position of the vertical line. row wise vector.
+## @item @var{properties}
+## line type. optional.
+## @end table
 ##
-## = arguments
-## * x -- x position of the vertical line
-## * properties -- line type. optional
+## @strong{Outputs}
+## @table @var
+## @item @var{h}
+## graphics handles of vertical lines.
+## @end table
+##
+## @end deftypefn
 
 ##== History
+## 2012-07-23
+## * use arrayfun instead of map.
 ## 2011-07-27
 ## * first argument can be axes object
 ## 2007-10-31
@@ -29,7 +43,7 @@ function result = vline(varargin)
   __ylim = get(ca, "ylim");
   global __prop;
   __prop = varargin;
-  result = map(@_vline, x);
+  result = arrayfun(@_vline, x);
 endfunction
 
 function result = _vline(x)
