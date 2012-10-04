@@ -1,6 +1,6 @@
 
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{blpattern}, @{rfvpattern}. @{timmings}, @var{opts})
+## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{blpattern}, @{rfvpattern}, @{timmings},@var{A2PM2file} @var{opts})
 ## 
 ## Calc harmonics control voltage pattern.
 ##
@@ -22,11 +22,14 @@
 ## @end deftypefn
 
 ##== History
+## 2012-10-04
+## * A2PM2 filename must be given.
+##
 ## 2009-06-26
 ## * renamed from calcHarmonicsControlV
 
 function varargout =\
-  harmonics_control_voltage(blpattern, rfvpattern, timmings, varargin)
+  harmonics_control_voltage(blpattern, rfvpattern, timmings, A2PM2file, varargin)
   if !nargin
     print_usage();
   endif
@@ -121,9 +124,8 @@ function varargout =\
   
   ##= 2倍高調波位相の計算
   #PolyFit_PhaseShifter
-  #load(file_in_loadpath("A2_PM2.dat"))
-  #A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090706.csv"));
-  A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090713.csv"));
+  #A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090713.csv"));
+  A2_PM2 = csvread(file_in_loadpath(A2PM2file));
   A2_PM2(1,:) = [];
   biasControlV = HzToPhaseControlV(rfHzList, A2_PM2);
 
