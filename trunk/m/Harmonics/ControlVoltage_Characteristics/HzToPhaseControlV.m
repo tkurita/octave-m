@@ -1,15 +1,33 @@
-## Usage : ctrlVList = HzToPhaseControlV(hzList)
-##          周波数 [Hz] で移相器が 0 を与える設定電圧 [V] を求める。
+## -*- texinfo -*-
+## @deftypefn {Function File} {@var{ctrlv} =} HzToPhaseControlV(@var{hz}, @var{A2_PM2})
+## Ovtain control voltages from the frequency characteristics of the harmonics porcessing unit giving phase 0.
 ##
-## = Parameters
-## * hzList -- [Hz]
-## * A2_PM2 -- ２倍高調波信号処理装置の周波数特性
+## @strong{Inputs}
+## @table @var
+## @item Hz
+## frequency
+## @item A2_PM2
+## A table of the frequency characteristics.
+## @end table
+##
+## @strong{Outputs}
+## @table @var
+## @item ctrlv
+## control voltage
+## @end table
+##
+## @end deftypefn
+
+## 周波数 [Hz] で移相器が 0 を与える設定電圧 [V] を求める。
+##== History
+## 2012-10-04
+## * use polyfit instead of wpolyfit.
 
 function ctrlVList = HzToPhaseControlV(hzList, A2_PM2)
-  #global A2_PM2;
   fHz = A2_PM2(:,2);
   PM2 = A2_PM2(:,4);
-  [p,s,mu] = wpolyfit(fHz,PM2,6);
+  #[p,s,mu] = wpolyfit(fHz,PM2,6);
+  [p,s,mu] = polyfit(fHz,PM2,6);
   ctrlVList = polyval(p,(hzList-mu(1))./mu(2));
   if (nargout < 1)
     y1 = polyval(p,(fHz-mu(1))./mu(2));
