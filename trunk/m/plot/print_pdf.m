@@ -6,6 +6,10 @@
 ## @end deftypefn
 
 ##== History
+## 2012-10-16
+## * default paper size is changed to [8,5.5] from [8,5] to fit fltk output.
+## 2012-07-27
+## * if fontsize is not given, fontsize is not changed.
 ## 2011-07-28
 ## * "position" property can be cell array for multi-plot
 ## 2011-01-13
@@ -16,7 +20,8 @@
 function retval = print_pdf(fname, varargin)
   [fs, ps, pp, ax_pos, device] = get_properties(varargin,...
     {"fontsize", "papersize", "paperposition", "position", "device"},
-    {8, [8,5], NA, NA, "pdf"});
+    {NA, [8,5.5], NA, NA, "pdf"});
+
   #xy = [11, 8.5];
   #papersize = [8, 5];
   pre_orient = orient;
@@ -52,7 +57,7 @@ function retval = print_pdf(fname, varargin)
   #pre_ticks = get(gca, "fontsize");
   pre_axfontsize = get(ax, "fontsize");
   #set(gca, "fontsize", fs); # axis ticks label
-  set(ax, "fontsize", fs);
+  if !isnan(fs) set(ax, "fontsize", fs); end
   
   ##=== xlabel
   lh = get(ax, "xlabel");
@@ -63,7 +68,7 @@ function retval = print_pdf(fname, varargin)
   pre_xls = NA;
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
-    set(xlabel_handles, "fontsize", fs);
+    if !isnan(fs) set(xlabel_handles, "fontsize", fs); end
   endif
   
 
@@ -76,11 +81,15 @@ function retval = print_pdf(fname, varargin)
   pre_yls = NA;
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
-    set(ylabel_handles, "fontsize", fs);
+    if !isnan(fs) set(ylabel_handles, "fontsize", fs);end
   endif
 
   #print(["-d",device], fname); 
-  print(["-F:", num2str(fs)], ["-d",device], fname); 
+  if isnan(fs)
+    print(["-d",device], fname);
+  else
+    print(["-F:", num2str(fs)], ["-d",device], fname);
+  endif
     # gnuplot 4.2
     #  -F は legend だけに効く 
   
