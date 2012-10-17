@@ -1,4 +1,3 @@
-
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{blpattern}, @{rfvpattern}, @{timmings},@var{A2PM2file} @var{opts})
 ## 
@@ -42,11 +41,11 @@ function varargout =\
 #   Proton7To200MeVMagnet
 #   blpattern = BMPattern;
 #   Proton200MeVRFPattern
-#   rfvpattern = rfPattern_7200_10_50_300_400_50_20090624;
-#   varargin = {"freq_base", 1102886.68, "freq_top", 5106800}
+#   rfvpattern = rfPattern_C001_10_200_400_400_50;
+#   varargin = {"freq_base", captureFreq, "freq_top", 5944300,"particle", "carbon", "harmonics", 2}
   opts = get_properties(varargin, ...
-                  {"bmangle", "circumference","freq_base", "freq_top"}, ...
-                  {pi/4, 33.201, NA, NA});
+                  {"bmangle", "circumference","freq_base", "freq_top", "particle", "harmonics"}, ...
+                  {pi/4, 33.201, NA, NA, "proton", 1});
 
   ##== タイミングデータをインデックスに変換
   tStep = timmings.tStep;
@@ -59,6 +58,7 @@ function varargout =\
   C = opts.circumference; #[m] 周長
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM" );
   proton_ev = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV")*1e6;
+  h = opts.harmonics;
   
   ##== 偏向電磁石パターン dBL/dt の構築
   [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
@@ -78,11 +78,11 @@ function varargout =\
 
   if isna(opts.freq_base)
     ##== 加速RF周波数の計算--偏向電磁石の磁場から
-    velocityList = velocity_with_brho(bLine/(pi/4), "proton", 1)';
+    velocityList = velocity_with_brho(bLine/(pi/4), "carbon")';
   elseif isna(opts.freq_top)
     ##== 加速RF周波数の計算--偏向電磁石の磁場変化量から
     # maximum error about 5kHz when time step is 1msec.
-    preVelocity = C*opts.freq_base;
+    preVelocity = C*opts.freq_base/h;
     velocityList = [];
     dvdtList = [];
     for dBLdt = dBLdtList
@@ -93,21 +93,21 @@ function varargout =\
       dvdt = (lv^2 * dbrho_dt)/(proton_ev * (g + b^2 * (1- b^2 )^(-3/2) ));
       dvdtList = [dvdtList; dvdt];
       preVelocity = preVelocity + dvdt*(tStep/1000);
-      velocityList = [velocityList;preVelocity];
+      velocityList = [velocityList; preVelocity];
     endfor
   else
     bbase = bLine(1)/opts.bmangle;
     btop = bLine(end)/opts.bmangle;
-    b_fbase = brho_with_frev(opts.freq_base/1e6, C, "proton");
-    b_ftop = brho_with_frev(opts.freq_top/1e6, C, "proton");
+    b_fbase = brho_with_frev(opts.freq_base/h/1e6, C, opts.particle);
+    b_ftop = brho_with_frev(opts.freq_top/h/1e6, C, opts.particle);
     A = (b_fbase - b_ftop)/(bbase-btop);
     B = b_fbase- A*bbase;
     brholist = A*(bLine/(pi/4))+B;
-    velocityList = velocity_with_brho(brholist, "proton", 1)';
+    velocityList = velocity_with_brho(brholist, opts.particle)';
   endif
   #plot(secList,dvdtList,";dvdt;",secList,velocityList,";velocity;")
    
-  rfHzList = velocityList./C;
+  rfHzList = h*velocityList./C;
   #plot(msecList,rfHzList,";RF [Hz];")
   
   ##= 加速位相の計算
@@ -136,7 +136,6 @@ function varargout =\
   #plot(phaseCtrlV, "-;1;", phaseCtrlV2, "-;2;")
   ##== stopPhaseTime以降を一定にする。
   phaseCtrlV(stopRFIndex:length(phaseCtrlV)) = phaseCtrlV(stopRFIndex);
-  
   #plot(msecList,phaseCtrlV,";phaseCtrlV;")
 
   ##= 2倍高調波の振幅の制御電圧を計算

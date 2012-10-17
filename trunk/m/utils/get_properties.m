@@ -5,8 +5,10 @@
 ##
 
 ##== History
+## 2012-07-20
+## 
 ## 2008-04-12
-## prop_list が property 名一つだけの時、無限 loop になる不具合を修正
+## * prop_list が property 名一つだけの時、無限 loop になる不具合を修正
 ## 
 ## 2008-04-10
 ## * property name が指定されているだけの property にも対応した
