@@ -39,14 +39,14 @@ function varargout = sinefit(varargin)
 % type sinefit for demo
 
 % seed number for random generator. For repeatability...
-oct_flag = 0;
-try
-    s=RandStream('mt19937ar','seed',16384);
-catch
-    oct_flag = 1;
-    fprintf('\nCannot create seed number\n')
-end
-
+#oct_flag = 0;
+#try
+#    s=RandStream('mt19937ar','seed',16384);
+#catch
+#    oct_flag = 1;
+#    fprintf('\nCannot create seed number\n')
+#end
+oct_flag = 1;
 
 if nargin == 0   %demo
     clc
@@ -118,7 +118,7 @@ MAX_FUN= 22;          % MAX number of function calls
 MAX_ITER = 22;        % MAX number of iterations in one function call
 
 %varargin
-if not(oct_flag)
+#if not(oct_flag)
 if nargin < 3 && nargin > 0
     error('at least three input params needed')
 else
@@ -143,7 +143,7 @@ elseif nargin == 6
     plotflag=varargin{5};
     searchflag=varargin{6};
 end
-end
+#end
 
 % Convergence related stuff: Vector x0 will be created: x0=[A B C dw], 
 % where A & B are sin & cos multiplicands, C is the offset and dw is 
