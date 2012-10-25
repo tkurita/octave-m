@@ -28,10 +28,14 @@
 
 ##== History
 ## 2012-10-25
+## * initial frev is f0.
+## * frev has same length with brhos.
+##
+## 2012-10-25
 ## * added to shared function files.
 
 function frev = frev_with_brho_pattern(brhos, C, particle, q, h, f0)
-frev = [];
+frev = [f0];
 pref = f0;
 m0c2 = mass_energy(particle)*1e6;
 lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
