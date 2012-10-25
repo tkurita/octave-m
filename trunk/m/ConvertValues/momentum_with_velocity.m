@@ -11,6 +11,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-10-25
+## * velocity can be an array.
+##
 ## 2009-07-01
 ## * Use mass_energy.m
 ## * fix the result of helium is invalid.
@@ -34,7 +37,7 @@ function result = momentum_with_velocity(velocity, particle)
   
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
   b = velocity/lv;
-  g = 1/sqrt(1-b^2);
+  g = 1/sqrt(1-b.^2);
   
   mass_e = mass_energy(particle);  
   result = mass_e*g*b/lv;
