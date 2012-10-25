@@ -1,22 +1,33 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} mev_with_brho_pattern(@var{bline}, @var{emin}, @var{emax}, @var{particle})
-## @deftypefnx {Function File} {@var{retval} =} mev_with_brho_pattern(@var{bline}, @var{emin}, @var{emax}, @var{AMU}, @var{charge})
-## description
+## @deftypefn {Function File} {@var{ke} =} mev_with_brho_pattern(@var{brhos}, @var{emin}, @var{emax}, @var{particle})
+## @deftypefnx {Function File} {@var{retval} =} mev_with_brho_pattern(@var{brhos}, @var{emin}, @var{emax}, @var{AMU}, @var{charge})
+##
+## The maiximum and minimum of @var{brhos} are scaled to match 
+## with B*rho for @var{emax} and @var{emin}. And the scaled @var{brhos} 
+## are converted in to the equivalent kinetic envery.
+##
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
+## @item brhos
+## A list of B*rho values.
+## @item emin
+## The minimum enery in MeV.
+## @item emax
+## The maximum energy in MeV.
 ## @end table
 ##
 ## @strong{Outputs}
 ## @table @var
-## @item retval
-## description of @var{retval}
+## @item ke
+## A list of kinetic energy which is equivalent to the scaled @var{brho}.
 ## @end table
 ##
 ## @end deftypefn
 
 ##== History
+## 2012-10-25
+## * improved documentation.
+##
 ## 2011-01-26
 ## * First implementation
 
