@@ -13,7 +13,8 @@ function retval = xy(isf)
   y = isf.v;
   xinc = str2num(isf.preambles("XIN"));
   n = 0:length(y)-1;
-  x = n*xinc;
+  xzero = str2num(isf.preambles("XZE"));
+  x = n*xinc + xzero;
   retval = [x(:), y(:)];
 endfunction
 
