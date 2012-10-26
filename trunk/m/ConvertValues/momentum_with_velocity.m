@@ -11,6 +11,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-10-26
+## * velocity argument can be an arrary
+## 
 ## 2012-10-25
 ## * velocity can be an array.
 ##
@@ -37,8 +40,8 @@ function result = momentum_with_velocity(velocity, particle)
   
   lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
   b = velocity/lv;
-  g = 1/sqrt(1-b.^2);
+  g = 1./sqrt(1-b.^2);
   
   mass_e = mass_energy(particle);  
-  result = mass_e*g*b/lv;
+  result = mass_e.*g.*b./lv;
 endfunction
