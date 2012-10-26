@@ -40,6 +40,6 @@ function result = momentum_with_frev(varargin)
   #f_rev = 11.9125
   #c_length = 33.2
   #particle = "carbon"
-  velocity = c_length*f_rev*1e6;
+  velocity = c_length.*f_rev.*1e6;
   result = momentum_with_velocity(velocity, varargin{3});
 endfunction

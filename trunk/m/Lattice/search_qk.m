@@ -26,6 +26,7 @@
 ##
 ## If nargout == 1, a structure is returned which have 'qfk' and 'qdk' as its fields.
 ##
+## Required "pkg load optim".
 ## @end deftypefn
 
 ##== History
