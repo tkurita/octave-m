@@ -24,14 +24,15 @@
 
 function retval = func_name(isf, varargin)
   diff_threshold = 2;
-  use_iterp = true;
+  #use_iterp = true;
+  method = "interp";
   if (length(varargin))
     for n = 1:length(varargin)
       opt = varargin{n};
       if isnumeric(opt)
         diff_threshold = opt;
-      elseif ischar(opt) && strcmp(opt, "simple")
-        use_iterp = false;
+      elseif ischar(opt)
+        method = opt;
       endif
     endfor
   endif
@@ -42,18 +43,34 @@ function retval = func_name(isf, varargin)
   ind_list = find(diff(positive_indexes) > diff_threshold);
   xinc = str2num(isf.preambles("XIN"));
   zc_indexes1 = positive_indexes(ind_list);
-  if use_iterp
-    zc_indexes2 = zc_indexes1 + 1;
-    v1 = v(zc_indexes1);
-    v2 = v(zc_indexes2);
-    zc_indexes0 = (v1.*zc_indexes2 - v2.*zc_indexes1)./(v1 - v2);
-    period = diff(zc_indexes0)*xinc;
-    t_zc = (zc_indexes0-1)*xinc;
-  else
-    period = diff(zc_indexes1)*xinc;
-    t_zc = (zc_indexes1 -1) *xinc;
-  endif
-  retval = [t_zc(1:end-1)(:), (1./period)(:)];
+  switch opt
+    case "interp"
+      zc_indexes2 = zc_indexes1 + 1;
+      v1 = v(zc_indexes1);
+      v2 = v(zc_indexes2);
+      zc_indexes0 = (v1.*zc_indexes2 - v2.*zc_indexes1)./(v1 - v2);
+      period = diff(zc_indexes0)*xinc;
+      t_zc = (zc_indexes0-1)*xinc;
+      fresult = 1./period;
+    case "simple"
+      period = diff(zc_indexes1)*xinc;
+      t_zc = (zc_indexes1 -1) *xinc;
+      fresult = 1./period;
+    case "fit"
+      period = diff(zc_indexes1)*xinc;
+      t_zc = (zc_indexes1 -1) *xinc;
+      fguess = 1./period;
+      fresult = [];
+      for n = 1:length(zc_indexes1)-1
+        yin = v(zc_indexes1(n):zc_indexes1(n+1));
+        tin = 0:xinc:(length(yin)-1)*xinc;
+        pf = sinefit(yin, tin, fguess(n), 0, 0, 1);
+        fresult(n) = pf(3);
+      endfor
+    otherwise
+      error([method , " is unknown method."]);
+  endswitch
+  retval = [t_zc(1:end-1)(:), fresult(:)];
 endfunction
 
 %!test
