@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{frev} =} frev_with_brho_pattern(@var{brhos}, @var{C}, @var{particle}, @var{q}, @var{h}, @var{f0})
+## @deftypefn {Function File} {@var{frev} =} frev_with_brho_pattern(@var{brhos}, @var{C}, @var{particle}, @var{q}, @var{f0})
 ##
 ## Obtain pattern of revolution frequency from B*rho pattern.
 ## B*rho pattern give frequency changes and added to @var{f0}.
@@ -25,6 +25,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-11-06
+## * change a constant name to give phyisical constant.
+## 
 ## 2012-10-26
 ## * remove harmonics number from aguments.
 ## * return column wise vector.
@@ -40,7 +43,7 @@ function frev = frev_with_brho_pattern(brhos, C, particle, q, f0)
 frev = [f0];
 pref = f0;
 m0c2 = mass_energy(particle)*1e6;
-lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+lv = physical_constant("speed of light in vacuum");
 dbrho = diff(brhos);
 h = 1;
 for n = 1:length(dbrho)
