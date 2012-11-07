@@ -11,6 +11,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-11-07
+## * change a constant name to give physical_constant due to the specification change of physical_consntant.
+##
 ## 2012-10-26
 ## * velocity argument can be an arrary
 ## 
@@ -38,7 +41,7 @@ function result = momentum_with_velocity(velocity, particle)
   
   #energy = 660 #[MeV]
   
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+  lv = physical_constant("speed of light in vacuum");
   b = velocity/lv;
   g = 1./sqrt(1-b.^2);
   
