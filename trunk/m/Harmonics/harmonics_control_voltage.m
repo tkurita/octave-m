@@ -21,6 +21,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-12-12
+## * update for new physical_constants package.
+##
 ## 2012-10-04
 ## * A2PM2 filename must be given.
 ##
@@ -56,8 +59,8 @@ function varargout =\
   
   ##== 定数
   C = opts.circumference; #[m] 周長
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM" );
-  proton_ev = physical_constant("PROTON_MASS_ENERGY_EQUIVALENT_IN_MEV")*1e6;
+  lv = physical_constant("speed of light in vacuum");
+  proton_ev = physical_constant("proton mass energy equivalent in mev")*1e6;
   h = opts.harmonics;
   
   ##== 偏向電磁石パターン dBL/dt の構築
