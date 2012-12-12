@@ -16,6 +16,9 @@
 ## @end deftypefn
 
 ##== History
+## 2012-12-12
+# * update for new physical_constants package.
+##
 ## 2012-10-12
 ## * allow to omit charge parameter.
 ##
@@ -47,7 +50,7 @@ function retval = velocity_with_brho(varargin)
   
   mass_e = mass_energy(particle);
   p = charge.*brho.*1e-6; # [MeV/c]
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+  lv = physical_constant("speed of light in vacuum");
   x = lv*p/mass_e; # beta/(sqrt(1-beta^2))
   b2 = x.^2./(1+x.^2);
   retval = sqrt(b2)*lv;
