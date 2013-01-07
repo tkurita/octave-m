@@ -1,5 +1,5 @@
-a2pm2_1 = csvread("A2_PM2_20121212.csv")
-a2pm2_1(1,:) = []
+a2pm2_1 = csvread("A2_PM2_20121212.csv");
+a2pm2_1(1,:) = [];
 
 hz = a2pm2_1(:,2);
 hzlist = linspace(hz(1), hz(end), 200);
