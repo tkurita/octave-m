@@ -19,6 +19,8 @@
 ## @end deftypefn
 
 ##== History
+## 2013-01-08
+## * taking XZE into accounts.
 ## 2012-10-18
 ## * first implementaion
 
@@ -43,6 +45,7 @@ function retval = func_name(isf, varargin)
   ind_list = find(diff(positive_indexes) > diff_threshold);
   xinc = str2num(isf.preambles("XIN"));
   zc_indexes1 = positive_indexes(ind_list);
+  xzero = str2num(isf.preambles("XZE"));
   switch opt
     case "interp"
       zc_indexes2 = zc_indexes1 + 1;
@@ -50,15 +53,15 @@ function retval = func_name(isf, varargin)
       v2 = v(zc_indexes2);
       zc_indexes0 = (v1.*zc_indexes2 - v2.*zc_indexes1)./(v1 - v2);
       period = diff(zc_indexes0)*xinc;
-      t_zc = (zc_indexes0-1)*xinc;
+      t_zc = (zc_indexes0-1)*xinc + xzero;
       fresult = 1./period;
     case "simple"
       period = diff(zc_indexes1)*xinc;
-      t_zc = (zc_indexes1 -1) *xinc;
+      t_zc = (zc_indexes1 -1) *xinc + xzero;
       fresult = 1./period;
     case "fit"
       period = diff(zc_indexes1)*xinc;
-      t_zc = (zc_indexes1 -1) *xinc;
+      t_zc = (zc_indexes1 -1) *xinc + xzero;
       fguess = 1./period;
       fresult = [];
       for n = 1:length(zc_indexes1)-1
