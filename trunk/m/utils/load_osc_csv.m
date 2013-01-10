@@ -27,6 +27,8 @@
 ## @end deftypefn
 
 ##== History
+## 2013-01-10
+## * pkg load io at the beginneing.
 ## 2010-08-26
 ## * ignored last line of data in _tek1
 ## 2009-06-22
@@ -37,6 +39,7 @@
 ## * first implementaion
 
 function retval = load_osc_csv(filepath, varargin)
+  pkg load io;
   if (!nargin)
     print_usage();
   endif
