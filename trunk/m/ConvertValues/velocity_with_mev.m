@@ -17,6 +17,9 @@
 ## @end deftypefn
 
 ##== History
+## 2013-03-25
+## * support new physical_constants
+##
 ## 2011-01-26
 ## * @var{mev} can be matrix.
 ##
@@ -33,7 +36,7 @@ function result = velocity_with_mev(mev, particle)
     return;
   endif
   mass_e = mass_energy(particle);
-  c = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+  c = physical_constant("speed of light in vacuum");
   result = c*sqrt(mev.*(mev + 2*mass_e))./(mev+mass_e);
 endfunction
 
