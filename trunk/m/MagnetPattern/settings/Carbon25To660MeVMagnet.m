@@ -72,27 +72,23 @@ function patternSet = QDPattern
   patternSet = {region1,region2,region3,region4, region5};
 endfunction
 
-function patternSet = BMPattern
-  timeSet = timeRegion;
-  ## capture period
-  ## [msec], [T*m]
-  ##= capture period
-  region1 = makeRegion(timeSet.capture,[0.3299,0.3299],"linear");
-  
-  ##= initial acceleration period
-  region2 = makeRegion(timeSet.initialAcc, [0.3299,0.3398,0.3889], "spline");
-
-  ##= acceleration period
-  region3 = makeRegion(timeSet.acc, [0.3889,1.6641], "linear");
-
-  region2 = setSplineGrad(region2,region1,region3);
-
-  ##= end of acceleration period
-  region4 = makeRegion(timeSet.postAcc, [1.6641,1.7133, 1.7232], "spline");
-  region4 = setSplineGrad(region4,region3);
-
-  ##= extraction period
-  region5 = makeRegion(timeSet.flatTop, [1.7232, 1.7232], "linear");
-
-  patternSet = {region1, region2, region3, region4, region5};
+function retval = BMPattern
+  ## [msec], [(T/m)*m]
+  pattern_cells = ...
+      {
+         0   ,0.3229, "linear";
+        35   ,0.3229, "spline";
+        60   ,0.3398, "";
+        85   ,0.3889, "linear";
+       625.4 ,1.6641, "spline";
+       650.4 ,1.7133, "";
+       675.4 ,1.7232, "linear";
+      1149.6 ,1.7232, "spline";
+      1174.6 ,1.7133, "";
+      1199.6 ,1.6641, "linear";
+      1740   ,0.3889, "spline";
+      1765   ,0.3398, "";
+      1790   ,0.3229, "linear";
+      2000   ,0.3229, 0};
+  retval = build_pattern(pattern_cells);
 endfunction
