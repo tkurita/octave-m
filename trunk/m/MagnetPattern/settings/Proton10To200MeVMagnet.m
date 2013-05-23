@@ -2,6 +2,8 @@
 1; #script file
 
 ##== Hisotory
+## 2013-05-23
+## * Update BMPattern with new form.
 ## 2009-10-30
 ## * Fiexed flat top time of BMPattern
 
@@ -68,25 +70,23 @@ function patternSet = QDPattern
 endfunction
 
 function patternSet = BMPattern
-  timeSet = timeRegion;
-  ## capture period
-  ## [msec], [T*m]
-  region1 = makeRegion(timeSet.capture,[0.3662,0.3662],"linear");
+    ## [msec], [(T/m)*m]
+  pattern_cells = ...
+  {...
+  0, 0.3662, "linear";
+  35, 0.3662, "spline";
+  60, 0.3761, "";
+  85, 0.4256, "linear";
+  599.2, 1.6473, "spline";
+  624.2, 1.6968, "";
+  649.2, 1.7067, "linear";
+  1175.8, 1.7067, "spline";
+  1200.8, 1.6968, "";
+  1225.8, 1.6473, "linear";
+  1740, 0.4256, "spline";
+  1765, 0.3761, "";
+  1790, 0.3662, "linear";
+  2000, 0.3662, 0};
   
-  ## initial acceleration period
-  region2 = makeRegion(timeSet.initialAcc, [0.3662,0.3761,0.4256], "spline");
-  
-  ## acceleration period
-  region3 = makeRegion(timeSet.acc, [0.4256,1.6473], "linear");
-  
-  region2 = setSplineGrad(region2,region1,region3);
-  
-  ## end of acceleration period
-  region4 = makeRegion(timeSet.postAcc, [1.6473,1.6968,1.7067], "spline");
-  region4 = setSplineGrad(region4,region3);
-  
-  ## flat top
-  region5 = makeRegion(timeSet.flatTop, [1.7067, 1.7067], "linear");
-  
-  patternSet = {region1,region2,region3,region4, region5};
+  patternSet = build_pattern(pattern_cells);  
 endfunction
