@@ -5,7 +5,7 @@
 ##== History
 ## 2013-06-13
 ## * use arrayfun instead of map
-## * remover persisitent _xlim in _hline
+## * remove persisitent _xlim in _hline
 ## 2011-07-27
 ## * first argument can accept axes object.
 ## 2008-03-10
@@ -29,11 +29,11 @@ endfunction
 
 function result = _hline(varargin)
   persistent _prop;
-  
   if (ischar(varargin{1}))
-    [_prop] = get_properties(varargin, {"properties"}, {_xlim, _prop});
+    [_prop] = get_properties(varargin, {"properties"}, {_prop});
     return;
   end
+
   y = varargin{1};
   if (!isempty(_prop) > 0)
     result = line(xlim(), [y,y], _prop{:});  
