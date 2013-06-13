@@ -19,6 +19,8 @@
 ## @end deftypefn
 
 ##== History
+## 2013-06-13
+## * remove persisitent _ylim in _vline
 ## 2012-07-23
 ## * use arrayfun instead of map.
 ## 2011-07-27
@@ -28,7 +30,7 @@
 ## * The code chekcing automatic_replot is removed for compatibility to 2.9.14
 
 function result = vline(varargin)
-  if (ishandle(varargin{1}))
+  if (length(varargin) > 1 &&  ishandle(varargin{1}))
     ca = varargin{1};
     set(gcf, "currentaxes", ca);
     varargin(1) = [];
@@ -39,19 +41,24 @@ function result = vline(varargin)
   x = varargin{1};
   varargin(1) = [];
 
-  global __ylim;
-  __ylim = get(ca, "ylim");
-  global __prop;
-  __prop = varargin;
+  if (length(varargin) > 1)
+    _vline("properties", varargin(2:end));
+  end
+
   result = arrayfun(@_vline, x);
 endfunction
 
 function result = _vline(x)
-  global __ylim;
-  global __prop;
+  persistent _prop;
+  if (ischar(varargin{1}))
+    [_prop] = get_properties(varargin, {"properties"}, {_prop});
+    return;
+  end
+
   if (length(__prop) > 0)
-    result = line([x,x], ylim, __prop{:});  
+    result = line([x,x], ylim(), __prop{:});  
   else
-    result = line([x,x], ylim);  
+    result = line([x,x], ylim());  
   endif
 endfunction
+
