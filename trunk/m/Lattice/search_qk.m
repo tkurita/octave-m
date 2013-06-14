@@ -30,6 +30,9 @@
 ## @end deftypefn
 
 ##== History
+## 2013-06-14
+## * load "optim"
+##
 ## 2009-05-29
 ## * "use_vedge" option is required to include vedge as a fitting parameter.
 ## * tune parameters must not be required.
@@ -46,6 +49,7 @@
 ## * assume vedge : 0
 
 function varargout = search_qk(farg, varargin)
+  pkg load "optim"
   #disp("start search_qk")
   #value_names = {"tune_h", "tune_v"};
   global _qfd_ratio; # qfd/qfk
