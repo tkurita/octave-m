@@ -48,13 +48,14 @@ function result = vline(varargin)
   result = arrayfun(@_vline, x);
 endfunction
 
-function result = _vline(x)
+function result = _vline(varargin)
   persistent _prop;
   if (ischar(varargin{1}))
     [_prop] = get_properties(varargin, {"properties"}, {_prop});
     return;
   end
-
+  
+  x = varargin{1};
   if (length(__prop) > 0)
     result = line([x,x], ylim(), __prop{:});  
   else
