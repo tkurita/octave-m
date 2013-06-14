@@ -56,10 +56,10 @@ function result = _vline(varargin)
   end
   
   x = varargin{1};
-  if (length(__prop) > 0)
-    result = line([x,x], ylim(), __prop{:});  
+  if (length(_prop) > 0)
+    result = line([x,x], ylim(), _prop{:});  
   else
-    result = line([x,x], ylim());  
+    result = line([x,x], ylim());
   endif
 endfunction
 
