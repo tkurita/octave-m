@@ -12,12 +12,17 @@
 ##  .time
 
 ##== History
+## 2013-06-14
+## * use cellfun instead of map.
+## * load "io"
 ## 2008-08-07
 ## * add fields 'name' and 'time' into the result
 ## 2008.01.09
 ## * renamed from loadProfileCVS
 
 function result = load_profile_csv(file_path)
+  pkg load "io";
+  #file_path = "../0712/profile_data/SYN0712-190132.csv"
   [fid, msg] = fopen(file_path, "r");
   if (fid == -1)
     error(msg);
@@ -25,8 +30,7 @@ function result = load_profile_csv(file_path)
   
   aline = deblank(fgetl(fid));
   [S, E, TE, M, T, NM] = regexp(aline, "(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+");
-  dvec = map(@str2num, T{1});
-  result.time = cell2mat(dvec);
+  result.time = cellfun(@str2num, T{1});
   
   aline = deblank(fgetl(fid));
   [S, E, TE, M, T, NM] = regexp(aline, "ÅF(.+)$");
