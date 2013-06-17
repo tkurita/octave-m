@@ -7,9 +7,10 @@
 ## * initial_values = [amp, sigma, mu]
 
 ##== History
+## 2013-06-17
+## * added "pkg load optim"
 ## 2008-07-02
 ## * use gaussianx instead of gaussian
-## 
 ## 2008-01-09
 ## * renamed gaussian_fit into gaussian-fit
 
