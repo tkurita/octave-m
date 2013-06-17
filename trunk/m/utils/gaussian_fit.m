@@ -14,6 +14,8 @@
 ## * renamed gaussian_fit into gaussian-fit
 
 function result = gaussian_fit(varargin)
+  pkg load "optim"
+
   persistent initial_values = [1, 1, 0];
   persistent stol = 0.00000001;
   persistent niter = 500;
