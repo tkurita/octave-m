@@ -29,6 +29,7 @@
 ## 2013-06-19
 ## * added "steererNames" option.
 ## * added "errorKickers" option.
+## * added "noPrediciton" option.
 ## 2007-12-03
 ## * update obsolete functions
 
@@ -36,19 +37,32 @@ function [cod_rec_FB, cod_rec_FT] = ...
               cod_correct_v(cod_rec_FB, cod_rec_FT, varargin)
   cod_rec_FB = setup_cod_rec_v(cod_rec_FB, varargin{:});
   cod_rec_FT = setup_cod_rec_v(cod_rec_FT, varargin{:});
-  [cod_rec_FB, cod_rec_FT] = doublelFitCOD(cod_rec_FB, cod_rec_FT, {"QD2"}, varargin{:});
+  [cod_rec_FB, cod_rec_FT] = doublelFitCOD(cod_rec_FB, cod_rec_FT,...
+                                   {"QD2"}, varargin{:});
   
   cod_rec_FB.correctCOD = cod_list_with_kickers(cod_rec_FB);
   cod_rec_FT.correctCOD = cod_list_with_kickers(cod_rec_FT);
   
+  use_prediction = true;
+  for n = 1:length(varargin)
+    if (strcmp(varargin{n}, "noPrediction"))
+      use_prediction = false;
+      break;
+    endif
+  endfor
+  
   xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"...
-    , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;"...
-    , cod_rec_FB.prediction.correctCOD, ...
-                 "-;Predicated COD with QD2, QD4, SMIN at FB;"...
-    , cod_rec_FT.targetCOD, "-@;Measured COD at Flat Top;"...
-    , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;"...
-    , cod_rec_FT.prediction.correctCOD, ...
+    , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;");
+  if (use_prediction)
+    append_plot(cod_rec_FB.prediction.correctCOD, ...
+                 "-;Predicated COD with QD2, QD4, SMIN at FB;");
+  endif
+  append_plot(cod_rec_FT.targetCOD, "-*;Measured COD at Flat Top;"...
+    , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;");
+  if (use_prediction)
+    append_plot(cod_rec_FT.prediction.correctCOD, ...
                   "-;Predicated COD with QD2, QD4, SMIN at FT;");
+  endif
   grid on;xlabel("Position [m]");ylabel("COD [mm]");
   visibleLabels = {"^BM\\d$", "^STV1$", "^QF\\d$", "^QD\\d$", "SM"};
   elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
