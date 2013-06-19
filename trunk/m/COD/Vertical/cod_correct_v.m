@@ -26,23 +26,29 @@
 ## [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT);
 
 ##== History
+## 2013-06-19
+## * added "steererNames" option.
+## * added "errorKickers" option.
 ## 2007-12-03
 ## * update obsolete functions
 
-function [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT, varargin)
-  cod_rec_FB = setup_cod_rec_v(cod_rec_FB);
-  cod_rec_FT = setup_cod_rec_v(cod_rec_FT);
+function [cod_rec_FB, cod_rec_FT] = ...
+              cod_correct_v(cod_rec_FB, cod_rec_FT, varargin)
+  cod_rec_FB = setup_cod_rec_v(cod_rec_FB, varargin{:});
+  cod_rec_FT = setup_cod_rec_v(cod_rec_FT, varargin{:});
   [cod_rec_FB, cod_rec_FT] = doublelFitCOD(cod_rec_FB, cod_rec_FT, {"QD2"}, varargin{:});
   
   cod_rec_FB.correctCOD = cod_list_with_kickers(cod_rec_FB);
   cod_rec_FT.correctCOD = cod_list_with_kickers(cod_rec_FT);
   
-  xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"\
-    , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;"\
-    , cod_rec_FB.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FB;"\
-    , cod_rec_FT.targetCOD, "-@;Measured COD at Flat Top;"\
-    , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;"\
-    , cod_rec_FT.prediction.correctCOD, "-;Predicated COD with QD2, QD4, SMIN at FT;");
+  xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"...
+    , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;"...
+    , cod_rec_FB.prediction.correctCOD, ...
+                 "-;Predicated COD with QD2, QD4, SMIN at FB;"...
+    , cod_rec_FT.targetCOD, "-@;Measured COD at Flat Top;"...
+    , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;"...
+    , cod_rec_FT.prediction.correctCOD, ...
+                  "-;Predicated COD with QD2, QD4, SMIN at FT;");
   grid on;xlabel("Position [m]");ylabel("COD [mm]");
   visibleLabels = {"^BM\\d$", "^STV1$", "^QF\\d$", "^QD\\d$", "SM"};
   elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
@@ -55,9 +61,12 @@ function [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT, vararg
   disp_kicker_values(cod_rec_FT);  
 endfunction
 
-function cod_rec = setup_cod_rec_v(cod_rec)
+function cod_rec = setup_cod_rec_v(cod_rec, varargin)
   cod_rec.horv = "v";
-  cod_rec.steererNames = {"STV1","QD2","QD3"};
+  [steerer_names, error_kickers] = get_properties(varargin,...
+                        {"steererNames" ,"errorKickers"},...
+                         {{"STV1","QD2","QD3"}, {"QD2", "QD4", "SMIN"}});
+  cod_rec.steererNames = steerer_names;
   cod_rec.targetCOD = cod_list_with_bpms(cod_rec);
-  cod_rec.prediction = cod_fit_with_kickers(cod_rec, {"QD2", "QD4", "SMIN"});
+  cod_rec.prediction = cod_fit_with_kickers(cod_rec, error_kickers);
 endfunction
