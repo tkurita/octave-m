@@ -15,9 +15,10 @@
 #shareTerm ../../../WorkSpace/シンクロトロン/2006.9-12 垂直 COD/Check_PR12_1211/Check_PR12_1211.m
 
 ##= Hisotry
+## 2013-06-19
+## * "weights" field can be a cell array instead of a structure.
 ## 2008-05-09
 ## * Used value_for_kickangle instead of calcKickerValue.
-## 
 ## 2007.07.12
 ## * add useWeight option
 
@@ -26,7 +27,7 @@ function [codRecord_FB, codRecord_FT] = ...
   #  codRecord_FB = codRec_FB_correct;
   #  codRecord_FT = codRec_correct_FT;
   #  variableKickers = {"QD2"};
-  
+
   use_kick_factors = false;
   use_weight = false;
   for n = 1:length(varargin)
@@ -40,7 +41,6 @@ function [codRecord_FB, codRecord_FT] = ...
       use_weight = true;
     endif
   endfor
-  
   
   codMatStruct_FB = buildCODMatrix(codRecord_FB);
   codMatStruct_FT = buildCODMatrix(codRecord_FT);
@@ -155,6 +155,9 @@ function dy = extract_dy(cod_rec, cod_mat_struct)
   if (isfield(cod_rec, "weights"))
     dy = [];
     weights = cod_rec.weights;
+    if iscell(weights)
+      weights = struct(weights{:});
+    endif
     for a_name = cod_mat_struct.monitors
       if (isfield(weights, a_name{1}))
         dy = [dy; weights.(a_name{1})];
