@@ -19,9 +19,10 @@
 ##     .pError
 
 ##= History
+## 2013-06-20
+## * added pkg load "optim"
 ## 2008-04-24
 ## * Use ib_for_kickangle instead of calcKickerValue
-##
 ## 2006-07-17
 ## * fitCOD(using non-linear least square method) と同じ結果が得られることを確認
 ##
@@ -71,7 +72,8 @@ function cod_rec = lFitCOD(cod_rec, varargin);
   nst = length(stBetaList);
   nref = length(refBetaList);
   X = repmat(sqrt(refBetaList'),1,nst).* repmat(sqrt(stBetaList), nref, 1);
-  cosX = cos(pi*tune.(horv) - abs(repmat(refPhaseList',1,nst) - repmat(stPhaseList,nref,1)));
+  cosX = cos(pi*tune.(horv) - abs(repmat(refPhaseList',1,nst)...
+                            - repmat(stPhaseList,nref,1)));
   
   switch (cod_rec.horv)
     case "h"
@@ -85,6 +87,7 @@ function cod_rec = lFitCOD(cod_rec, varargin);
   refCODList = refCODList/1000; # convert unit from [m] to [mm]
   
   if (isfield(cod_rec, "weights") && (length(refCODList) > 2))
+    pkg load "optim"; # required for wsolve
     dy = [];
     weights = cod_rec.weights;
     for theName = refNameList
