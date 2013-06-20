@@ -5,6 +5,6 @@
 ## * First Implementation
 
 ssfilename = ["session-", strftime("%Y%m%d", localtime(time())), ".mat"];
-save(ssfilename);
+save("-z", ssfilename);
 
 disp(["success to save session into ", ssfilename]);
