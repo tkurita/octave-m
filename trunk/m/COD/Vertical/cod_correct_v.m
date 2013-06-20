@@ -7,6 +7,12 @@
 ##  .lattice
 ##  .codAtBPM
 ##
+##= Options
+## * "useWeight" : cod_rec must have a "weights" field.
+## * "noPrecition" : no COD prediction in the plot.
+## * "steererNames" : give a cell array of steerer names for COD correction.
+## * "errorKickers" : give a cell array of steerer names for COD prediction.
+## 
 ##= SAMPLE
 ##
 ## # flat base
@@ -26,6 +32,8 @@
 ## [cod_rec_FB, cod_rec_FT] = cod_correct_v(cod_rec_FB, cod_rec_FT);
 
 ##== History
+## 2013-06-20
+## * added "variableKickers" options
 ## 2013-06-19
 ## * added "steererNames" option.
 ## * added "errorKickers" option.
@@ -37,8 +45,11 @@ function [cod_rec_FB, cod_rec_FT] = ...
               cod_correct_v(cod_rec_FB, cod_rec_FT, varargin)
   cod_rec_FB = setup_cod_rec_v(cod_rec_FB, varargin{:});
   cod_rec_FT = setup_cod_rec_v(cod_rec_FT, varargin{:});
+  opts = get_properties(varargin,...
+                      {"variableKickers"},...
+                      {{"QD2"}});
   [cod_rec_FB, cod_rec_FT] = doublelFitCOD(cod_rec_FB, cod_rec_FT,...
-                                   {"QD2"}, varargin{:});
+                                   opts.variableKickers, varargin{:});
   
   cod_rec_FB.correctCOD = cod_list_with_kickers(cod_rec_FB);
   cod_rec_FT.correctCOD = cod_list_with_kickers(cod_rec_FT);
