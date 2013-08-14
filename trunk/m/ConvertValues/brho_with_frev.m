@@ -1,11 +1,11 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{brho} [T*m] =} brho_with_frev(@var{frev}, @var{circumference} [m], @var{particle})
+## @deftypefn {Function File} {@var{brho} [T*m] =} brho_with_frev(@var{frev} [MHz], @var{circumference} [m], @var{particle})
 ##
-## @deftypefnx {Function File} {@var{brho} [T*m] =} brho_with_frev(@var{frev}, @var{circumference} [m], @var{amu}, @var{charge})
+## @deftypefnx {Function File} {@var{brho} [T*m] =} brho_with_frev(@var{frev} [MHz], @var{circumference} [m], @var{amu}, @var{charge})
 ##
-## @deftypefnx {Function File} {@var{lattice_rec} =} brho_with_frev(@var{lattice_rec}, @var{frev}, @var{particle})
+## @deftypefnx {Function File} {@var{lattice_rec} =} brho_with_frev(@var{lattice_rec}, @var{frev} [MHz], @var{particle})
 ##
-## @deftypefnx {Function File} {@var{lattice_rec} =} brho_with_frev(@var{lattice_rec}, @var{frev}, @var{amu}, @var{charge})
+## @deftypefnx {Function File} {@var{lattice_rec} =} brho_with_frev(@var{lattice_rec}, @var{frev} [MHz], @var{amu}, @var{charge})
 ##
 ## Evaluate B*rho value [T*m] with revolution frequency @var{frev} [MHz] and kind of particle.
 ##
