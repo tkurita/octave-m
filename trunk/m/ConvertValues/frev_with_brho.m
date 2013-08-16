@@ -1,7 +1,9 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} frev_with_brho(@var{mev}, @var{circumference}, @var{particle})
+## @deftypefn {Function File} frev_with_brho(@var{brho}, @var{circumference}, @var{particle})
+##
 ## Calculate revolution frequency [Hz] of a particle from its Brho value.
 ## It is assumed that the harmonics is 1.
+##
 ## @table @code
 ## @item @var{brho}
 ## B*rho [T*m]
