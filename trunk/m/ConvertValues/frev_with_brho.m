@@ -9,7 +9,7 @@
 ## B*rho [T*m]
 ## @item @var{circumference}
 ## circumference of the ring [m]
-## @item @var{partivle}
+## @item @var{particle}
 ## kind of a particle, should be "proton" or "carbon" or mass number.
 ## @item @var{charge}
 ## charge number.
@@ -18,15 +18,17 @@
 ## @end deftypefn
 
 ##== History
+## 2013-08-16
+## * charge parameter is optional.
 ## 2012-08-30
 ## * Initial implemented
 
-function result = frev_with_brho(brho, circumference, particle, charge)
+function result = frev_with_brho(brho, circumference, varargin)
   if (!nargin)
     print_usage();
     return;
   endif
-  v = velocity_with_brho(brho, particle, charge);
+  v = velocity_with_brho(brho, varargin{:});
   result = v/circumference;
 endfunction
 
