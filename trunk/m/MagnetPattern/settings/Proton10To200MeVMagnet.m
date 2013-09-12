@@ -73,20 +73,20 @@ function patternSet = BMPattern
     ## [msec], [(T/m)*m]
   pattern_cells = ...
   {...
-  0, 0.3662, "linear";
-  35, 0.3662, "spline";
-  60, 0.3761, "";
-  85, 0.4256, "linear";
-  599.2, 1.6473, "spline";
-  624.2, 1.6968, "";
-  649.2, 1.7067, "linear";
+  0     , 0.3662, "linear";
+  35    , 0.3662, "spline";
+  60    , 0.3761, "";
+  85    , 0.4256, "linear";
+  599.2 , 1.6473, "spline";
+  624.2 , 1.6968, "";
+  649.2 , 1.7067, "linear";
   1175.8, 1.7067, "spline";
   1200.8, 1.6968, "";
   1225.8, 1.6473, "linear";
-  1740, 0.4256, "spline";
-  1765, 0.3761, "";
-  1790, 0.3662, "linear";
-  2000, 0.3662, 0};
+  1740  , 0.4256, "spline";
+  1765  , 0.3761, "";
+  1790  , 0.3662, "linear";
+  2000  , 0.3662, 0};
   
   patternSet = build_pattern(pattern_cells);  
 endfunction

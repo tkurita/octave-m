@@ -26,7 +26,7 @@ function retval = df_f_with_dp_p(dp_p, v, a)
     return;
   endif
   lv = physical_constant("speed of light in vacuum");
-  retval = dp_p .* (1 - (v./lv).^2 - a)
+  retval = dp_p .* (1 - (v./lv).^2 - a);
 endfunction
 
 %!test

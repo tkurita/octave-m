@@ -23,9 +23,13 @@
 ## * initial implementataion
 
 function retval = dp_p_with_frev(f0, f1, a, C)
+  if (!nargin)
+    print_usage();
+    return;
+  endif
   lv = physical_constant("speed of light in vacuum");
   v = C.*f0;
-  retval = (f1 - f0)./f0./(a - 1 + (v./lv).^2)
+  retval = (f1 - f0)./f0./(1 - (v./lv).^2 - a);
 endfunction
 
 %!test

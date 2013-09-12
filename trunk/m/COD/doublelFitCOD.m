@@ -127,8 +127,10 @@ function [codRecord_FB, codRecord_FT] = ...
       if (strcmp(target_name, kickers{m}.name))
         kick_angles_sorted_FB(end+1) = kick_angles_FB(m);
         kick_angles_sorted_FT(end+1) = kick_angles_FT(m);
-        steerer_values_FB(end+1) = ib_for_kickangle(kickers{m}, kick_angles_FB(m), codRecord_FB.brho);
-        steerer_values_FT(end+1) = ib_for_kickangle(kickers{m}, kick_angles_FT(m), codRecord_FT.brho);
+        steerer_values_FB(end+1) = ib_for_kickangle(kickers{m}, 
+                            kick_angles_FB(m), codRecord_FB.brho);
+        steerer_values_FT(end+1) = ib_for_kickangle(kickers{m}, 
+                            kick_angles_FT(m), codRecord_FT.brho);
       endif
     endfor
   endfor

@@ -24,7 +24,7 @@
 ## 2012-10-18
 ## * first implementaion
 
-function retval = func_name(isf, varargin)
+function retval = zc_frequency(isf, varargin)
   diff_threshold = 2;
   #use_iterp = true;
   method = "interp";

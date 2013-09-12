@@ -13,5 +13,5 @@ plot(hz, a2, "*;Amplitude Control vs Frequency;","markersize", 10,...
    hz, pm2, "*;Phase Control vs Frequency;", "markersize", 10,...
    hzlist, pmvlist, "-", "linewidth", 3);
 xlabel("[Hz]");ylabel("[V]");grid on;
-print_pdf("A2_PM2_20121212.pdf")
+print_pdf("A2_PM2_20121212.pdf", "fontsize", 14 );
 

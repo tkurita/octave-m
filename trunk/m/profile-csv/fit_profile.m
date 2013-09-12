@@ -34,9 +34,7 @@ function varargout = fit_profile(filepath, plot_title, horv)
   xyplot(pr.(horv), "-@;;");
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
-  #fit_result_pr
   mean_value = fit_result_pr(3);
-  #unsetarrow()
   vline(mean_value);
   gp = gravity_point(pr.(horv))
   vline(gp)

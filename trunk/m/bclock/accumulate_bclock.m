@@ -28,7 +28,7 @@
 ## * initial implementaion
 
 function retval = accumulate_bclock(bclock_data, db, bl_fb, 
-                                              varargin)q
+                                              varargin)
   th = -1;
   pw = 5e-6; # B-Clock パルス幅 [sec]
   xydata = xy(bclock_data);

@@ -1,12 +1,12 @@
 ## Usage : ctrlVList = radToControlV(rad_list, phase_shifter)
-##          ˆÚ‘Š—Ê [rad] ‚ğ‚Q”{‚’²”gM†ˆ—‘•’uiˆÚ‘ŠŠíj‚Ì§Œä“dˆ³ [V] ‚ğŒvZ
+##          ç§»ç›¸é‡ [rad] ã‚’ï¼’å€é«˜èª¿æ³¢ä¿¡å·å‡¦ç†è£…ç½®ï¼ˆç§»ç›¸å™¨ï¼‰ã®åˆ¶å¾¡é›»åœ§ [V] ã‚’è¨ˆç®—
 ##
 ## = Parameters
 ## * radList -- [rad]
-## * phaseShifter -- ˆÚ‘ŠŠí‚Ìü”g”“Á«
+## * phaseShifter -- ç§»ç›¸å™¨ã®å‘¨æ³¢æ•°ç‰¹æ€§
 
 function ctrlVList = radToControlV(radList, phaseShifter)
-  ## ˆÚ‘Š—Ê [rad] ‚©‚ç§Œä“dˆ³ [V] ‚ğŒvZ
+  ## ç§»ç›¸é‡ [rad] ã‹ã‚‰åˆ¶å¾¡é›»åœ§ [V] ã‚’è¨ˆç®—
   #global PhaseShifter;
   shiftRad = phaseShifter(:,3);
   controlV = phaseShifter(:,4);

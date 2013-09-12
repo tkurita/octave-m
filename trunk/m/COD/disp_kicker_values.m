@@ -16,8 +16,11 @@
 ##  - "kickAngles" : display "kickAngles" field instead of "steererValues" field.
 ##  - "calcKickAngels" : calculate kick angles from steererValues field.
 ##  - "factoredKickAngles" : codRecord.kickAngles./codRecord.kickFactors
+##  - "factoredValues" : codRecord.steererValues .* codRecord.kickFactors
 
 ##== History
+## 2013-06-20
+## * added an option "factoredValues"
 ## 2008-12-02
 ## * renamed from printKickerValues
 
@@ -41,10 +44,11 @@ function disp_kicker_values(varargin)
             steererValues = calcKickAngles(varargin{1});
             out_form = "%e";
           case "factoredKickAngles"
-            is_factoredKickAngles = false;
             steererValues = varargin{1}.kickAngles;
             steererValues = steererValues./varargin{1}.kickFactors;
             out_form = "%e";
+          case "factoredValues"
+            steererValues = varargin{1}.steererValues(:).*varargin{1}.kickFactors(:);
           case "units"
             switch (varargin{n})
               case "mrad"

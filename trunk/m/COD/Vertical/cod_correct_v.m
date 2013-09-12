@@ -62,23 +62,25 @@ function [cod_rec_FB, cod_rec_FT] = ...
     endif
   endfor
   
-  xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;"...
-    , cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;");
+  xyplot(cod_rec_FB.targetCOD, "-@;Measured COD at Flat Base;",...
+         cod_rec_FB.correctCOD, "-;Fitting Result for Flat Base;");
   if (use_prediction)
     append_plot(cod_rec_FB.prediction.correctCOD, ...
                  "-;Predicated COD with QD2, QD4, SMIN at FB;");
   endif
-  append_plot(cod_rec_FT.targetCOD, "-*;Measured COD at Flat Top;"...
-    , cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;");
+  append_plot(cod_rec_FT.targetCOD, "-*;Measured COD at Flat Top;",...
+            cod_rec_FT.correctCOD, "-;Fitting Result for Flat Top;");
   if (use_prediction)
     append_plot(cod_rec_FT.prediction.correctCOD, ...
                   "-;Predicated COD with QD2, QD4, SMIN at FT;");
   endif
   grid on;xlabel("Position [m]");ylabel("COD [mm]");
   visibleLabels = {"^BM\\d$", "^STV1$", "^QF\\d$", "^QD\\d$", "SM"};
-  elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "graph 0.5");
+  elements_on_plot(visibleLabels, cod_rec_FB.lattice,...
+                   "clear", "yposition", "graph 0.5");
   #elements_on_plot(visibleLabels, cod_rec_FB.lattice, "clear", "yposition", "first 0");
-  elements_on_plot({"^BPM3$", "^BPM6$", "^PR1$","^PR2$"}, cod_rec_FB.lattice, "yposition", "graph 0.1");
+  elements_on_plot({"^BPM3$", "^BPM6$", "^PR1$","^PR2$"},...
+                 cod_rec_FB.lattice, "yposition", "graph 0.1");
 
   printf("At Flat Base\n");
   disp_kicker_values(cod_rec_FB);

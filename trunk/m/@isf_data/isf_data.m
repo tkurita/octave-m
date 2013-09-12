@@ -14,6 +14,9 @@
 ## isf_data object
 ## @end table
 ##
+## @deftypefnx {Accessor method} isfdata.xy
+## Return list of xy values.
+## 
 ## @end deftypefn
 
 ##== History
