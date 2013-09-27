@@ -21,6 +21,7 @@
 ## BL pattern.
 ## @end table
 ##
+## @seealso{merge_bclock, interp_bclock}
 ## @end deftypefn
 
 ##== History

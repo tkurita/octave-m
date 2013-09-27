@@ -27,6 +27,7 @@
 ## summation of @var{bclock_plus} and @var{bclock_minus}
 ## @end table
 ##
+## @seealso{interp_bclock, merge_bclock}
 ## @end deftypefn
 
 ##== History

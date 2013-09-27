@@ -23,6 +23,7 @@
 ## summation of @var{bclock_plus} and @var{bclock_minus}
 ## @end table
 ##
+## @seealso{blpattern_with_bclock, merge_bclock}
 ## @end deftypefn
 
 ##== History
@@ -109,4 +110,4 @@ function varargout = interp_bclock(bclock_plus, bclock_minus, periods, t_interp)
 endfunction
 
 %!test
-%! bl_pattern_with_b_clock(x)
+%! interp_bclock(x)
