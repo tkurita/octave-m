@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{bl_interp}, @var{bclock_sum]=} interp_bclock(@var{bclock_plus}, @var{block_minus}, @var{periods}, @var{t_interp}])
+## @deftypefn {Function File} {[@var{bl_interp}, @var{bclock_sum]=} spline_interp_bclock(@var{bclock_plus}, @var{block_minus}, @var{periods}, @var{t_interp}])
 ##
 ## Make summation of B-Clock data, and make a pttern with spline interpolcation.
 ##
@@ -30,7 +30,7 @@
 ## 2013-08-22
 ## * initial implementaion.
 
-function varargout = interp_bclock(bclock_plus, bclock_minus, periods, t_interp)
+function varargout = spline_interp_bclock(bclock_plus, bclock_minus, periods, t_interp)
   ## block_data : isf_data
   ## db : magnetic field differnece per on B Clock in [T*m]
   ## bl_fb : BL value at the flat base in [T*m]
@@ -39,45 +39,15 @@ function varargout = interp_bclock(bclock_plus, bclock_minus, periods, t_interp)
   ## t_deaccstart : the timming of beginning of deaccerelation in secconds.
   ## periods (optional) : times to switch B-Clock ON/OFF
   ## interpolation (optional) : points for interpolation
-  
-  bclock_minus = [bclock_minus(:,1), zeros(rows(bclock_minus), 1),...
-                  bclock_minus(:,2), ones(rows(bclock_minus), 1)];
-  bclock_plus = [bclock_plus(:,1), bclock_plus(:,2),...
-                zeros(rows(bclock_plus),1), zeros(rows(bclock_plus), 1)];
-  bclock_join = [bclock_plus(1:end-1,:); bclock_minus(2:end,:)];
-  bclock_join = sortrows(bclock_join, 1);
-  # 1 : time
-  # 2 : bl by b-clock+
-  # 3 : bl by b-clock-
-  # 4 : flag of b-clock-
-  indexes_minus = find(bclock_join(:,3));
-  bplus = 0;
-  n_minustotal = rows(indexes_minus);
-  n_join = rows(bclock_join);
-  for n = 1:length(indexes_minus)
-    ind = indexes_minus(n);
-    if (! bclock_join(ind-1 , 4)) # previous index is b-clock plus
-      bplus = bclock_join(ind-1 , 2);
-    endif
-    bminus = bclock_join(ind, 3);
-    bclock_join(ind, 2) = bplus;
-    if (n < n_minustotal)
-      ind_next = indexes_minus(n+1);
-      if (ind_next - ind) > 1
-        bclock_join(ind+1:ind_next-1, 3) = bminus;
-      endif
-    else
-      if (n_join - ind) >= 1
-        bclock_join(ind+1:n_join, 3) = bminus;
-      endif
-    endif
-  endfor
-  
+
+  bclock_total = merge_bclock(bclock_plus, bclock_minus);
+  t_list = bclock_total(:,1);
+  bl_list = bclock_total(:,2);
   bl_interp = zeros(length(t_interp), 1);
   t_beg = 0;
   is_off = 1;
-  t_list = bclock_join(:,1);
-  bl_list = bclock_join(:,2) + bclock_join(:,3);
+#  t_list = bclock_join(:,1);
+#  bl_list = bclock_join(:,2) + bclock_join(:,3);
   #xyplot(t_list, bl_list)
   for t_end = periods
     #t_beg

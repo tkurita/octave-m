@@ -27,7 +27,7 @@
 ## summation of @var{bclock_plus} and @var{bclock_minus}
 ## @end table
 ##
-## @seealso{interp_bclock, merge_bclock}
+## @seealso{interp_bclock, merge_bclock, accumulate_bclock}
 ## @end deftypefn
 
 ##== History
@@ -35,15 +35,18 @@
 ## * initial implementation
 
 function varargout = blpattern_with_bclock(bclock_plus, bclock_minus,...
-                                     delta_b, bl_flatbase, periods, t_step)
+                                 delta_b, bl_flatbase, periods, t_step)
   ##== accumulate
-  bclock_plus_accumulated = accumulate_bclock(bclock_plus, delta_b, bl_flatbase, periods);
-  bclock_minus_accumulated = accumulate_bclock(bclock_minus, -1*delta_b, 0, periods(3:end));
+  bclock_plus_accumulated = accumulate_bclock(bclock_plus, delta_b,...
+                                              bl_flatbase, periods);
+  bclock_minus_accumulated = accumulate_bclock(bclock_minus, -1*delta_b,...
+                                               0, periods(3:end));
   
   t_step = 10e-6; # データ間隔 10usec (100kHz)
   t_list = 0:t_step:2-t_step;
   ##== interplate
-  [bclock_interp, bclock_sum] = interp_bclock(bclock_plus_accumulated, bclock_minus_accumulated,...
+  [bclock_interp, bclock_sum] = spline_interp_bclock(bclock_plus_accumulated,...
+                                            bclock_minus_accumulated,...
                                              periods, t_list);
   subplot(3,1,1);
   xyplot(bclock_interp);vline(periods);
