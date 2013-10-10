@@ -1,6 +1,8 @@
 ## usage : result = notch_filter(P, N, m, data)
 ##         result = notch_filter(filter_rec, data)
 ##
+##  trasfer function : {1 - z^(-N) / (1- z^(-P))}^m
+##
 ## fields of filter_rec 
 ##  .P
 ##  .N
@@ -23,10 +25,12 @@ function data = notch_filter2(varargin)
   #data = ones(1000, 1) .*1;
   #P=8
   data = data(:);
+  # com filter
   shifted_data = shift(data,N);
   shifted_data(1:N,:) = 0;
   data = data - shifted_data;
-  
+ 
+  # integrator
   lendata = length(data);
   for k = (P+1):lendata
     data(k) += data(k - P);
@@ -36,8 +40,8 @@ function data = notch_filter2(varargin)
 #    data(k) += data(end-(P-k));
 #  endfor
   
-data = data/Q;
-if --m > 0 
+  data = data/Q;
+  if --m > 0 
     data = notch_filter2(P, N, m, data);
   endif
   

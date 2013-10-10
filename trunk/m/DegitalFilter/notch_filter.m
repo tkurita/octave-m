@@ -5,6 +5,8 @@
 ##  .P
 ##  .N
 ##  .m
+##
+## notch_filter2 を使った方が良い。
 
 function data = notch_filter(varargin)
   if (isstruct(varargin{1}))
