@@ -26,7 +26,7 @@
 ## Filtered value of @var{data}.
 ## @end table
 ##
-## @seealso{notch_filter2}
+## @seealso{mcic_filter, notch_freqz}
 ##
 ## @end deftypefn
 

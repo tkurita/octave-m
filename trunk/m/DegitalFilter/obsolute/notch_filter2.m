@@ -9,6 +9,7 @@
 ##  .m
 
 function data = notch_filter2(varargin)
+  warning("notch_filter2 is deprecated. Use mcic_filter.");
   if (isstruct(varargin{1}))
     P = varargin{1}.P;
     N = varargin{1}.N;

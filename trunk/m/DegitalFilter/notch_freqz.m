@@ -27,6 +27,7 @@
 ## description of @var{retval}
 ## @end table
 ##
+## @seealso{mcic_filter, notch_freqz, notch_mcic_filter}
 ## @end deftypefn
 
 ##== History
