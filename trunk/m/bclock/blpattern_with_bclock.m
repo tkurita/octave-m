@@ -1,7 +1,8 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{bclock_interp}, @var{bclock_interp} =} blpattern_with_bclock(@var{bclock_plus}, @var{bclock_minus}, @var{delta_b}, @var{bl_flatbase}, @var{periods}, @{t_step})
+## @deftypefn {Function File} {[@var{bclock_interp}, @var{bclock_total}] =} blpattern_with_bclock(@var{bclock_plus}, @var{bclock_minus}, @var{delta_b}, @var{bl_flatbase}, @var{periods}, @var{t_step}, ["method", @var{method}], )
 ##
-## Generate BL pattern by accumulating B-Clock and spilne interpolation. And make a plot.
+## Generate BL pattern by accumulating, interpolating and smooth B-Clock. 
+## And make a plot.
 ## 
 ## @strong{Inputs}
 ## @table @var
@@ -17,6 +18,9 @@
 ## Timmings to switch B-Clock ON/OFF in seconds.
 ## @item t_step
 ## time interval for interpolation in seconds.
+## @item method
+## Optional. Indicate a method for interplation and smoothing.
+## "spline" or "linear and cic". The default is "linear and cic"
 ## @end table
 ## 
 ## @strong{Outputs}
@@ -31,36 +35,121 @@
 ## @end deftypefn
 
 ##== History
+## 2013-10-10
+## * added "linear and cic" mode
 ## 2013-08-22
 ## * initial implementation
 
 function varargout = blpattern_with_bclock(bclock_plus, bclock_minus,...
-                                 delta_b, bl_flatbase, periods, t_step)
+                                 delta_b, bl_flatbase, periods, t_step, varargin)
+  ##== prepare parameters
+  opts = get_properties(varargin, {"method"}, {"linear and cic"});
+  method = opts.method;
+
   ##== accumulate
-  bclock_plus_accumulated = accumulate_bclock(bclock_plus, delta_b,...
-                                              bl_flatbase, periods);
-  bclock_minus_accumulated = accumulate_bclock(bclock_minus, -1*delta_b,...
-                                               0, periods(3:end));
-  
+
   t_step = 10e-6; # データ間隔 10usec (100kHz)
   t_list = 0:t_step:2-t_step;
+
   ##== interplate
-  [bclock_interp, bclock_sum] = spline_interp_bclock(bclock_plus_accumulated,...
-                                            bclock_minus_accumulated,...
-                                             periods, t_list);
+  switch method
+    case "spline"
+      bclock_plus_accumulated = accumulate_bclock(bclock_plus, delta_b,...
+                                                bl_flatbase, periods);
+      bclock_minus_accumulated = accumulate_bclock(bclock_minus, -1*delta_b,...
+                                                 0, periods);
+      [bclock_interp, bclock_total] = ...
+                          spline_interp_bclock(bclock_plus_accumulated,...
+                                               bclock_minus_accumulated,...
+                                                 periods, t_list);
+    case "linear and cic"
+      bclock_plus_accumulated = accumulate_bclock(bclock_plus, delta_b,...
+                                                bl_flatbase);
+      bclock_minus_accumulated = accumulate_bclock(bclock_minus, -1*delta_b,...
+                                                 0);
+      bclock_total = merge_bclock(bclock_plus_accumulated,...
+                                  bclock_minus_accumulated);
+      bclock_linterp =  interp1(bclock_total(:,1), bclock_total(:,2),...
+                                   t_list, "linear")';
+      fs = 1/t_step;
+      N60 = round(fs/60);
+      N240 = round(fs/240);
+      [smooth_pattern_x2, pattern_error] =...
+                             reduce_ripple(N60, 2, bclock_linterp);
+      pattern_diff = bclock_linterp - smooth_pattern_x2;
+      smooth_diff_240 = filter_tripattern(ones(1,N240)/N240, pattern_diff);
+      smooth_diff_240_mcic5 = mcic_tripattern(N60, N60*5, 2, smooth_diff_240);
+      smooth_pattern = smooth_pattern_x2 + smooth_diff_240_mcic5;
+      
+      bclock_interp = [t_list(:),...
+                  apply_bclock_state(smooth_pattern, t_list, periods)];
+    otherwise
+       error([method, " is unkown method."]);
+  endswitch
+  
   subplot(3,1,1);
   xyplot(bclock_interp);vline(periods);
   subplot(3,1,2);
-  xyplot(bclock_interp, "-", bclock_sum, "-*");
+  xyplot(bclock_interp, "-;smoothed pattern;",...
+          bclock_total, "-*;bclock;");
   xlim([periods(1)-0.02, periods(1)+0.02]);
-  ylim([bclock_interp(1,2)-0.0002, bclock_interp(1,2)+0.0002]);vline(periods);
+  ylim([bclock_interp(1,2)-0.0002, bclock_interp(1,2)+0.0002]);
+  vline(periods);
   subplot(3,1,3);
-  xyplot(bclock_interp, "-", bclock_sum, "-*");
+  xyplot(bclock_interp, "-;smoothed pattern;",...
+         bclock_total, "-*;bclock;");
   xlim([periods(2)-0.02, periods(2)+0.02]);
-  ylim([max(bclock_interp(:,2))-0.0002, max(bclock_interp(:,2))+0.0002]);vline(periods);
+  ycenter = y_at_x(bclock_interp, periods(2)); 
+  ylim([ycenter-0.0002, ycenter+0.0002]);vline(periods);
 
-   varargout = {bclock_interp, bclock_sum};
+ varargout = {bclock_interp, bclock_total};
 endfunction
+
+function [smooth_data, pattern_error] = reduce_ripple(N, m, source_data)
+  # N : filter のパラメータ
+  # m : 繰り返し回数
+  base_pattern = filter_tripattern(ones(1,N)/N, source_data);
+  for k = 1:m
+    pattern_diff = (source_data - base_pattern);
+    smooth_diff = filter_tripattern(ones(1,N)/N, pattern_diff);
+    base_pattern = base_pattern + smooth_diff;
+  endfor
+  smooth_data = base_pattern;
+  pattern_error = (source_data-smooth_data)./smooth_data;
+endfunction
+
+function result_pattern = apply_bclock_state(pattern_data, t_list, periods)
+  result_pattern = NA(length(t_list), 1);
+  t_beg = 0;
+  is_off = 1;
+  for t_end = periods
+    #t_beg
+    #t_end
+    ind_t_in_period = find(t_list >= t_beg & t_list <= t_end);
+    val_in_period = pattern_data(ind_t_in_period);
+    
+    if is_off
+      if (! isna(result_pattern(ind_t_in_period(1))))
+        val = result_pattern(ind_t_in_period(1));
+      else
+        val = val_in_period(1);
+      endif
+      result_pattern(ind_t_in_period) = val;
+    else
+      if (! isna(result_pattern(ind_t_in_period(1))))
+        result_pattern(ind_t_in_period) =...
+            val_in_period - (val_in_period(1) - result_pattern(ind_t_in_period(1)));
+      else
+        result_pattern(ind_t_in_period) = val_in_period;
+      endif
+    endif
+    
+    t_beg = t_end;
+    is_off = ! is_off;
+  endfor
+  
+endfunction
+
 
 %!test
 %! blpattern_with_bclock(x)
