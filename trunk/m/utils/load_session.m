@@ -1,12 +1,22 @@
 ## load last session file
 
 ##== History
+## 2013-10-25
+## * A variable session_file is not used. 
+##   Because if same name variable is included in the loaded session file, 
+##   the file name in the message will be invalid.
 ## 2011-03-03
 ## * First Implementaion
 
 1;
 
-function lastssfile = last_session_file()
+function lastssfile = last_session_file(varargin)
+  persistent lastssfile = NA;
+  if length(varargin)
+    return
+  else
+    lastssfile = NA;  
+  endif
   files = readdir("./");
   lastssfile = NA;
   lastdate = 0;
@@ -18,7 +28,7 @@ function lastssfile = last_session_file()
       d = str2num(T{1}{1});
       if d > lastdate
         lastdate = d;
-        lastssfile = a_file;
+        lastssfile = a_file
       endif
     endif
   endfor
@@ -28,7 +38,5 @@ function lastssfile = last_session_file()
   endif
 endfunction
 
-
-session_file = last_session_file();
-load(session_file);
-disp(["Success to load ", session_file]);
+load(last_session_file());
+disp(["Success to load ", last_session_file("filename")]);
