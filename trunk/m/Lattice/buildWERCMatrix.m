@@ -18,10 +18,16 @@
 ##  * .twmat.v : 縦方向の twiss parameter を計算する matrix
 
 ##== History
+## 2013-10-29
+## * call print_usage if no arguments are given.
 ## 2007-10-18
 ## * accept a structure as an argument
 
 function all_elements = buildWERCMatrix(varargin)
+  if length(varargin) < 1
+    print_usage();
+  endif
+  
   if (isstruct(varargin{1}))
     lattice_rec = varargin{1};
     qfk = lattice_rec.qfk;
