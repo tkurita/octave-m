@@ -24,7 +24,7 @@
 ## * accept a structure as an argument
 
 function all_elements = buildWERCMatrix(varargin)
-  if length(varargin) < 1
+  if ! nargin
     print_usage();
   endif
   
