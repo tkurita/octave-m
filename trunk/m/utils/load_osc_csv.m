@@ -27,6 +27,8 @@
 ## @end deftypefn
 
 ##== History
+## 2013-11-08
+## * added a check of number of arguments.
 ## 2013-01-10
 ## * pkg load io at the beginneing.
 ## 2010-08-26
@@ -40,10 +42,14 @@
 
 function retval = load_osc_csv(filepath, varargin)
   pkg load io;
-  if (!nargin)
+  if !nargin
     print_usage();
   endif
   
+  if length(varargin) < 2
+    error("Number of optional arguments is invalid. It must be 2.");
+  endif
+
   opts = get_properties(varargin,...
                         {"model"}, {NA});
   if isna(opts.model)
