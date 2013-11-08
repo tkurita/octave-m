@@ -19,6 +19,8 @@
 ## @end deftypefn
 
 ##== History
+## 2013-11-08
+## * fixed error of treatments of properties.
 ## 2013-06-13
 ## * remove persisitent _ylim in _vline
 ## 2012-07-23
@@ -42,7 +44,7 @@ function result = vline(varargin)
   varargin(1) = [];
 
   if (length(varargin) > 1)
-    _vline("properties", varargin(2:end));
+    _vline("properties", varargin);
   end
 
   result = arrayfun(@_vline, x);
@@ -55,11 +57,12 @@ function result = _vline(varargin)
     return;
   end
   
+  _prop
   x = varargin{1};
   if (length(_prop) > 0)
-    result = line([x,x], ylim(), _prop{:});  
+    result = line([x x], ylim(), _prop.properties{:});
   else
-    result = line([x,x], ylim());
+    result = line([x x], ylim());
   endif
 endfunction
 
