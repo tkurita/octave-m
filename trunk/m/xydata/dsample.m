@@ -27,7 +27,7 @@ function retval = dsample(mat, N)
   endif
 
   n_rows = rows(mat);
-  if n_rows >= N
+  if n_rows <= N
     retval = mat;
     return;
   endif
