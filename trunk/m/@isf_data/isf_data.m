@@ -23,7 +23,17 @@
 ## 2012-10-16
 ## * first implementation
 
-function retval = isf_data(filename)
+function retval = isf_data(varargin)
+  if ! nargin
+    print_usage();
+  endif
+
+  if isstruct(varargin{1})
+    retval = class(varargin{1}, "isf_data");
+    return
+  else
+    filename = varargin{1};
+  endif
   pkg load general;
   fid = fopen(filename, "r");
   preambles = dict;

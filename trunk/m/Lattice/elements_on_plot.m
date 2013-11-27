@@ -21,6 +21,9 @@
 ## @end deftypefn
 
 ##= History
+## 2013-10-29
+## * call print_usage if no arguments are given.
+##
 ## 2008-08-01
 ## * @var{lattice} can accept lattice object.
 ##
@@ -41,6 +44,10 @@
 ## * derived from setElementsOnPlot
 
 function elements_on_plot(names, lattice, varargin)
+  if ! nargin
+    print_usage();
+  endif
+  
   if (isstruct(lattice))
     lattice = lattice.lattice;
   endif

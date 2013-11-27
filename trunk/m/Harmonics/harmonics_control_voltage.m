@@ -1,3 +1,5 @@
+#shareTerm /Users/tkurita/WorkSpace/Synchrotron/2倍高調波/特性データと設定ファイルの計算/HP FG用データ/0200_10_180-280-400-50_20070621-bclock/HarmonicsControl.m
+
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} harmonics_control_voltage(@var{blpattern}, @{rfvpattern}, @{timmings},@var{A2PM2file} @var{opts})
 ## 
@@ -30,8 +32,8 @@
 ## 2009-06-26
 ## * renamed from calcHarmonicsControlV
 
-function varargout =\
-  harmonics_control_voltage(blpattern, rfvpattern, timmings, A2PM2file, varargin)
+function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,...
+                                                               A2PM2file, varargin)
   if !nargin
     print_usage();
   endif
@@ -43,9 +45,12 @@ function varargout =\
 #   timmings.stopPhaseTime = 310; #[msec] 高調波位相停止
 #   Proton7To200MeVMagnet
 #   blpattern = BMPattern;
+#   blpattern = bmPattern
 #   Proton200MeVRFPattern
-#   rfvpattern = rfPattern_C001_10_200_400_400_50;
-#   varargin = {"freq_base", captureFreq, "freq_top", 5944300,"particle", "carbon", "harmonics", 2}
+#   rfvpattern = rfPattern_0200_10_180_280_400_50_20060720;
+#   A2PM2file = "A2_PM2_20121212.csv"
+#   varargin = {"freq_base", captureFreq, "freq_top", 5944300,"particle", "carbon", "harmonics", 1}
+#   varargin = {"freq_base", captureFreq, "freq_top", 5104300}
   opts = get_properties(varargin, ...
                   {"bmangle", "circumference","freq_base", "freq_top", "particle", "harmonics"}, ...
                   {pi/4, 33.201, NA, NA, "proton", 1});
@@ -64,11 +69,18 @@ function varargout =\
   h = opts.harmonics;
   
   ##== 偏向電磁石パターン dBL/dt の構築
-  [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
+  if ismatrix(blpattern)
+    msecList = 0:tStep:timmings.endDataTime;
+    bLine = interp1(blpattern(:,1), blpattern(:,2), msecList, "linear");
+    dBLdtList = gradient(blpattern(:,2), blpattern(:,1)/1000);
+    dBLdtList = interp1(blpattern(:,1), dBLdtList, msecList, "linear");
+  else
+    [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
+    dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
+  endif
   #plot(msecList,bLine, "-*")
   secList = msecList/1000;
   #plot(secList,dBLdtList,";dBLdt;");
-  dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
   # plot(dBLdtList)
   #dBLdtList = gradient(bLine)./gradient(secList);
   ##== 加速電圧パターンの構築
@@ -114,7 +126,7 @@ function varargout =\
   #plot(msecList,rfHzList,";RF [Hz];")
   
   ##= 加速位相の計算
-  sinphi = (C.*dBLdtList'./(pi/4))./vList';
+  sinphi = (C.*dBLdtList(:)./(pi/4))./vList(:);
   sinphi(1:startCapIndex) = zeros(startCapIndex,1); # 電圧が発生されるまでを強制的に 0 にする。
   phiList=asin(sinphi);
   #plot(phiList)
@@ -134,7 +146,7 @@ function varargout =\
 
   phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #特性データ
   bias_rad = controlVToRad(biasControlV, phase_shifter);
-  phaseCtrlV = radToControlV(bias_rad + phiList, phase_shifter);
+  phaseCtrlV = radToControlV(bias_rad(:) + phiList(:), phase_shifter);
   #phaseCtrlV2 = biasControlV + radToControlV(phiList, phase_shifter);
   #plot(phaseCtrlV, "-;1;", phaseCtrlV2, "-;2;")
   ##== stopPhaseTime以降を一定にする。

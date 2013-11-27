@@ -36,7 +36,7 @@ endif
 frev = [];
 pref = f0;
 m0c2 = mass_energy(particle)*1e6;
-lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+lv = physical_constant("speed of light in vacuum");
 dbl = diff(bl);
 
 for n = 1:length(dbl)

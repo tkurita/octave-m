@@ -23,6 +23,8 @@
 ## @item @var{tlist}
 ## tiems [msec]
 ## @end table
+## 
+## @seealso{value_at_time}
 ## @end deftypefn
 
 ##== History

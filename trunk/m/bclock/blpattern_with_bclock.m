@@ -47,8 +47,7 @@ function varargout = blpattern_with_bclock(bclock_plus, bclock_minus,...
   method = opts.method;
 
   ##== accumulate
-
-  t_step = 10e-6; # データ間隔 10usec (100kHz)
+  #t_step = 10e-6; # データ間隔 10usec (100kHz)
   t_list = 0:t_step:2-t_step;
 
   ##== interplate
@@ -137,8 +136,11 @@ function result_pattern = apply_bclock_state(pattern_data, t_list, periods)
       result_pattern(ind_t_in_period) = val;
     else
       if (! isna(result_pattern(ind_t_in_period(1))))
-        result_pattern(ind_t_in_period) =...
+        result_pattern(ind_t_in_period) = ...
             val_in_period - (val_in_period(1) - result_pattern(ind_t_in_period(1)));
+      elseif (! isna(result_pattern(ind_t_in_period(1)-1)))
+        result_pattern(ind_t_in_period) = ...
+            val_in_period - (val_in_period(1) - result_pattern(ind_t_in_period(1) - 1));
       else
         result_pattern(ind_t_in_period) = val_in_period;
       endif

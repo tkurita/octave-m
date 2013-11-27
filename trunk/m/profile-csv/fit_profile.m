@@ -25,7 +25,7 @@
 
 function varargout = fit_profile(filepath, plot_title, horv)
   pr = load_profile_csv(filepath);
-  valid_limit = 3277; #3276 だと satulate しているみたい
+  valid_limit = 3275; #3276 だと satulate しているみたい
   for n = 1:rows(pr.(horv))
     if pr.(horv)(n,2) > valid_limit
       pr.(horv)(n,2) = 0;

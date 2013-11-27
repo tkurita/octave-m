@@ -2,8 +2,7 @@
 ## @deftypefn {Function File} {@var{lattice_rec} =} 
 ##    process_lattice(@var{lattice_rec}, [@var{full_circle_mat}])
 ##
-## @deftypefnx {Function File} {[@var{beta_function}, @var{dispersion},@var{total_phase}, @var{all_elements}] =} 
-##                process_lattice(@var{lattice_rec}, [@var{full_circle_mat}])
+## @deftypefnx {Function File} {[@var{beta_function}, @var{dispersion},@var{total_phase}, @var{all_elements}] =} process_lattice(@var{lattice_rec}, [@var{full_circle_mat}])
 ## 
 ## The argument @var{lattice_rec} is a cell array consisted of element structures or a structure which have field 'lattice' of a cell array.
 ## 

@@ -28,7 +28,7 @@ function lastssfile = last_session_file(varargin)
       d = str2num(T{1}{1});
       if d > lastdate
         lastdate = d;
-        lastssfile = a_file
+        lastssfile = a_file;
       endif
     endif
   endfor

@@ -3,9 +3,12 @@
 ## calculate any time points
 ## * fftRec -- output of fourier
 ## * time -- time to calculate y, the unit is depend of fftRec.
+##
+## 遅すぎて使えない。
+## ifft を使おう
 
 function y = inv_fourier(fftRec, varargin)
-  bs = fftRec.fftResult;
+  bs = fftRec.fft_result;
   N = length(bs);
   if (mod(N, 2) == 0)
     maxs = N/2+1;
