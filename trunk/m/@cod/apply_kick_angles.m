@@ -89,7 +89,7 @@ function result = apply_kick_angles(cod_obj, cod_mat, varargin)
       endif
     endfor
   endfor
-  if (use_kickfactor && ! isna(cod_obj.kick_factor))
+  if (use_kickfactor && isfield(cod_obj ,"kick_factor"))
     kickAngles .*= cod_obj.kick_factor(:);
   endif
   result = cod_mat.mat * kickAngles;

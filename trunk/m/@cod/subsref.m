@@ -17,7 +17,12 @@ function retval = subsref(x, s)
     case "{}"
     case "."
       fld = s.subs;
-      retval = x.(fld);
+      switch fld
+        case "brho"
+          retval = x.ring.brho;
+        otherwise
+          retval = x.(fld);
+      endswitch
     otherwise
       error("invalid subscript type");
   endswitch
