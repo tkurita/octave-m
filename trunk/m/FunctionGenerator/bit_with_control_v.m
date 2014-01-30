@@ -20,7 +20,7 @@
 ## 2014-01-30
 ## * renamed from contolVToBits.m
 
-function bit = bit_with_contol_v(control_v)
+function bit = bit_with_control_v(control_v)
   control_v_amp = 20; #[V] 関数発生器最大出力 ±10V
   bit_max = 2^16-1; # 関数発生器設定値の最大値 16 bit
   # v_per_bit = control_v_amp/bit_max
