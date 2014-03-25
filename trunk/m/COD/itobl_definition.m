@@ -19,7 +19,7 @@ function varargout = itobl_definition(varargin)
     eval(["clear ", func_name]);
   else
     if isempty(func_name)
-      error("No function is given to itol_definition.");
+      error("No function is given to itobl_definition.");
     end
     varargout{1} = str2func(func_name);
   endif
