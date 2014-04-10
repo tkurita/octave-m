@@ -1,11 +1,25 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} print_pdf(@var{fname})
+## @deftypefn {Function File} {} print_pdf(@var{fname}, [@var{opts}])
 ##
-## Output plot as PDF file of which font size is 10 and size is 8,5.
+## Output plot as PDF file of which paper size fit the graphics.
+##
+## @strong{Available options}
+## @table @code
+## @item fontsize
+## @item papersize
+## @item paperposition
+## @item position
+## @item orient
+## "landscape" or "portrat"
+## @item margins
+## The default is "10 10 10 10"
+## @end table
 ##
 ## @end deftypefn
 
 ##== History
+## 2014-04-10
+## * utilize pdfcrop to make paper size fit the graphics.
 ## 2012-10-16
 ## * default paper size is changed to [8,5.5] from [8,5] to fit fltk output.
 ## 2012-07-27
@@ -17,23 +31,36 @@
 ## 2011-01-06
 ## * fixed : "fontsize" are applied to plots in multiplot
 
-function retval = print_pdf(fname, varargin)
-  [fs, ps, pp, ax_pos, device] = get_properties(varargin,...
-    {"fontsize", "papersize", "paperposition", "position", "device"},
-    {NA, [8,5.5], NA, NA, "pdf"});
+function print_pdf(fname, varargin)
+  [fs, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
+    {"fontsize", "papersize", "paperposition", "position", "orient", "margins", "device"},
+    {NA, NA, NA, NA, NA, "10 10 10 10", "pdf"});
 
   #xy = [11, 8.5];
   #papersize = [8, 5];
-  pre_orient = orient;
-  orient("landscape");
-  pre_ps = get(gcf, "papersize");
-  set(gcf, "papersize", ps);
-  pre_pp =get(gcf, "paperposition");
-  if isna(pp)
+  pre_orient = NA;
+  if !isna(ort)
+    pre_orient = orient;
+    orient(ort);
+  endif
+  #pre_orient = orient;
+  #orient("landscape");
+  pre_ps = NA;
+  if !isna(ps)
+    pre_ps = get(gcf, "papersize");
+    set(gcf, "papersize", ps);
+  endif
+  
+  if isna(pp) && !isna(ps)
     pp = [0, 0, ps(1), ps(2)];
   endif
-  set(gcf, "paperposition", pp);
-
+  
+  pre_pp = NA;
+  if !isna(pp)
+    pre_pp =get(gcf, "paperposition");
+    set(gcf, "paperposition", pp);
+  endif
+  
   ##=== axes position
   pre_axpos = NA;
   ax = findobj(gcf, "type", "axes");
@@ -57,7 +84,7 @@ function retval = print_pdf(fname, varargin)
   #pre_ticks = get(gca, "fontsize");
   pre_axfontsize = get(ax, "fontsize");
   #set(gca, "fontsize", fs); # axis ticks label
-  if !isnan(fs) set(ax, "fontsize", fs); end
+  if !isnan(fs) set(ax, "fontsize", fs); endif
   
   ##=== xlabel
   lh = get(ax, "xlabel");
@@ -68,7 +95,7 @@ function retval = print_pdf(fname, varargin)
   pre_xls = NA;
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
-    if !isnan(fs) set(xlabel_handles, "fontsize", fs); end
+    if !isnan(fs) set(xlabel_handles, "fontsize", fs); endif
   endif
   
 
@@ -81,7 +108,7 @@ function retval = print_pdf(fname, varargin)
   pre_yls = NA;
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
-    if !isnan(fs) set(ylabel_handles, "fontsize", fs);end
+    if !isnan(fs) set(ylabel_handles, "fontsize", fs); endif
   endif
 
   #print(["-d",device], fname); 
@@ -106,9 +133,11 @@ function retval = print_pdf(fname, varargin)
     apply_property(ax, "position", pre_axpos);
     # set(gca, "position", pre_axpos);
   endif
-  set(gcf, "papersize", pre_ps);
-  set(gcf, "paperposition", pre_pp);
-  orient(pre_orient);
+  
+  if !isna(pre_ps) set(gcf, "papersize", pre_ps); endif
+  if !isna(pre_pp) set(gcf, "paperposition", pre_pp); endif
+  if !isna(pre_orient) orient(pre_orient); endif
+  pdfcrop(fname, "margins", margins);
 endfunction
 
 function apply_property(hs, propname, fs)
