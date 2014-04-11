@@ -4,11 +4,13 @@
 ## nM : 質量数 [a.m.u]
 
 ##== History
+## 2014-04-11
+## * support new physical_constant.
 ## 2011-01-05
 ## * renamed from deltaEwithBstep
 
 function deltaE = dE_with_dB(bLine,deltaB,nM)
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM") ; # light velocity [m/sec]
+  lv = physical_constant("speed of light in vacuum") ; # light velocity [m/sec]
   #m0c2 = nM * proton_eV;
   m0c2 = mass_energy(nM)*1e6;
   EeDeltaE = sqrt(m0c2^2 + ((bLine.+(deltaB*1e-5))./(pi/4)).^2 *lv^2);
