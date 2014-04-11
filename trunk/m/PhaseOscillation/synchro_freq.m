@@ -33,6 +33,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-04-11
+## * support new physical_constant
 ## 2011-01-25
 ## * accept brho instead of BL
 ## * help with texinfo.
@@ -40,7 +42,7 @@
 ## * renamed from synchroFrequency
 
 function [ws,Ee,eta] = synchro_freq(alpha, particle, brho, h, sin_ps, vline,C)
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
+  lv = physical_constant("speed of light in vacuum"); #光速
   m0c2 = mass_energy(particle)*1e6; #[eV]
   Ee2 = m0c2^2 + brho.^2 .*lv^2; #[ev2]
   Ee = sqrt(Ee2); #[eV]
