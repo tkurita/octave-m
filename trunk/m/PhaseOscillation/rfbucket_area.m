@@ -14,6 +14,8 @@
 ## phi1 : unstable fixed point
 
 ##== History
+## 2014-04-11
+## * support new physical_constant
 ## 2010-12-21
 ## * renamed from RFBucketEArea
 
@@ -21,7 +23,7 @@ function [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(vlist, particle, Ee, eta,
   # particle = 1
   # phi_s = ps;
   
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); #光速
+  lv = physical_constant("speed of light in vacuum"); #光速
 
   for n = 1:length(phi_s)
     # n = 1
