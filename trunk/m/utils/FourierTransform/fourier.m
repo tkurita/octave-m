@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec})
-## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval})
+## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, ["plot"])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, ["plot"])
 ## 
 ## The input @var{fft_rec} is a structure which has following fields
 ## @table @code
@@ -22,6 +22,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-04-15
+## * added "plot" option.
 ## 2013-11-06
 ## * accept non structure parameter.
 ## * make a plot if no output aguments.
@@ -31,12 +33,14 @@ function varargout = fourier(varargin)
     print_usage();
   endif
   
+  arg_index = 2;
   if isstruct(varargin{1})
     fft_rec = varargin{1};
   else
     fft_rec = struct("data", varargin{1}, "interval", varargin{2});
+    arg_index = 3;
   endif
-    
+  
   fft_result = fft(fft_rec.data);
   nsample = length(fft_rec.data);
   amplitude = abs(fft(fft_rec.data));
@@ -47,7 +51,11 @@ function varargout = fourier(varargin)
   fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
   if nargout
     varargout{1} = fft_rec;
-    return;
+    if length(varargin) >= arg_index
+      if !contain_str(varargin, "plot")
+        return;
+      endif
+    endif
   endif
   
   plot(frequency, 20*log10(amplitude), "-");...
