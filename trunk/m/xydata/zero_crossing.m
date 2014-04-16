@@ -5,7 +5,7 @@
 ## @strong{Inputs}
 ## @table @var
 ## @item xy
-## 2 dimensional matrix
+## column wise two dimensional matrix
 ## @end table
 ##
 ## @strong{Options}
@@ -16,7 +16,6 @@
 ## @item edge
 ## "falling" or "raising". The default is "falling"
 ## @end table
-##
 ##
 ## @end deftypefn
 
