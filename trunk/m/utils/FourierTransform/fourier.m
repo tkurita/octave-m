@@ -22,6 +22,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-04-23
+## * amplitude is normalized.
 ## 2014-04-15
 ## * added "plot" option.
 ## 2013-11-06
@@ -45,13 +47,13 @@ function varargout = fourier(varargin)
   nsample = length(fft_rec.data);
   amplitude = abs(fft(fft_rec.data));
   n_half = floor(nsample/2);
-  amplitude = amplitude(1:n_half);
+  amplitude = amplitude(1:n_half)/(nsample/2);
   delf = 1/(fft_rec.interval * nsample);
   frequency = 0:delf:((n_half-1)*delf);
   fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
   if nargout
     varargout{1} = fft_rec;
-    if length(varargin) >= arg_index
+    if length(varargin) <= arg_index
       if !contain_str(varargin, "plot")
         return;
       endif
