@@ -20,6 +20,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-07-01
+## * support isf of TDS3000
 ## 2012-10-16
 ## * first implementation
 
@@ -57,18 +59,27 @@ function retval = isf_data(varargin)
   
   [totalbyte, c, msg] = fscanf(fid, "%1d%d", 2);
   totalbyte = totalbyte(2);
-  byte_per_point = str2num(preambles(":WFMP:BYT_N"));
+  byte_per_point = str2num(find_dict(preambles, {":WFMP:BYT_N", ":WFMPRE:BYT_NR"}));
   totalpoints = totalbyte/byte_per_point;
-  y =fread(fid, totalpoints, sprintf("%d*int16", totalpoints), "ieee-be");
+  y = fread(fid, totalpoints, sprintf("%d*int16", totalpoints), "ieee-be");
   fclose(fid);
-  ymulti = str2num(preambles("YMU"));
-  yoffset = str2num(preambles("YOF"));
-  yzero = str2num(preambles("YZE"));
+  ymulti = str2num(find_dict(preambles, {"YMU", "YMULT"}));
+  yoffset = str2num(find_dict(preambles, {"YOF", "YOFF"}));
+  yzero = str2num(find_dict(preambles, {"YZE", "YZERO"}));
 
   retval.v = (y - yoffset)*ymulti +yzero;
   retval = setfields(retval, "preambles", preambles,...
                              "totalpoints", totalpoints);
   retval = class(retval, "isf_data");
+endfunction
+
+function retval = find_dict(a_dict, keys)
+  for k = keys
+    if has(a_dict, k{:})
+      retval = a_dict(k{:});
+      return
+    endif
+  endfor
 endfunction
 
 %!test

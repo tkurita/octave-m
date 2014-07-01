@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} zc_frequency(@var{isf_data}, [@var{diff_threshold}, @var{method})
+## @deftypefn {Function File} {@var{retval} =} zc_frequency(@var{isf_data}, [@var{diff_threshold}, @var{method}, "need_amplitude"])
 ## Evaluate frequency from peripod of zerocrossing positions.
 ##
 ## @strong{Inputs}
@@ -8,8 +8,9 @@
 ## pass 2 for low sampling rate or 5 for high sampling rate.
 ## The default value is 2.
 ## @item method
-## "simple" cause evaluate periods from porints closests to zero.
-## "intep" cause evaluate zerocrossing by linear interpolation.
+## "simple" : evaluate periods from porints closests to zero.
+## "intep" : evaluate zerocrossing by linear interpolation.
+## "fit" : evaluate zerocrossing by sin curve fitting.
 ## The default value is "iterp"
 ## @end table
 ##
