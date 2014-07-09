@@ -37,10 +37,12 @@ function xzc = zero_crossing(xy, varargin)
   falling_positions = indexes_diff > diff_threshold;
   switch edge
     case "falling"
+      #disp "falling"
       ind_list = find(falling_positions);
       zc_indexes1 = positive_indexes(ind_list);
       xzc = x_at_zerocrossing(xy, zc_indexes1, zc_indexes1 +1);
     otherwise # raising
+      #disp "raising"
       raising_positions = [0; falling_positions(1:end-1)];
       ind_list = find(raising_positions);
       zc_indexes1 = positive_indexes(ind_list);
