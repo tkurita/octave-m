@@ -30,9 +30,7 @@ function cod_list = by_kickers(cod_obj, varargin)
   if (length(varargin) > 0) 
     for n = 1:length(varargin)
       if strcmp(varargin{n}, "useSteererValues")
-        use_steerer_valuse = true;
-      elseif strcmp(varargin{n}, "noKickFactor")
-        use_kickfactor = false;
+        use_steerer_valuse = true;      
       else
         warning([varargin{n}, " is unknown option\n"]);
       endif

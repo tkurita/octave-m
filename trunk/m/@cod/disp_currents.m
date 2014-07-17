@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{kickers}, @var{currents}] =} disp_currents(@var{cod_obj})
-## @deftypefnx {Function File} {@var{currents} =} disp_currents(@var{cod_obj})
+## @deftypefn {Function File} {[@var{kickers}, @var{currents}] =} disp_currents(@var{cod_obj}, [@var{current_factor}])
+## @deftypefnx {Function File} {@var{currents} =} disp_currents(@var{cod_obj}, , [@var{current_factor}])
 ## description
 ## @strong{Inputs}
 ## @table @var
@@ -20,11 +20,15 @@
 ## 2013-12-13
 ## * first implementation
 
-function varargout = disp_currents(cod_obj)
+function varargout = disp_currents(cod_obj, varargin)
   if ! nargin
     print_usage();
   endif
-  
+  current_factor = NA;
+  if length(varargin)
+    current_factor = varargin{1};
+  endif
+
   brho = cod_obj.ring.brho;
   itobl_def = itobl_definition();
   current_list = [];
@@ -35,6 +39,9 @@ function varargout = disp_currents(cod_obj)
     ka = cod_obj.kick_angles(n);
     itobl = itobl_def(elem);
     current = ka*(brho/itobl);
+    if isstruct(current_factor)
+      current = current * current_factor.(name);
+    endif
     printf(["%s : %f [A]\n"] ,name, current);
     current_list(end+1) = current;
     name_list{end+1} = name;

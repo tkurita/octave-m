@@ -45,6 +45,9 @@
 
 
 function cod_obj = fit(cod_obj, varargin);
+  if length(varargin)
+    cod_obj = set(cod_obj, varargin{:});
+  endif
   kicker_names = cod_obj.kickers;
   horv = cod_obj.horv;
 

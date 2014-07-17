@@ -1,6 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{obj} =} cod("BPM1", @var{v1}, ...)
-## make a cod object
+## make a cod object with positions measured with BPMs.
+## @deftypefnx {Function File} cod("kickers", {"kicker1, "kicker2", ...}, "kick_angles", @var{kick_angles})
+## make a cod object with kick angles.
 ## @deftypefnx {Function File} cod("template", @var{template})
 ## set a template for new cod objects.
 ## 
@@ -24,6 +26,8 @@
 function obj = cod(varargin)
   persistent ring = NA;
   persistent template = NA;
+  
+  additionals = NA;
   switch nargin
     case 0
       # print_usage();
@@ -48,11 +52,25 @@ function obj = cod(varargin)
           else
             obj.ring = ring;
           endif
-          obj.at_bpms = struct(varargin{:});
+          kickers = NA;
+          at_bpms = NA;
+          switch varargin{1}
+            case "kickers"
+              kickers = varargin{2};
+              additionals = struct(varargin{3:end});
+            otherwise
+              at_bpms = struct(varargin{:});
+          endswitch
+          obj.kickers = kickers;
+          obj.at_bpms = at_bpms;
       endswitch
   endswitch
-
   obj = class(obj, "cod");
+  if isstruct(additionals)
+    for [val, key] = additionals
+      obj.(key) = val;
+    endfor
+  endif
 endfunction
 
 %!test
