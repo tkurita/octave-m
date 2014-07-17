@@ -83,9 +83,9 @@ function [cod_FB, cod_FT] = ...
                  cod_FB.ring.lattice, "yposition", "graph 0.1");
 
   printf("At Flat Base\n");
-  disp_kicker_values(cod_FB);
+  disp_kick_angles(cod_FB);
   printf("At Flat Top\n");
-  disp_kicker_values(cod_FT);  
+  disp_kick_angles(cod_FT);  
 endfunction
 
 function cod_obj = setup_for_vertical(cod_obj, varargin)
