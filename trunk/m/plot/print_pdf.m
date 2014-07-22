@@ -19,6 +19,7 @@
 
 ##== History
 ## 2014-07-22
+## * if device is not "pdf", pdfcrop will not be prformed.
 ## * support fontname property.
 ## 2014-04-10
 ## * utilize pdfcrop to make paper size fit the graphics.
@@ -146,7 +147,9 @@ function print_pdf(fname, varargin)
   if !isna(pre_ps) set(gcf, "papersize", pre_ps); endif
   if !isna(pre_pp) set(gcf, "paperposition", pre_pp); endif
   if !isna(pre_orient) orient(pre_orient); endif
-  pdfcrop(fname, "margins", margins);
+  if strcmp(device, "pdf")
+    pdfcrop(fname, "margins", margins);
+  endif
 endfunction
 
 function apply_property(hs, propname, fs)
