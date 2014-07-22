@@ -57,7 +57,6 @@ function result = _vline(varargin)
     return;
   end
   
-  _prop
   x = varargin{1};
   if (length(_prop) > 0)
     result = line([x x], ylim(), _prop.properties{:});

@@ -18,6 +18,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-07-22
+## * support fontname property.
 ## 2014-04-10
 ## * utilize pdfcrop to make paper size fit the graphics.
 ## 2012-10-16
@@ -32,9 +34,9 @@
 ## * fixed : "fontsize" are applied to plots in multiplot
 
 function print_pdf(fname, varargin)
-  [fs, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
-    {"fontsize", "papersize", "paperposition", "position", "orient", "margins", "device"},
-    {NA, NA, NA, NA, NA, "10 10 10 10", "pdf"});
+  [fs, fn, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
+    {"fontsize", "fontname", "papersize", "paperposition", "position", "orient", "margins", "device"},
+    {NA, NA,NA, NA, NA, NA, "10 10 10 10", "pdf"});
 
   #xy = [11, 8.5];
   #papersize = [8, 5];
@@ -96,6 +98,7 @@ function print_pdf(fname, varargin)
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
     if !isnan(fs) set(xlabel_handles, "fontsize", fs); endif
+    if !isna(fn) set(xlabel_handles, "fontname", fn); endif
   endif
   
 
@@ -109,6 +112,12 @@ function print_pdf(fname, varargin)
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
     if !isnan(fs) set(ylabel_handles, "fontsize", fs); endif
+    if !isna(fn) set(ylabel_handles, "fontname", fn); endif
+  endif
+  
+  ##=== fontname
+  if !isna(fn)
+    set(findobj(gcf, "-property", "fontname"), "fontname", fn);
   endif
 
   #print(["-d",device], fname); 

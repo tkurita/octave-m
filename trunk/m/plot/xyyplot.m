@@ -39,7 +39,7 @@ function ax = xyyplot(xy1arg, xy2arg)
   axes(ax(1))
   newplot()
   xyplot(xy1arg{:});
-  set(ax(1), "keypos", "northwest");
+  #set(ax(1), "keypos", "northwest");
   cf = gcf();
   set(cf, "nextplot", "add");
   
