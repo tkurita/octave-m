@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} print_pdf(@var{fname}, [@var{opts}])
+## @deftypefn {Function File} {} save_plot(@var{fname}, [@var{opts}])
 ##
 ## Output plot as PDF file of which paper size fit the graphics.
 ##
@@ -18,6 +18,9 @@
 ## @end deftypefn
 
 ##== History
+## 2014-07-31
+## * device is obtained from the path extension.
+## * renamed from print_pdf.
 ## 2014-07-22
 ## * if device is not "pdf", pdfcrop will not be prformed.
 ## * support fontname property.
@@ -34,13 +37,21 @@
 ## 2011-01-06
 ## * fixed : "fontsize" are applied to plots in multiplot
 
-function print_pdf(fname, varargin)
+function save_plot(fname, varargin)
   [fs, fn, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
     {"fontsize", "fontname", "papersize", "paperposition", "position", "orient", "margins", "device"},
-    {NA, NA,NA, NA, NA, NA, "10 10 10 10", "pdf"});
+    {NA, NA,NA, NA, NA, NA, "10 10 10 10", NA});
 
   #xy = [11, 8.5];
   #papersize = [8, 5];
+  if isna(device)
+    [d , bn, ext, v] = fileparts(fname);
+    if !length(ext)
+      error("device is not specified.");
+    endif
+    device = ext;
+  endif
+
   pre_orient = NA;
   if !isna(ort)
     pre_orient = orient;
@@ -162,4 +173,4 @@ function apply_property(hs, propname, fs)
 endfunction
 
 %!test
-%! print_pdf(x)
+%! save_plot(x)
