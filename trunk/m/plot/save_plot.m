@@ -49,7 +49,7 @@ function save_plot(fname, varargin)
     if !length(ext)
       error("device is not specified.");
     endif
-    device = ext;
+    device = ext(2:end);
   endif
 
   pre_orient = NA;
