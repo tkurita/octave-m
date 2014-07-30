@@ -19,7 +19,7 @@
 
 ##== History
 ## 2014-07-31
-## * device is obtained from the path extension.
+## * the device parameter is obtained from the path extension.
 ## * renamed from print_pdf.
 ## 2014-07-22
 ## * if device is not "pdf", pdfcrop will not be prformed.
