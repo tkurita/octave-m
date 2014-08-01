@@ -2,7 +2,7 @@
 
 ##== History
 ## 2014-08-01
-## * if "session_init.m" exists in load paths, the file will be preformed as script file.
+## * if "session_init.m" exists in load paths, the file will be preformed as a script file.
 ## 2013-10-25
 ## * A variable session_file is not used. 
 ##   Because if same name variable is included in the loaded session file, 
