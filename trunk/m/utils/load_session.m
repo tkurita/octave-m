@@ -1,6 +1,8 @@
 ## load last session file
 
 ##== History
+## 2014-08-01
+## * if "session_init.m" exists in load paths, the file will be preformed as script file.
 ## 2013-10-25
 ## * A variable session_file is not used. 
 ##   Because if same name variable is included in the loaded session file, 
@@ -39,4 +41,7 @@ function lastssfile = last_session_file(varargin)
 endfunction
 
 load(last_session_file());
+if exist("session_init.m", "file")
+  session_init
+endif
 disp(["Success to load ", last_session_file("filename")]);
