@@ -25,7 +25,7 @@ function retval = pdfcrop(pdffile, varargin)
     error(sprintf("Can't find '%s' .", pdffile));
   endif
   
-  pdfcrop_path = file_in_path(EXEC_PATH, "pdfcrop");
+  pdfcrop_path = file_in_path(getenv("PATH"), "pdfcrop");
   [d, name, ext, v] = fileparts(pdffile);
   new_pdf = fullfile(d, [name,"-crop", ext]);
   [err, msg] = system(sprintf("%s --margins '%s' '%s' '%s'",...
