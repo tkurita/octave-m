@@ -2,6 +2,7 @@
 ## @deftypefn {Function File} {} print_pdf(@var{fname}, [@var{opts}])
 ##
 ## Output plot as PDF file of which paper size fit the graphics.
+## print_pdf was deprecated. Use save_plot.
 ##
 ## @strong{Available options}
 ## @table @code
@@ -35,6 +36,12 @@
 ## * fixed : "fontsize" are applied to plots in multiplot
 
 function print_pdf(fname, varargin)
+  if (! nargin )
+    print_usage();
+    return;
+  endif
+  warning("print_pdf is depredated. Use save_plot.");
+  
   [fs, fn, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
     {"fontsize", "fontname", "papersize", "paperposition", "position", "orient", "margins", "device"},
     {NA, NA,NA, NA, NA, NA, "10 10 10 10", "pdf"});
