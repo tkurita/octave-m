@@ -9,7 +9,7 @@
 ## * first implementation
 
 function pngpaste(outpath)
-  pngpaste_path = file_in_path(getenv("PATH"), "pngpaste")
+  pngpaste_path = file_in_path(getenv("PATH"), "pngpaste");
   [err, msg] = system(sprintf("%s '%s'", pngpaste_path, outpath));
   if err != 0
     error(sprintf("Failed to pngpaste error %d : %s", err, msg));
