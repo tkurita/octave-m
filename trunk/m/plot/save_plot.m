@@ -18,6 +18,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-10-01
+## * paper is fit to figure. when paper orient is landscape.
 ## 2014-07-31
 ## * the device parameter is obtained from the path extension.
 ## * renamed from print_pdf.
@@ -38,12 +40,12 @@
 ## * fixed : "fontsize" are applied to plots in multiplot
 
 function save_plot(fname, varargin)
-  [fs, fn, ps, pp, ax_pos, ort, margins, device] = get_properties(varargin,...
-    {"fontsize", "fontname", "papersize", "paperposition", "position", "orient", "margins", "device"},
-    {NA, NA,NA, NA, NA, NA, "10 10 10 10", NA});
+  [fs, fn, ps, pp, ax_pos, ort, margins, device, crop] = get_properties(varargin,...
+            {"fontsize", "fontname", ...
+            "papersize", "paperposition", "position", ... 
+            "orient", "margins", "device", "crop"},...
+            {NA, NA,NA, NA, NA, "landscape", "10 10 10 10", NA, false});
 
-  #xy = [11, 8.5];
-  #papersize = [8, 5];
   if isna(device)
     [d , bn, ext, v] = fileparts(fname);
     if !length(ext)
@@ -57,22 +59,18 @@ function save_plot(fname, varargin)
     pre_orient = orient;
     orient(ort);
   endif
-  #pre_orient = orient;
-  #orient("landscape");
-  pre_ps = NA;
-  if !isna(ps)
-    pre_ps = get(gcf, "papersize");
-    set(gcf, "papersize", ps);
-  endif
-  
-  if isna(pp) && !isna(ps)
-    pp = [0, 0, ps(1), ps(2)];
-  endif
-  
-  pre_pp = NA;
-  if !isna(pp)
-    pre_pp =get(gcf, "paperposition");
+
+  pre_pp = get(gcf, "paperposition");
+  pre_ps = get(gcf, "papersize");
+
+  if isna(pp) && isna(ps) && strcmp(ort, "landscape")
+    #pm = pre_pp(1)
+    xo = -0.15;
+    yo = -0.25;
+    pp = [xo, yo, pre_pp(3), pre_pp(4)];
     set(gcf, "paperposition", pp);
+    ps = [pre_pp(3), pre_pp(4)];
+    set(gcf, "papersize", ps);
   endif
   
   ##=== axes position
@@ -158,7 +156,8 @@ function save_plot(fname, varargin)
   if !isna(pre_ps) set(gcf, "papersize", pre_ps); endif
   if !isna(pre_pp) set(gcf, "paperposition", pre_pp); endif
   if !isna(pre_orient) orient(pre_orient); endif
-  if strcmp(device, "pdf")
+  if (crop && strcmp(device, "pdf"))
+    # disp("will pdfcrop")
     pdfcrop(fname, "margins", margins);
   endif
 endfunction
