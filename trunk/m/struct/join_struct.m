@@ -6,6 +6,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-10-02
+## * Fixed : a structure as a second argument is not accepted.
 ## 2012-07-14
 ## * accept "key1", val1, "key2", val2, ...
 ## 2007-10-25
@@ -21,7 +23,7 @@ function struct1 = join_struct(struct1, varargin)
     case 0
       error("Wrong argument numbers");
     case 1
-      for [val, key] = struct2
+      for [val, key] = varargin{1}
         struct1.(key) = val;
       endfor
     otherwise
