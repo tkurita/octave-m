@@ -22,8 +22,8 @@ if length(x) ~= length(y)
     error('Two input data should have the same length.');
 end
 
-if (nargin < 2)|(nargin > 3),
- error('Please see help for INPUT DATA.');
+if (nargin < 2) || (nargin > 3)
+  error('Please see help for INPUT DATA.');
 elseif (nargin == 2)
     interpMethod = 'linear';
 end
