@@ -18,6 +18,9 @@
 ## @end deftypefn
 
 ##== History
+## 2014-10-23
+## * added "paperorientation" option.
+## * improved "paperposition" setteing for gnuplot.
 ## 2014-10-01
 ## * paper is fit to figure. when paper orient is landscape.
 ## 2014-07-31
@@ -40,11 +43,11 @@
 ## * fixed : "fontsize" are applied to plots in multiplot
 
 function save_plot(fname, varargin)
-  [fs, fn, ps, pp, ax_pos, ort, margins, device, crop] = get_properties(varargin,...
+  [fs, fn, ps, pp, po, ax_pos, ort, margins, device, crop] = get_properties(varargin,...
             {"fontsize", "fontname", ...
-            "papersize", "paperposition", "position", ... 
+            "papersize", "paperposition", "paperorientation", "position", ... 
             "orient", "margins", "device", "crop"},...
-            {NA, NA,NA, NA, NA, "landscape", "10 10 10 10", NA, false});
+            {NA, NA, NA, NA, NA, NA, "landscape", "10 10 10 10", NA, false});
 
   if isna(device)
     [d , bn, ext, v] = fileparts(fname);
@@ -65,9 +68,14 @@ function save_plot(fname, varargin)
 
   if isna(pp) && isna(ps) && strcmp(ort, "landscape")
     #pm = pre_pp(1)
-    xo = -0.15;
-    yo = -0.25;
-    pp = [xo, yo, pre_pp(3), pre_pp(4)];
+    if (isna(po))
+      if (strcmp(graphics_toolkit, "fltk"))
+        po = [-0.15, -0.25];
+      else
+        po = [0, 0];
+      endif
+    endif
+    pp = [po(1), po(2), pre_pp(3), pre_pp(4)];
     set(gcf, "paperposition", pp);
     ps = [pre_pp(3), pre_pp(4)];
     set(gcf, "papersize", ps);
