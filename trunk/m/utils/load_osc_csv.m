@@ -27,6 +27,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-04
+## * use !ischar instead of isna to support 3.8.2
 ## 2013-11-08
 ## * added a check of number of arguments.
 ## 2013-01-10
@@ -52,7 +54,7 @@ function retval = load_osc_csv(filepath, varargin)
 
   opts = get_properties(varargin,...
                         {"model"}, {NA});
-  if isna(opts.model)
+  if !ischar(opts.model)
     opts.model = default_osc_model();
   endif
   switch opts.model
