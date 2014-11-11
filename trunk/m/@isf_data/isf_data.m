@@ -20,6 +20,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-11
+## * added "pkg load struct".
 ## 2014-07-01
 ## * support isf of TDS3000
 ## 2012-10-16
@@ -37,6 +39,8 @@ function retval = isf_data(varargin)
     filename = varargin{1};
   endif
   pkg load general;
+  pkg load struct;
+
   fid = fopen(filename, "r");
   preambles = dict;
   buff = "";
