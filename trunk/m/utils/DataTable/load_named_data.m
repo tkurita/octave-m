@@ -32,8 +32,8 @@ function data_sets = load_named_data(filename)
     if (aline == -1) break; endif
     rowdata = csvexplode(aline);
     set_name = rowdata{1};
-    vals = rowdata(2:end);
-    num_vals = arrayfun(@eval_chars, vals);
+    vals = rowdata(2:end)
+    num_vals = arrayfun(@eval_chars, vals, "Uniformout", false)
     n_vals = length(num_vals);
     if (n_names < n_vals) n_vals = n_names; end;
     data_sets.(set_name) = [data_names(1:n_vals)(:), num_vals(1:n_vals)(:)];
@@ -42,6 +42,7 @@ function data_sets = load_named_data(filename)
 endfunction
 
 function result = eval_chars(x)
+  x = x{1}
   if ischar(x)
     if length(x)
       try
