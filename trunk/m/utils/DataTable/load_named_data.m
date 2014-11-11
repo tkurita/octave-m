@@ -9,6 +9,9 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-11
+## * added "pkg load io".
+## * use applyfun instead of map.
 ## 2010-03-25
 ## * First implementaion
 
@@ -19,6 +22,7 @@ function data_sets = load_named_data(filename)
     error(msg);
   endif
   
+  pkg load io;  
   aline = read_line(fid);
   data_names = csvexplode(aline)(2:end);
   data_sets = struct;
@@ -29,7 +33,7 @@ function data_sets = load_named_data(filename)
     rowdata = csvexplode(aline);
     set_name = rowdata{1};
     vals = rowdata(2:end);
-    num_vals = map(@eval_chars, vals);
+    num_vals = arrayfun(@eval_chars, vals);
     n_vals = length(num_vals);
     if (n_names < n_vals) n_vals = n_names; end;
     data_sets.(set_name) = [data_names(1:n_vals)(:), num_vals(1:n_vals)(:)];
