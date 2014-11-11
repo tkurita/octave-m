@@ -18,6 +18,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-11
+## * revived "papersize" option.
 ## 2014-10-23
 ## * added "paperorientation" option.
 ## * improved "paperposition" setteing for gnuplot.
@@ -49,7 +51,7 @@ function save_plot(fname, varargin)
             "orient", "margins", "device", "crop"},...
             {NA, NA, NA, NA, NA, NA, "landscape", "10 10 10 10", NA, false});
 
-  if isna(device)
+  if !ischar(device)
     [d , bn, ext, v] = fileparts(fname);
     if !length(ext)
       error("device is not specified.");
@@ -58,16 +60,15 @@ function save_plot(fname, varargin)
   endif
 
   pre_orient = NA;
-  if !isna(ort)
+  if ischar(ort)
     pre_orient = orient;
     orient(ort);
   endif
 
   pre_pp = get(gcf, "paperposition");
   pre_ps = get(gcf, "papersize");
-
-  if isna(pp) && isna(ps) && strcmp(ort, "landscape")
-    #pm = pre_pp(1)
+  #if isna(pp) && isna(ps) && strcmp(ort, "landscape")
+  if isna(pp) && strcmp(ort, "landscape")
     if (isna(po))
       if (strcmp(graphics_toolkit, "fltk"))
         po = [-0.15, -0.25];
@@ -75,9 +76,11 @@ function save_plot(fname, varargin)
         po = [0, 0];
       endif
     endif
-    pp = [po(1), po(2), pre_pp(3), pre_pp(4)];
+    if isna(ps)
+      ps = [pre_pp(3), pre_pp(4)];
+    endif
+    pp = [po(1), po(2), ps(1), ps(2)];
     set(gcf, "paperposition", pp);
-    ps = [pre_pp(3), pre_pp(4)];
     set(gcf, "papersize", ps);
   endif
   
@@ -116,7 +119,7 @@ function save_plot(fname, varargin)
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
     if !isnan(fs) set(xlabel_handles, "fontsize", fs); endif
-    if !isna(fn) set(xlabel_handles, "fontname", fn); endif
+    if ischar(fn) set(xlabel_handles, "fontname", fn); endif
   endif
   
 
@@ -130,11 +133,11 @@ function save_plot(fname, varargin)
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
     if !isnan(fs) set(ylabel_handles, "fontsize", fs); endif
-    if !isna(fn) set(ylabel_handles, "fontname", fn); endif
+    if ischar(fn) set(ylabel_handles, "fontname", fn); endif
   endif
   
   ##=== fontname
-  if !isna(fn)
+  if ischar(fn)
     set(findobj(gcf, "-property", "fontname"), "fontname", fn);
   endif
 
@@ -163,7 +166,7 @@ function save_plot(fname, varargin)
   
   if !isna(pre_ps) set(gcf, "papersize", pre_ps); endif
   if !isna(pre_pp) set(gcf, "paperposition", pre_pp); endif
-  if !isna(pre_orient) orient(pre_orient); endif
+  if ischar(pre_orient) orient(pre_orient); endif
   if (crop && strcmp(device, "pdf"))
     # disp("will pdfcrop")
     pdfcrop(fname, "margins", margins);
