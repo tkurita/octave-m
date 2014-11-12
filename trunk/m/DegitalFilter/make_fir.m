@@ -14,6 +14,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-12
+## * fixed : filter oreder N+1 -> N.
 ## 2014-11-11
 ## * help description added.
 
@@ -29,7 +31,7 @@ function varargout = make_fir(N, fc, ftype)
     otherwise # LPF
     wc = 2*pi*fc;
   endswitch
-  n = 0:N;
+  n = 0:(N-1);
   h = (wc/pi)*sinc(n*wc./pi);
   switch ftype
     case "high"
