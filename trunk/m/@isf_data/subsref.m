@@ -27,7 +27,7 @@ function retval = subsref(x, s)
       fld = s.subs;
       switch fld
         case "ts" # sampling interval
-          retval = str2num(x.preambles("XIN"))
+          retval = str2num(x.preambles("XIN"));
         otherwise
           retval = x.(fld);
         endswitch
