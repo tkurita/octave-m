@@ -10,6 +10,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-13
+## * added .ts (sampling interval)
 ## 2012-10-16
 ## * initial implementation
 
@@ -23,7 +25,12 @@ function retval = subsref(x, s)
     case "{}"
     case "."
       fld = s.subs;
-      retval = x.(fld);
+      switch fld
+        case "ts" # sampling interval
+          retval = str2num(x.preambles("XIN"))
+        otherwise
+          retval = x.(fld);
+        endswitch
     otherwise
       error("invalid subscript type");
   endswitch
