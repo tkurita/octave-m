@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, ["plot"])
-## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, ["plot"])
+## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, ["plot"], [@var{plotopts},...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, ["plot"], [@var{plotopts},...])
 ## 
 ## The input @var{fft_rec} is a structure which has following fields
 ## @table @code
@@ -22,6 +22,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-13
+## * added support of plot options 
 ## 2014-04-23
 ## * amplitude is normalized.
 ## 2014-04-15
@@ -53,14 +55,20 @@ function varargout = fourier(varargin)
   fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
   if nargout
     varargout{1} = fft_rec;
-    if length(varargin) <= arg_index
+    if length(varargin) >= arg_index
       if !contain_str(varargin, "plot")
         return;
       endif
     endif
   endif
   
-  plot(frequency, 20*log10(amplitude), "-");...
+
+  if length(varargin) > arg_index
+    plotopts = varargin(arg_index+1:end);
+  else
+    plotopts = {};
+  endif
+  plot(frequency, 20*log10(amplitude), "-", plotopts{:});...
   set(gca, "xscale", "log");grid on;
   ylabel("magnitude [dBm]");
   xlabel("[Hz]");  
