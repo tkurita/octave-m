@@ -2,6 +2,14 @@
 ## @deftypefn {Function File} {@var{retval} =} isf_data(@var{filename})
 ## Parse .isf format file of tektronics oscilloscopes.
 ##
+## @example
+## isf = isf_data(path_to_file);
+## isf.v # voltage data
+## isf.ts # sampling interval in sec
+## xy(isfdata) # obtain voltage vs time
+## zc_frequency(isdata);
+## @end example
+##
 ## @strong{Inputs}
 ## @table @var
 ## @item filename
@@ -13,9 +21,6 @@
 ## @item retval
 ## isf_data object
 ## @end table
-##
-## @deftypefnx {Accessor method} isfdata.xy
-## Return list of xy values.
 ## 
 ## @end deftypefn
 
