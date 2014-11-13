@@ -13,7 +13,8 @@
 ## * initial implementation.
 
 function retval = xy(isf)
-  retval = [isf.t(:), isf.v(:)];
+  t = subsref(isf, struct("type", ".", "subs", "t"));
+  retval = [t(:), isf.v(:)];
 endfunction
 
 function retval = find_dict(a_dict, keys)
