@@ -5,18 +5,15 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-13
+## * use isf_data.t
 ## 2014-07-01
 ## * support isf of TDS3000
 ## 2012-10-16
 ## * initial implementation.
 
 function retval = xy(isf)
-  y = isf.v;
-  xinc = str2num(find_dict(isf.preambles, {"XIN", "XINCR"}));
-  n = 0:length(y)-1;
-  xzero = str2num(find_dict(isf.preambles, {"XZE", "XZERO"}));
-  x = n*xinc + xzero;
-  retval = [x(:), y(:)];
+  retval = [isf.t(:), isf.v(:)];
 endfunction
 
 function retval = find_dict(a_dict, keys)
