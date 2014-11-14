@@ -19,7 +19,7 @@ function retval = setfont(varargin)
   #set(ax, varargin{:}); # axis ticks label
 
   ##=== xlabel, ylabel
-  for labelname = {"xlabel", "ylabel"}
+  for labelname = {"xlabel", "ylabel", "title"}
     lh = get(ax, labelname{1});
     if iscell(lh)
       lh = cell2mat(lh);
