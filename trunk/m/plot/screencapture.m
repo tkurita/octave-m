@@ -4,6 +4,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-14
+## * call remove_windowparts
 ## 2014-11-13
 ## * first implementation
 
@@ -12,6 +14,7 @@ function retval = screencapture(filename)
     print_usage();
   endif
   system(["screencapture -w -o ", filename]);
+  retval = remove_windowparts(filename);
 endfunction
 
 %!test
