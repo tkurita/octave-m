@@ -22,6 +22,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-17
+## * moved to class
 ## 2014-11-13
 ## * added support of plot options 
 ## 2014-04-23
@@ -53,9 +55,10 @@ function varargout = fourier(varargin)
   delf = 1/(fft_rec.interval * nsample);
   frequency = 0:delf:((n_half-1)*delf);
   fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
+  fft_rec = class(fft_rec, "fourier");
   if nargout
     varargout{1} = fft_rec;
-    if length(varargin) >= arg_index
+    if length(varargin) <= arg_index
       if !contain_str(varargin, "plot")
         return;
       endif
