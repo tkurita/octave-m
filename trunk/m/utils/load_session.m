@@ -1,6 +1,8 @@
 ## load last session file
 
 ##== History
+## 2014-11-17
+## * fixed for 3.8.2.
 ## 2014-08-01
 ## * if "session_init.m" exists in load paths, the file will be preformed as a script file.
 ## 2013-10-25
@@ -13,14 +15,14 @@
 1;
 
 function lastssfile = last_session_file(varargin)
-  persistent lastssfile = NA;
+  persistent lastssfile = [];
   if length(varargin)
     return
   else
-    lastssfile = NA;  
+    lastssfile = [];  
   endif
   files = readdir("./");
-  lastssfile = NA;
+  lastssfile = [];
   lastdate = 0;
   for n = 1:length(files)
     # n = 13
@@ -35,7 +37,7 @@ function lastssfile = last_session_file(varargin)
     endif
   endfor
 
-  if isna(lastssfile)
+  if isempty(lastssfile)
     error(["No session file in ", pwd]);
   endif
 endfunction
