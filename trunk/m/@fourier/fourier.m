@@ -22,6 +22,9 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-21
+## * if a structre is not passed, data and interval field of the returned value 
+##   will be empty to save memory.
 ## 2014-11-17
 ## * moved to class
 ## 2014-11-13
@@ -42,17 +45,22 @@ function varargout = fourier(varargin)
   arg_index = 2;
   if isstruct(varargin{1})
     fft_rec = varargin{1};
+    y = fft_rec.data;
+    ts = fft_rec.interval;
   else
-    fft_rec = struct("data", varargin{1}, "interval", varargin{2});
+    #fft_rec = struct("data", varargin{1}, "interval", varargin{2});
+    fft_rec = struct("data", [], "interval", []);
+    y = varargin{1};
+    ts = varargin{2};
     arg_index = 3;
   endif
   
-  fft_result = fft(fft_rec.data);
-  nsample = length(fft_rec.data);
-  amplitude = abs(fft(fft_rec.data));
+  fft_result = fft(y);
+  nsample = length(y);
+  amplitude = abs(fft(y));
   n_half = floor(nsample/2);
   amplitude = amplitude(1:n_half)/(nsample/2);
-  delf = 1/(fft_rec.interval * nsample);
+  delf = 1/(ts * nsample);
   frequency = 0:delf:((n_half-1)*delf);
   fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
   fft_rec = class(fft_rec, "fourier");
