@@ -41,9 +41,8 @@ function lastssfile = last_session_file(varargin)
 
   if isempty(lastssfile)
     error(["No session file in ", pwd]);
-    return false;
+    return;
   endif
-  return true;
 endfunction
 
 if exist("SESSION_ID", "var")
