@@ -53,9 +53,18 @@ else
   init_file = "session-init.m";
 endif
 
-if load(ssfilename);
-  if exist(init_file, "file")
-    session_init
-  endif
+try
+  load(ssfilename);
   disp(["Success to load ", ssfilename]);
+catch
+  disp(["Failed to load ", ssfilename]);
+end_try_catch
+
+if exist(init_file, "file")
+  try
+    load(init_file);
+    disp(["Success to load ", init_file]);
+  catch
+    disp(["Failed to load ", init_file]);
+  end_try_catch
 endif
