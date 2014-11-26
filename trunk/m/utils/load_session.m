@@ -62,9 +62,9 @@ end_try_catch
 
 if exist(init_file, "file")
   try
-    load(init_file);
-    disp(["Success to load ", init_file]);
+    source(init_file);
+    disp(["Success to evaluate ", init_file]);
   catch
-    disp(["Failed to load ", init_file]);
+    disp(["Failed to evaluate ", init_file]);
   end_try_catch
 endif
