@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, ["plot"], [@var{plotopts},...])
 ## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, ["plot"], [@var{plotopts},...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{xy}, ["plot"], [@var{plotopts},...])
 ## 
 ## The input @var{fft_rec} is a structure which has following fields
 ## @table @code
@@ -19,9 +20,14 @@
 ## @item frequency
 ## frequency according to the amplitude
 ## @end table
+##
+## If @var{xy} is given, y value is resampled with mean iterval of x value.
+##
 ## @end deftypefn
 
 ##== History
+## 2014-11-26
+## * accept xy data.
 ## 2014-11-21
 ## * if a structre is not passed, data and interval field of the returned value 
 ##   will be empty to save memory.
@@ -47,6 +53,12 @@ function varargout = fourier(varargin)
     fft_rec = varargin{1};
     y = fft_rec.data;
     ts = fft_rec.interval;
+  elseif columns(varargin{1}) == 2
+    t = varargin{1}(:,1);
+    ti = linspace(t(1), t(end), length(t));
+    y = interp1(t, varargin{1}(:,2), ti);
+    ts = mean(diff(ti));
+    fft_rec = struct("data", [], "interval", []);
   else
     #fft_rec = struct("data", varargin{1}, "interval", varargin{2});
     fft_rec = struct("data", [], "interval", []);
