@@ -4,6 +4,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-11-29
+## * show the path extension.
 ## 2014-11-14
 ## * call remove_windowparts
 ## 2014-11-13
@@ -14,6 +16,7 @@ function retval = screencapture(filename)
     print_usage();
   endif
   system(["screencapture -w -o ", filename]);
+  system(["SetFile -a e ", filename]); # show the path extension.
   retval = remove_windowparts(filename);
 endfunction
 
