@@ -25,6 +25,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-01
+## * fixed : misread total byte in some cases.
 ## 2014-11-11
 ## * added "pkg load struct".
 ## 2014-07-01
@@ -65,9 +67,8 @@ function retval = isf_data(varargin)
          buff = [buff, s];
     endswitch
   endwhile
-  
-  [totalbyte, c, msg] = fscanf(fid, "%1d%d", 2);
-  totalbyte = totalbyte(2);
+  [c, msg] = fscanf(fid, "%1s", 1);
+  [totalbyte, msg] = fscanf(fid, ["%", c, "d"], 1);
   byte_per_point = str2num(find_dict(preambles, {":WFMP:BYT_N", ":WFMPRE:BYT_NR"}));
   totalpoints = totalbyte/byte_per_point;
   y = fread(fid, totalpoints, sprintf("%d*int16", totalpoints), "ieee-be");
