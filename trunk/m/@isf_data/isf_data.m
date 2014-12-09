@@ -25,6 +25,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-08
+## * use struct instead of dict.
 ## 2014-12-01
 ## * fixed : misread total byte in some cases.
 ## 2014-11-11
@@ -45,11 +47,10 @@ function retval = isf_data(varargin)
   else
     filename = varargin{1};
   endif
-  pkg load general;
   pkg load struct;
 
   fid = fopen(filename, "r");
-  preambles = dict;
+  preambles = struct;
   buff = "";
   frewind(fid);
   while(1)
@@ -59,7 +60,7 @@ function retval = isf_data(varargin)
            sep_ind = index(buff, " ");
            field_name = substr(buff, 1, sep_ind-1);
            field_value = substr(buff, sep_ind+1);
-           preambles(field_name) = field_value;
+           preambles.(field_name) = field_value;
            buff = "";
       case "#"
            break;
@@ -69,13 +70,13 @@ function retval = isf_data(varargin)
   endwhile
   [c, msg] = fscanf(fid, "%1s", 1);
   [totalbyte, msg] = fscanf(fid, ["%", c, "d"], 1);
-  byte_per_point = str2num(find_dict(preambles, {":WFMP:BYT_N", ":WFMPRE:BYT_NR"}));
+  byte_per_point = str2num(find_field(preambles, {":WFMP:BYT_N", ":WFMPRE:BYT_NR"}));
   totalpoints = totalbyte/byte_per_point;
   y = fread(fid, totalpoints, sprintf("%d*int16", totalpoints), "ieee-be");
   fclose(fid);
-  ymulti = str2num(find_dict(preambles, {"YMU", "YMULT"}));
-  yoffset = str2num(find_dict(preambles, {"YOF", "YOFF"}));
-  yzero = str2num(find_dict(preambles, {"YZE", "YZERO"}));
+  ymulti = str2num(find_field(preambles, {"YMU", "YMULT"}));
+  yoffset = str2num(find_field(preambles, {"YOF", "YOFF"}));
+  yzero = str2num(find_field(preambles, {"YZE", "YZERO"}));
 
   retval.v = (y - yoffset)*ymulti +yzero;
   retval = setfields(retval, "preambles", preambles,...
@@ -83,11 +84,11 @@ function retval = isf_data(varargin)
   retval = class(retval, "isf_data");
 endfunction
 
-function retval = find_dict(a_dict, keys)
+function retval = find_field(s, keys)
   for k = keys
-    if has(a_dict, k{:})
-      retval = a_dict(k{:});
-      return
+    if isfield(s, k{:})
+      retval = s.(k{:});
+      return;
     endif
   endfor
 endfunction

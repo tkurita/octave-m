@@ -20,6 +20,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-08
+## * use struct instead of dict.
 ## 2013-01-08
 ## * taking XZE into accounts.
 ## 2012-10-18
@@ -52,9 +54,9 @@ function retval = zc_frequency(isf, varargin)
   positive_indexes = find(v > 0);
   indexes_diff = diff(positive_indexes);
   ind_list = find(diff(positive_indexes) > diff_threshold);
-  xinc = str2num(isf.preambles("XIN"));
+  xinc = str2num(isf.preambles.("XIN"));
   zc_indexes1 = positive_indexes(ind_list);
-  xzero = str2num(isf.preambles("XZE"));
+  xzero = str2num(isf.preambles.("XZE"));
   switch method
     case "interp"
       zc_indexes2 = zc_indexes1 + 1;
