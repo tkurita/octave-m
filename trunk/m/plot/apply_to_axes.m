@@ -15,7 +15,7 @@
 
 ##== History
 ## 2014-12-10
-## * support axes labels.
+## * added support of axes labels.
 ## 2014-09-15
 ## * first implementaion
 
