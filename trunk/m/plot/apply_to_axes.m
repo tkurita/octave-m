@@ -14,18 +14,27 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-10
+## * support axes labels.
 ## 2014-09-15
 ## * first implementaion
 
-function retval = apply_to_axes(propname, value)
+function retval = apply_to_axes(propname, varargin)
   if ! nargin
     print_usage();
   endif
   
-  ax = findobj(gcf, "type", "axes");
+  ax = findobj(gcf, "type", "axes", "tag", "");
+  
+  if ! isempty(regexp(propname, "^.label"))
+    for a = ax(:)'
+      feval(propname, a, varargin{:});
+    endfor
+    return
+  endif
   
   for n = 1:length(ax)
-    set(ax(n), propname, value);
+    set(ax(n), propname, varargin{1});
   endfor
 endfunction
 
