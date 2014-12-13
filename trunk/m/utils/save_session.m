@@ -14,7 +14,7 @@
 if exist("SESSION_ID")
   ssfilename = session_filename(SESSION_ID);
 else
-  ssfilename = session_filename(SESSION_ID);
+  ssfilename = session_filename();
 endif
 save("-z","-binary", ssfilename);
 disp(["success to save session into ", ssfilename]);
