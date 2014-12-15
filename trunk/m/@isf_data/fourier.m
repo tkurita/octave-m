@@ -16,18 +16,22 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-15
+## * added "samplerange" option
 ## 2014-12-11
 ## * first implementaion
 
 function retval = fourier(isf, varargin)
-  opts = get_properties(varargin, {"range"}, {[]});
-  rng = opts.range;
-  t = subsref(isf, struct("type", ".", "subs", "t"));
+  opts = get_properties(varargin, {"range", "samplerange"}, {[], []});
   v = isf.v;
-  if !isempty(rng)
+  if !isempty(opts.range)
+    rng = opts.range;
+    t = subsref(isf, struct("type", ".", "subs", "t"));
     ind = (t > rng(1)) & (t < rng(2));
-    t = t(ind);
     v = v(ind);
+  elseif !isempty(opts.samplerange)
+    rng = opts.samplerange;
+    v = v(rng(1):rng(2));
   endif
   retval = fourier(v, subsref(isf, struct("type", ".", "subs", "ts")));
 endfunction
