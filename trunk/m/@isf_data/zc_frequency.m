@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} zc_frequency(@var{isf_data}, [@var{diff_threshold}, @var{method}, "need_amplitude"])
+## @deftypefn {Function File} {@var{retval} =} zc_frequency(@var{isf_data}, [@var{diff_threshold}, @var{method}, "need_amplitude", "timerange", @var{tr}])
 ## Evaluate frequency from peripod of zerocrossing positions.
 ##
 ## @strong{Inputs}
@@ -20,6 +20,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-17
+## * added "timerange" option.
 ## 2014-12-08
 ## * use struct instead of dict.
 ## 2013-01-08
@@ -32,8 +34,10 @@ function retval = zc_frequency(isf, varargin)
   #use_iterp = true;
   method = "interp";
   need_amplitude = false;
+  tr = [];
   if (length(varargin))
-    for n = 1:length(varargin)
+    n = 1;
+    while n <= length(varargin)
       opt = varargin{n};
       if isnumeric(opt)
         diff_threshold = opt;
@@ -43,20 +47,30 @@ function retval = zc_frequency(isf, varargin)
             method = opt;
           case "need_amplitude"
             need_amplitude = true;
+          case "timerange"
+            tr = varargin{++n};
           otherwise
             error([opt, " is unknown option."]);
         endswitch
       endif
-    endfor
+      n += 1;
+    endwhile
   endif
   # diff_threshold
   v = isf.v;
+  t = subsref(isf, struct("type", ".", "subs", "t"));
+  xzero = str2num(isf.preambles.("XZE"));
+  xinc = str2num(isf.preambles.("XIN"));
+  if !isempty(tr)
+    ind = (t >= tr(1)) & (t <= tr(2));
+    v = v(ind);
+    t = t(ind);
+    xzero = t(1);
+  endif
   positive_indexes = find(v > 0);
   indexes_diff = diff(positive_indexes);
   ind_list = find(diff(positive_indexes) > diff_threshold);
-  xinc = str2num(isf.preambles.("XIN"));
   zc_indexes1 = positive_indexes(ind_list);
-  xzero = str2num(isf.preambles.("XZE"));
   switch method
     case "interp"
       zc_indexes2 = zc_indexes1 + 1;
@@ -68,11 +82,11 @@ function retval = zc_frequency(isf, varargin)
       fresult = 1./period;
     case "simple"
       period = diff(zc_indexes1)*xinc;
-      t_zc = (zc_indexes1 -1) *xinc + xzero;
+      t_zc = t(zc_indexes1);
       fresult = 1./period;
     case "fit"
       period = diff(zc_indexes1)*xinc;
-      t_zc = (zc_indexes1 -1) *xinc + xzero;
+      t_zc = t(zc_indexes1);
       fguess = 1./period;
       fresult = [];
       ampresult = [];
