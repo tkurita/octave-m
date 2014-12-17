@@ -1,5 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} zc_frequency(@var{isf_data}, [@var{diff_threshold}, @var{method}, "need_amplitude", "timerange", @var{tr}])
+## @deftypefnx {Function File} {} zc_frequency(@var{isf_data}, "fit", "plot", @var{pltnum})
 ## Evaluate frequency from peripod of zerocrossing positions.
 ##
 ## @strong{Inputs}
@@ -12,6 +13,10 @@
 ## "intep" : evaluate zerocrossing by linear interpolation.
 ## "fit" : evaluate zerocrossing by sin curve fitting.
 ## The default value is "iterp"
+## @item pltnum
+## A list of indexes to plot fitting result.
+## This option must be used with "plot" method.
+## If this option is passed, result will not be returned.
 ## @end table
 ##
 ## @strong{Outputs}
@@ -22,6 +27,7 @@
 ##== History
 ## 2014-12-17
 ## * added "timerange" option.
+## * added "plot" option.
 ## 2014-12-08
 ## * use struct instead of dict.
 ## 2013-01-08
@@ -31,10 +37,10 @@
 
 function retval = zc_frequency(isf, varargin)
   diff_threshold = 2;
-  #use_iterp = true;
   method = "interp";
   need_amplitude = false;
   tr = [];
+  plt = [];
   if (length(varargin))
     n = 1;
     while n <= length(varargin)
@@ -49,6 +55,8 @@ function retval = zc_frequency(isf, varargin)
             need_amplitude = true;
           case "timerange"
             tr = varargin{++n};
+          case "plot"
+            plt = varargin{++n};
           otherwise
             error([opt, " is unknown option."]);
         endswitch
@@ -56,7 +64,7 @@ function retval = zc_frequency(isf, varargin)
       n += 1;
     endwhile
   endif
-  # diff_threshold
+
   v = isf.v;
   t = subsref(isf, struct("type", ".", "subs", "t"));
   xzero = str2num(isf.preambles.("XZE"));
@@ -90,13 +98,26 @@ function retval = zc_frequency(isf, varargin)
       fguess = 1./period;
       fresult = [];
       ampresult = [];
-      for n = 1:length(zc_indexes1)-1
-        yin = v(zc_indexes1(n):zc_indexes1(n+1));
-        tin = 0:xinc:(length(yin)-1)*xinc;
-        pf = sinefit(yin, tin, fguess(n), 0, 0, 1);
-        fresult(n) = pf(3);
-        ampresult(n) = pf(2);
-      endfor
+      if !isempty(plt)
+        for n = plt
+          yin = v(zc_indexes1(n):zc_indexes1(n+1));
+          tin = 0:xinc:(length(yin)-1)*xinc;
+          pf = sinefit(yin, tin, fguess(n), 0, 1, 1);
+          fresult(n) = pf(3);
+          ampresult(n) = pf(2);
+#          plot(tin, yin, "*", tin, -pf(2).*sin(2*pi*pf(3)*tin), "-");
+          input("hit a key to continue");
+        endfor
+        return;
+      else
+        for n = 1:length(zc_indexes1)-1
+          yin = v(zc_indexes1(n):zc_indexes1(n+1));
+          tin = 0:xinc:(length(yin)-1)*xinc;
+          pf = sinefit(yin, tin, fguess(n), 0, 0, 1);
+          fresult(n) = pf(3);
+          ampresult(n) = pf(2);
+        endfor
+      endif
     otherwise
       error([method , " is unknown method."]);
   endswitch
