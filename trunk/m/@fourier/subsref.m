@@ -10,6 +10,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-23
+## * added "fdB".
 ## 2014-11-17
 ## * first implementation
 
@@ -24,7 +26,7 @@ function retval = subsref(x, s)
     case "."
       fld = s.subs;
       switch fld
-        case {"fdBm", "xy"} # sampling interval
+        case {"fdBm", "xy", "fdB"} # sampling interval
           retval = [x.frequency(:), 20*log10(x.amplitude)(:)];
         otherwise
           retval = x.(fld);
