@@ -1,7 +1,9 @@
 ## BM pattern of Carbon 6+ 25MeV -> 660MeV
 1; #script file
 
-#LOADPATH=['~/share/octave:' DEFAULT_LOADPATH];
+##== History
+## 2015-01-06
+## * fiexed BMPattern at Flat base
 
 function timeSet = timeRegion
   timeSet.capture = [0,35];
@@ -76,8 +78,8 @@ function retval = BMPattern
   ## [msec], [(T/m)*m]
   pattern_cells = ...
       {
-         0   ,0.3229, "linear";
-        35   ,0.3229, "spline";
+         0   ,0.3299, "linear";
+        35   ,0.3299, "spline";
         60   ,0.3398, "";
         85   ,0.3889, "linear";
        625.4 ,1.6641, "spline";
@@ -88,7 +90,7 @@ function retval = BMPattern
       1199.6 ,1.6641, "linear";
       1740   ,0.3889, "spline";
       1765   ,0.3398, "";
-      1790   ,0.3229, "linear";
-      2000   ,0.3229, 0};
+      1790   ,0.3299, "linear";
+      2000   ,0.3299, 0};
   retval = build_pattern(pattern_cells);
 endfunction
