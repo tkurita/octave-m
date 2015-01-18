@@ -10,7 +10,7 @@
 ## The default value is 2.
 ## @item method
 ## "simple" : evaluate periods from porints closests to zero.
-## "intep" : evaluate zerocrossing by linear interpolation.
+## "interp" : evaluate zerocrossing by linear interpolation.
 ## "fit" : evaluate zerocrossing by sin curve fitting.
 ## The default value is "iterp"
 ## @item pltnum
