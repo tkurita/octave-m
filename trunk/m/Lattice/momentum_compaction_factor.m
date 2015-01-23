@@ -4,7 +4,7 @@
 ## @strong{Inputs}
 ## @table @var
 ## @item lattice
-## a cell array of elements or a sturct which have allElements field.
+## a cell array of elements or a sturct which have lattice field.
 ## dispersion values of all elements should be prepared.
 ## @end table
 ## 
@@ -23,7 +23,7 @@ function alpha = momentum_compaction_factor(lattice)
     print_usage(); return;
   endif
   if isstruct(lattice)
-    lattice = lattice.allElements;
+    lattice = lattice.lattice;
   endif
   alpha = 0;
   for n = 1:length(lattice)
