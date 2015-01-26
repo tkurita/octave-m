@@ -46,7 +46,7 @@ function retval = stacked_plot(varargin)
   pltindex = varargin{2};
   aw = 1 - lm - rm;
   fh = 1 - bm - tm; # figure height
-  ah = fh/nrows
+  ah = fh/nrows; # axes hight
   retval = subplot("position", [lm, bm+ah*(nrows-pltindex), aw, ah]);
 endfunction
 
