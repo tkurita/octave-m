@@ -25,6 +25,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-01-28
+## * added fit-check method
 ## 2014-12-17
 ## * added "timerange" option.
 ## * added "plot" option.
@@ -41,6 +43,7 @@ function retval = zc_frequency(isf, varargin)
   need_amplitude = false;
   tr = [];
   plt = [];
+  target_index = [];
   if (length(varargin))
     n = 1;
     while n <= length(varargin)
@@ -51,6 +54,9 @@ function retval = zc_frequency(isf, varargin)
         switch opt
           case {"simple", "interp", "fit"}
             method = opt;
+          case "fit-check"
+            method = opt;
+            target_index = varargin{++n};
           case "need_amplitude"
             need_amplitude = true;
           case "timerange"
@@ -118,6 +124,21 @@ function retval = zc_frequency(isf, varargin)
           ampresult(n) = pf(2);
         endfor
       endif
+    case "fit-check"
+      period = diff(zc_indexes1)*xinc;
+      t_zc = t(zc_indexes1);
+      fguess = 1./period;
+      fresult = [];
+      ampresult = [];
+      n = target_index;
+      y = v(zc_indexes1(n):zc_indexes1(n+1));
+      t = 0:xinc:(length(y)-1)*xinc;
+      pf = sinefit(y, t, fguess(n), 0, 1, 1);
+      f = pf(3);
+      amp = pf(2);
+      #plot(t, y, "*", t, pf(1) + amp.*sin(2*pi*f*t + pf(4) + pi/2), "-");
+      retval = tars(t, y, f, amp, pf);
+      return;
     otherwise
       error([method , " is unknown method."]);
   endswitch
