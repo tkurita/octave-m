@@ -12,7 +12,8 @@
 ## "simple" : evaluate periods from porints closests to zero.
 ## "interp" : evaluate zerocrossing by linear interpolation.
 ## "fit" : evaluate zerocrossing by sin curve fitting.
-## The default value is "iterp"
+## If the input signal is not noisy, "interp" will be better result than "fit". 
+## The default value is "iterp".
 ## @item pltnum
 ## A list of indexes to plot fitting result.
 ## This option must be used with "plot" method.
@@ -26,6 +27,7 @@
 
 ##== History
 ## 2015-01-28
+## * added mfit method.
 ## * added fit-check method
 ## 2014-12-17
 ## * added "timerange" option.
@@ -44,6 +46,7 @@ function retval = zc_frequency(isf, varargin)
   tr = [];
   plt = [];
   target_index = [];
+  ncycle = 1;
   if (length(varargin))
     n = 1;
     while n <= length(varargin)
@@ -54,6 +57,9 @@ function retval = zc_frequency(isf, varargin)
         switch opt
           case {"simple", "interp", "fit"}
             method = opt;
+          case "mfit"
+            method = opt;
+            ncycle = varargin{++n};
           case "fit-check"
             method = opt;
             target_index = varargin{++n};
@@ -94,10 +100,12 @@ function retval = zc_frequency(isf, varargin)
       period = diff(zc_indexes0)*xinc;
       t_zc = (zc_indexes0-1)*xinc + xzero;
       fresult = 1./period;
+      tresult = t_zc(1:end-1);
     case "simple"
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
       fresult = 1./period;
+      tresult = t_zc(1:end-1);
     case "fit"
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
@@ -124,6 +132,24 @@ function retval = zc_frequency(isf, varargin)
           ampresult(n) = pf(2);
         endfor
       endif
+      tresult = t_zc(1:end-1);
+    case "mfit"
+      period = diff(zc_indexes1)*xinc;
+      t_zc = t(zc_indexes1);
+      fguess = 1./period;
+      fresult = [];
+      ampresult = [];
+      tresult = [];
+      m = 1;
+      for n = 1:ncycle:length(zc_indexes1)-ncycle
+        yin = v(zc_indexes1(n):zc_indexes1(n+ncycle));
+        tin = 0:xinc:(length(yin)-1)*xinc;
+        pf = sinefit(yin, tin, fguess(n), 0, 0, 1);
+        fresult(m++) = pf(3);
+        ampresult(m++) = pf(2);
+        #mean(t_zc(n:ncycle))
+        tresult(m++) = mean(t_zc(n:n+ncycle));
+      endfor
     case "fit-check"
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
@@ -136,7 +162,7 @@ function retval = zc_frequency(isf, varargin)
       pf = sinefit(y, t, fguess(n), 0, 1, 1);
       f = pf(3);
       amp = pf(2);
-      #plot(t, y, "*", t, pf(1) + amp.*sin(2*pi*f*t + pf(4) + pi/2), "-");
+      #plot(t, y, "*", t, pf(1) + amp.*cos(2*pi*f*t + pf(4)), "-");
       retval = tars(t, y, f, amp, pf);
       return;
     otherwise
@@ -144,9 +170,9 @@ function retval = zc_frequency(isf, varargin)
   endswitch
   
   if need_amplitude
-    retval = [t_zc(1:end-1)(:), fresult(:), ampresult(:)];
+    retval = [tresult(:), fresult(:), ampresult(:)];
   else
-    retval = [t_zc(1:end-1)(:), fresult(:)];
+    retval = [tresult(:), fresult(:)];
   endif
 endfunction
 
