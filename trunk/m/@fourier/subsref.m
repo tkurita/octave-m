@@ -44,15 +44,5 @@ function retval = subsref(x, s)
   endif
 endfunction
 
-function retval = find_dict(a_dict, keys)
-  for k = keys
-    if has(a_dict, k{:})
-      retval = a_dict(k{:});
-      return
-    endif
-  endfor
-endfunction
-
-
 %!test
 %! func_name(x)
