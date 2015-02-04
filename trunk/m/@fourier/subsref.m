@@ -32,7 +32,7 @@ function retval = subsref(x, s)
         case {"fdBm", "fdB"} # sampling interval
           retval = [x.frequency(:), 20*log10(x.amplitude)(:)];
         case "xy"
-          retval = [x.frequency(:), x.amplitude];
+          retval = [x.frequency(:), x.amplitude(:)];
         otherwise
           retval = x.(fld);
         endswitch
