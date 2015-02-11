@@ -69,12 +69,12 @@ function varargout = fourier(varargin)
   
   fft_result = fft(y);
   nsample = length(y);
-  amplitude = abs(fft(y));
+  amplitude = abs(fft_result);
   n_half = floor(nsample/2);
-  amplitude = amplitude(1:n_half)/(nsample/2);
-  delf = 1/(ts * nsample);
-  frequency = 0:delf:((n_half-1)*delf);
-  fft_rec = append_fields(fft_rec, fft_result, amplitude, frequency);
+  #amplitude = amplitude(1:n_half)/(nsample/2);
+  df = 1/(ts * nsample);
+  frequency = 0:df:((n_half-1)*df);
+  fft_rec = append_fields(fft_rec, fft_result, frequency, df);
   fft_rec = class(fft_rec, "fourier");
   if nargout
     varargout{1} = fft_rec;
