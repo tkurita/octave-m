@@ -10,6 +10,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-02-05
+## * added "amp", "amplitude", "phase", "freq"
 ## 2015-02-04
 ## * subscription "xy" returns [frequency, amplitude]. 
 ##   amplituede is not passed through log10.
@@ -33,6 +35,12 @@ function retval = subsref(x, s)
           retval = [x.frequency(:), 20*log10(x.amplitude)(:)];
         case "xy"
           retval = [x.frequency(:), x.amplitude(:)];
+        case {"amp", "amplitude"}
+            retval = amp(x); 
+        case "phase"
+            retval = phase(x);
+        case "freq"
+            retval = x.frequency;
         otherwise
           retval = x.(fld);
         endswitch
