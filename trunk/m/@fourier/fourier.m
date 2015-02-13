@@ -26,6 +26,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-02-13
+## * The number of sampling data "ns" is appended into a result structure.
 ## 2014-11-26
 ## * accept xy data.
 ## 2014-11-21
