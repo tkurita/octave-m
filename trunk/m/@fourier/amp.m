@@ -10,8 +10,9 @@
 function retval = amp(x)
   retval = abs(x.fft_result);
   nsample = length(x.fft_result);
-   n_half = floor(nsample/2);
-  retval = retval(1:n_half)/(nsample/2); 
+  n_half = floor(nsample/2);
+  #retval = retval(1:n_half)/(nsample/2); 
+  retval = retval(1:n_half)/(nsample); 
 endfunction
 
 %!test
