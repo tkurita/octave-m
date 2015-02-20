@@ -13,8 +13,8 @@
 
 function lh = xyplot(varargin)
   plotarg = {};
-  for i = 1:length(varargin)
-    item = varargin{i};
+  for n = 1:length(varargin)
+    item = varargin{n};
     if (ischar(item))
       plotarg{end+1} = item;
     else
