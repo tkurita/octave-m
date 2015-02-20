@@ -7,6 +7,8 @@
 ## @end deftypefn
 
 ##== History
+## 2014-12-10
+## * not to access "*tick" property.
 ## 2011-01-06
 ## * First implementation
 
@@ -22,9 +24,9 @@ function retval = tickslabel_off(varargin)
   tickname = [axspec, "tick"];
   ticklabel = [axspec, "ticklabel"];
   
-  current_ticks = get(ax, tickname);
+  # current_ticks = get(ax, tickname);
   set(ax, ticklabel, {});
-  set(ax, tickname, current_ticks);
+  #set(ax, tickname, current_ticks);
 endfunction
 
 %!test
