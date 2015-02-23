@@ -71,7 +71,6 @@ function varargout = fourier(varargin)
   
   fft_result = fft(y);
   ns = length(y);
-  amplitude = abs(fft_result);
   n_half = floor(ns/2);
   df = 1/(ts * ns);
   frequency = 0:df:((n_half-1)*df);
@@ -92,8 +91,7 @@ function varargout = fourier(varargin)
   else
     plotopts = {};
   endif
-  plot(frequency, 20*log10(amplitude), "-", plotopts{:});...
-  set(gca, "xscale", "log");grid on;
-  ylabel("magnitude [dBm]");
-  xlabel("[Hz]");  
+  plot(frequency, 20*log10(amp(fft_rec)), "-", plotopts{:});...
+  set(gca, "xscale", "log");grid on;...
+  ylabel("magnitude [dB]");xlabel("[Hz]");
 endfunction
