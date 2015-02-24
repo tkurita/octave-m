@@ -15,7 +15,7 @@
 
 ## $Date::                           $
 ## $Rev$
-## $Auther$
+## $Author$
 
 ##== History
 ## 2015-02-24
