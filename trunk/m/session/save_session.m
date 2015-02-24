@@ -1,7 +1,22 @@
-## save all variables into the file "session-yyyymmdd.mat"
+## -*- texinfo -*-
+## @deftypefn {Function File} {} save_session([@var{SESSION_ID}])
+## Save all variables into the file "session-[@var{SESSION_ID}-]yyyymmdd.mat"
+##
+## @strong{Inputs}
+## @table @var
+## @item SESSION_ID
+## A name of a session.
+## If the value is not passes as an argument and 
+## a variable "SESSION_ID" in the "caller" context will be used.
+## @end table
+##
+## @seealso{load_session, purge_session}
+## @end deftypefn
 
-## $Date$
+## $Date::                           $
 ## $Rev$
+## $Auther$
+
 ##== History
 ## 2015-02-24
 ## * reimplement with function.
