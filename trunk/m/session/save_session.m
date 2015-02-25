@@ -33,7 +33,7 @@
 function save_session(varargin)
   if length(varargin)
     ssfilename = session_filename(varargin{1});
-  elseif evalin("caller", "exist SESSION_ID")
+  elseif evalin("caller", "exist SESSION_ID var")
     ssfilename = session_filename(evalin("caller", "SESSION_ID"));
   else
     ssfilename = session_filename();
