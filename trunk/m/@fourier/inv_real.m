@@ -16,7 +16,7 @@
 ## * first implementation
 
 function yt = inv_real(x)
-  bs = x.fft_result;
+  bs = x.fft_result(:); # standardize as a column-wise vector
   ns = length(bs);
   # if ns is odd
   smax = (ns + 1)/2;
@@ -27,11 +27,14 @@ function yt = inv_real(x)
   endif
   bs_abs = abs(bs(2:smax));
   bs_arg = arg(bs(2:smax));
-  s = 1:(smax-1);
-
+  s = (1:(smax-1))'; # standardize as a column-wise vector
+  st = time;
   for n = 1:ns
-    y(n) = eventerm(n) + 2*sum(bs_abs.*cos(2*pi*(n-1).*s/ns + bs_arg));
+    y(n) = eventerm(n) + 2*sum(bs_abs.*cos(2*pi*(n-1).*s/ns .+ bs_arg));
+    printf("%d/%d, elapsed time : %.1f [s]\r", n, ns, time()-st);
   endfor
+  printf("\n"); # prevent overlap between the display of the elapsed time 
+                # and a prompt.
   y = (bs(1) + y)/ns;
   t = linspace(0, 1/x.df, length(y));
   yt = [t(:), y(:)];
