@@ -5,6 +5,10 @@
 ## @seealso{inv}
 ## @end deftypefn
 
+## $Date::                           $
+## $Rev$
+## $Author$
+
 ##== History
 ## 2015-02-25
 ## * return [t, y] matrix.
