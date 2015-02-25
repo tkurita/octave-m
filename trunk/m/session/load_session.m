@@ -1,4 +1,20 @@
-## load last session file
+## -*- texinfo -*-
+## @deftypefn {Function File} {} load_session()
+## @deftypefnx {Function File} {} load_session(@var{session_id})
+## Load last session file
+##
+## @strong{Inputs}
+## @table @var
+## @item session_id
+## Optional. An optional name to give an unique name to a session file.
+## @end table
+## 
+## @seealso{save_session, purge_session}
+## @end deftypefn
+
+## $Date::                           $
+## $Rev$
+## $Auther$
 
 ##== History
 ## 2015-02-25
