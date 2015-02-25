@@ -1,15 +1,17 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} inv_real(@var{fourier_obj})
+## @deftypefn {Function File} {@var{yt} =} inv_real(@var{fourier_obj})
 ## Calculate invert fourier transformer without using imaginaly numbers.
 ## In ordicary cases ifft should be used ,because this routuine is slow. 
-## @seealso{}
+## @seealso{inv}
 ## @end deftypefn
 
 ##== History
+## 2015-02-25
+## * return [t, y] matrix.
 ## 2015-02-16
 ## * first implementation
 
-function y = inv_real(x)
+function yt = inv_real(x)
   bs = x.fft_result;
   ns = length(bs);
   # if ns is odd
@@ -27,4 +29,6 @@ function y = inv_real(x)
     y(n) = eventerm(n) + 2*sum(bs_abs.*cos(2*pi*(n-1).*s/ns + bs_arg));
   endfor
   y = (bs(1) + y)/ns;
+  t = linspace(0, 1/x.df, length(y));
+  yt = [t(:), y(:)];
 endfunction
