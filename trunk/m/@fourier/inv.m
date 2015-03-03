@@ -5,6 +5,10 @@
 ## The result is two column matrix of [t, y].
 ## @end deftypefn
 
+## $Date::                           $
+## $Rev$
+## $Author: tkurita $
+
 function yt = inv(x)
   y = ifft(x.fft_result);
   t = linspace(0, 1/x.df, length(y));
