@@ -36,8 +36,8 @@ function varargout = fit_profile(filepath, plot_title, horv)
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
   mean_value = fit_result_pr(3);
   vline(mean_value);
-  gp = gravity_point(pr.(horv))
-  vline(gp)
+  gp = gravity_point(pr.(horv));
+  vline(gp);
 
   title(plot_title);
   xlabel("Position [mm]");

@@ -184,14 +184,15 @@ function retval = zc_frequency(isf, varargin)
       else
         samplelag = zeros(length(period));
       endif
-      fresult = [];
-      ampresult = [];
       st = time;
       nmax = length(zc_indexes1)-ncycle;
-      m = 1;
       idxlist = 1:ncycle:nmax;
       nidx = length(idxlist);
       page_screen_output(0, "local");
+      fresult = zeros(nidx, 1);
+      ampresult = zeros(nidx, 1);
+      m = 1;
+      printf("start fitting\r");
       for n = idxlist
         yin = v(zc_indexes1(n)+samplelag(n):zc_indexes1(n+ncycle)+samplelag(n));
         tin = 0:xinc:(length(yin)-1)*xinc;
@@ -229,14 +230,17 @@ function retval = zc_frequency(isf, varargin)
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
       fguess = 1./period;
-      fresult = [];
-      ampresult = [];
-      tresult = [];
-      F = @ (x, p) p(1) + p(2)*cos(2*pi*p(3).*x + p(4) + pi/4);
+      F = @ (x, p) p(1) + p(2)*sin(2*pi*p(3).*x + p(4));
       page_screen_output(0, "local");
       nmax = length(zc_indexes1)-ncycle;
+      idxlist = 1:ncycle:nmax;
+      nidx = length(idxlist);
+      fresult = zeros(nidx, 1);
+      ampresult = zeros(nidx, 1);
+      tresult = zeros(nidx, 1);      
       m = 1;
-      for n = 1:ncycle:nmax
+      printf("start fitting\r");
+      for n = idxlist
         yin = v(zc_indexes1(n):zc_indexes1(n+ncycle));
         tin = 0:xinc:(length(yin)-1)*xinc;
         pin =  [0, max(yin), fguess(n), 0];
@@ -244,7 +248,7 @@ function retval = zc_frequency(isf, varargin)
         fresult(m) = pout(3);
         ampresult(m) = pout(2);
         tresult(m) = (t_zc(n) + t_zc(n+ncycle))/2;
-        printf("%d/%d\n", n, nmax/ncycle);
+        printf("%d/%d, elapsed time : %.1f [s]\r", m, nidx, time()-st);
         m++;
       endfor
       printf("\n");
@@ -257,7 +261,7 @@ function retval = zc_frequency(isf, varargin)
       fresult = [];
       ampresult = [];
       tresult = [];
-      F = @ (x, p) p(1) + p(2)*cos(2*pi*p(3).*x + p(4) + pi/4);
+      F = @ (x, p) p(1) + p(2)*sin(2*pi*p(3).*x + p(4));
       page_screen_output(0, "local");
       nmax = length(zc_indexes1)-ncycle;
       m = 1;

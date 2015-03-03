@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} func_name(@var{arg})
-## description
+## @deftypefn {Function File} {@var{up}, @var{down} =} menvelope(@var{x}, @var{y}, @var{n})
+## apply evelope @var{n} times.
 ## @strong{Inputs}
 ## @table @var
 ## @item arg1
@@ -18,11 +18,11 @@
 ##== History
 ##
 
-function [up, down] = menvelope(x, y, n, method)
-  [up, down] = envelope(x, y, method);
+function [up, down] = menvelope(x, y, n, varargin)
+  [up, down] = envelope(x, y, varargin{:});
   n -= 1;
   if n >= 1
-    [up, down_1] = menvelope(x, up, n, method);
-    [up_1, down] = menvelope(x, down, n, method);
+    [up, down_1] = menvelope(x, up, n, varargin{:});
+    [up_1, down] = menvelope(x, down, n, varargin{:});
   endif
 endfunction
