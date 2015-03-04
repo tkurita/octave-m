@@ -176,23 +176,22 @@ function retval = zc_frequency(isf, varargin)
       tresult = t_zc(1:end-1);
     #== fit
     case {"fit", "mfit"}
+      page_screen_output(0, "local");
+      st = time;
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
       fguess = 1./period;
       if use_cosine
         samplelag = round(period/(4*xinc));
       else
-        samplelag = zeros(length(period));
+        samplelag = zeros(length(period),1);
       endif
-      st = time;
       nmax = length(zc_indexes1)-ncycle;
       idxlist = 1:ncycle:nmax;
       nidx = length(idxlist);
-      page_screen_output(0, "local");
       fresult = zeros(nidx, 1);
       ampresult = zeros(nidx, 1);
       m = 1;
-      printf("start fitting\r");
       for n = idxlist
         yin = v(zc_indexes1(n)+samplelag(n):zc_indexes1(n+ncycle)+samplelag(n));
         tin = 0:xinc:(length(yin)-1)*xinc;
