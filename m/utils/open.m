@@ -9,4 +9,5 @@ function open(filepath)
   endif
   
   system(["open '",filepath,"'"]);
+  waitpid(0); # too remove zombie process
 endfunction
