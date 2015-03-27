@@ -8,7 +8,7 @@
 ##
 
 function retval = peak_freq(x)
-  [max_amp, i_amp] = max(x.amplitude);
+  [max_amp, i_amp] = max(amp(x));
   retval = x.frequency(i_amp);
 endfunction
 
