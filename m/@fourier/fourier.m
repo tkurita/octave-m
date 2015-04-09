@@ -1,7 +1,8 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, ["plot"], [@var{plotopts},...])
-## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, ["plot"], [@var{plotopts},...])
-## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{xy}, ["plot"], [@var{plotopts},...])
+## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, [opts,...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, [opts,...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{xy}, [opts,...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(... , ["window", wf],  ["plot", @var{plotopts},...])
 ## 
 ## The input @var{fft_rec} is a structure which has following fields
 ## @table @code
@@ -26,6 +27,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-04-09
+## * added support a window function.
 ## 2015-02-13
 ## * The number of sampling data "ns" is appended into a result structure.
 ## 2014-11-26
@@ -49,7 +52,6 @@ function varargout = fourier(varargin)
   if ! nargin
     print_usage();
   endif
-  
   arg_index = 2;
   if isstruct(varargin{1})
     fft_rec = varargin{1};
@@ -67,6 +69,15 @@ function varargout = fourier(varargin)
     y = varargin{1};
     ts = varargin{2};
     arg_index = 3;
+  endif
+  
+  if strcmp("window", varargin{arg_index})
+    wf = varargin{arg_index+1};
+    if !isempty(wf)
+      wf = feval(wf, length(y));
+      y = y .* wf;
+    endif
+    arg_index = arg_index+2;
   endif
   
   fft_result = fft(y);
