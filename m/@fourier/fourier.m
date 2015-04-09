@@ -28,6 +28,7 @@
 
 ##== History
 ## 2015-04-09
+## * improved parameter handling.
 ## * added support a window function.
 ## 2015-02-13
 ## * The number of sampling data "ns" is appended into a result structure.
@@ -52,7 +53,7 @@ function varargout = fourier(varargin)
   if ! nargin
     print_usage();
   endif
-  arg_index = 2;
+  arg_idx = 2;
   if isstruct(varargin{1})
     fft_rec = varargin{1};
     y = fft_rec.data;
@@ -68,17 +69,30 @@ function varargout = fourier(varargin)
     fft_rec = struct("data", [], "interval", []);
     y = varargin{1};
     ts = varargin{2};
-    arg_index = 3;
+    arg_idx = 3;
   endif
   
-  if strcmp("window", varargin{arg_index})
-    wf = varargin{arg_index+1};
-    if !isempty(wf)
-      wf = feval(wf, length(y));
-      y = y .* wf;
-    endif
-    arg_index = arg_index+2;
-  endif
+  do_plot = false;
+  plot_opts = {};
+  while arg_idx <= length(varargin)
+    opt = varargin{arg_idx};
+    switch opt
+      case "window"
+        wf = varargin{++arg_idx};
+        if !isempty(wf)
+          wf = feval(wf, length(y));
+          y = y .* wf;
+        endif
+      case "plot"
+        do_plot = true;
+        if length(varargin) > arg_idx
+          plot_opts = varargin(arg_idx+1:end);
+        endif
+      otherwise
+        error([opt, " is unknown option."]);
+      endswitch
+      arg_idx += 1;
+  endwhile
   
   fft_result = fft(y);
   ns = length(y);
@@ -89,19 +103,11 @@ function varargout = fourier(varargin)
   fft_rec = class(fft_rec, "fourier");
   if nargout
     varargout{1} = fft_rec;
-    if length(varargin) <= arg_index
-      if !contain_str(varargin, "plot")
-        return;
-      endif
+    if !do_plot
+      return
     endif
   endif
   
-
-  if length(varargin) > arg_index
-    plotopts = varargin(arg_index+1:end);
-  else
-    plotopts = {};
-  endif
   plot(frequency, 20*log10(amp(fft_rec)), "-", plotopts{:});...
   set(gca, "xscale", "log");grid on;...
   ylabel("magnitude [dB]");xlabel("[Hz]");
