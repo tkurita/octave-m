@@ -16,13 +16,15 @@
 ## @end deftypefn
 
 ##== History
+## 2015-04-09
+## * added "window" (window function) option.
 ## 2014-12-15
 ## * added "samplerange" option
 ## 2014-12-11
 ## * first implementaion
 
 function retval = fourier(isf, varargin)
-  opts = get_properties(varargin, {"range", "samplerange"}, {[], []});
+  opts = get_properties(varargin, {"range", "samplerange", "window"}, {[], [], []});
   v = isf.v;
   if !isempty(opts.range)
     rng = opts.range;
@@ -33,7 +35,7 @@ function retval = fourier(isf, varargin)
     rng = opts.samplerange;
     v = v(rng(1):rng(2));
   endif
-  retval = fourier(v, subsref(isf, struct("type", ".", "subs", "ts")));
+  retval = fourier(v, subsref(isf, struct("type", ".", "subs", "ts")), "window", opts.window);
 endfunction
 
 %!test
