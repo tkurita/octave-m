@@ -25,6 +25,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-04-13
+## * support zip file
 ## 2014-12-08
 ## * use struct instead of dict.
 ## 2014-12-01
@@ -48,11 +50,24 @@ function retval = isf_data(varargin)
     filename = varargin{1};
   endif
   pkg load struct;
+  
+  zipfilename = [];
+  if !exist(filename, "file")
+    zipfilename = [filename, ".zip"];
+    if !exist(zipfilename, "file")
+      error(["Can't found a file : ", filename]);
+    endif
+  endif
 
-  fid = fopen(filename, "r");
+  if isempty(zipfilename)
+    fid = fopen(filename, "r");
+    frewind(fid);
+  else
+    fid = popen(sprintf("unzip -p '%s' '%s'",zipfilename, basename(filename)), "r");
+  endif
+  
   preambles = struct;
   buff = "";
-  frewind(fid);
   while(1)
     s = fgets(fid, 1);
     switch s
