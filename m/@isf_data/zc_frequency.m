@@ -128,7 +128,7 @@ function retval = zc_frequency(isf, varargin)
   nskip = ncycle - noverlap;
   v = isf.v;
   t = subsref(isf, struct("type", ".", "subs", "t"));
-  xzero = str2num(isf.preambles.("XZE"));
+  xzero = str2num(isf.preambles.XZE);
   xinc = subsref(isf, struct("type", ".", "subs", "ts"));
   if !isempty(tr)
     ind = (t >= tr(1)) & (t <= tr(2));
@@ -141,7 +141,6 @@ function retval = zc_frequency(isf, varargin)
   else
     chpolar_indexes = find(v < 0);
   endif
-  indexes_diff = diff(chpolar_indexes);
   ind_list = find(diff(chpolar_indexes) > diff_threshold);
   zc_indexes1 = chpolar_indexes(ind_list);
   switch method
@@ -225,12 +224,13 @@ function retval = zc_frequency(isf, varargin)
       printf("\n"); # prevent overlap between the display of elapsed time and a prompt.
     #== leasqr
     case "leasqr"
+      page_screen_output(0, "local");
+      st = time;
       pkg load optim
       period = diff(zc_indexes1)*xinc;
       t_zc = t(zc_indexes1);
       fguess = 1./period;
       F = @ (x, p) p(1) + p(2)*sin(2*pi*p(3).*x + p(4));
-      page_screen_output(0, "local");
       nmax = length(zc_indexes1)-ncycle;
       idxlist = 1:ncycle:nmax;
       nidx = length(idxlist);

@@ -22,7 +22,7 @@ function retval = zc_trim(isf)
   if v(1) > 0
     chpoloar_idxes = find(v < 0);
     idx_list = find(diff(chpoloar_idxes) > diff_threshold);
-    zc_head = chpoloar_idxes(idx_list(1));
+    zc_head = chpoloar_idxes(idx_list(1))+1;
   else
     chpoloar_idxes = find(v > 0);
     zc_head = chpoloar_idxes(1);
