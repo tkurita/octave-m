@@ -60,7 +60,7 @@ function varargout = fourier(varargin)
     ts = fft_rec.interval;
   elseif columns(varargin{1}) == 2
     t = varargin{1}(:,1);
-    ti = linspace(t(1), t(end), length(t));
+    ti = linspace(t(1), t(end), length(t))';
     y = interp1(t, varargin{1}(:,2), ti);
     ts = mean(diff(ti));
     fft_rec = struct("data", [], "interval", []);
@@ -93,7 +93,6 @@ function varargout = fourier(varargin)
       endswitch
       arg_idx += 1;
   endwhile
-  
   fft_result = fft(y);
   ns = length(y);
   n_half = floor(ns/2);
@@ -108,7 +107,7 @@ function varargout = fourier(varargin)
     endif
   endif
   
-  plot(frequency, 20*log10(amp(fft_rec)), "-", plotopts{:});...
+  plot(frequency, 20*log10(amp(fft_rec)), "-", plot_opts{:});...
   set(gca, "xscale", "log");grid on;...
   ylabel("magnitude [dB]");xlabel("[Hz]");
 endfunction
