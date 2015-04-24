@@ -1,7 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} shift_xlim(@var{dx})
 ## Shift the limits of the x-axis for the current plot.
-## equivalent to xlim(xlim() + @var{dx})
+## 
+## Equivalent to xlim(xlim() + @var{dx})
 ##
 ## @end deftypefn
 
