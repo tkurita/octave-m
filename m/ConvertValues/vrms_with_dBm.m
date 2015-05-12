@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} vrms_with_dBm(@var{dbm}, @var{r})
-## description
+## Convert a value in dBm to a value in Vrms.
 ## @strong{Inputs}
 ## @table @var
 ## @item dbm
@@ -16,9 +16,6 @@
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-##
 
 function retval = vrms_with_dBm(dbm, r)
   p = 10^(dbm/10); # power in mW

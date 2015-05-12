@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} vrms_with_dBm(@var{dbm}, @var{r})
-## description
+## @deftypefn {Function File} {@var{retval} =} vpp_with_dBm(@var{dbm}, @var{r})
+## Convert a value in dBm to a value in Vpp.
 ## @strong{Inputs}
 ## @table @var
 ## @item dbm
@@ -16,9 +16,6 @@
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-##
 
 function retval = vpp_with_dBm(dbm, r)
   if nargin < 2
