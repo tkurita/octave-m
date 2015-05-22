@@ -14,14 +14,14 @@
 ## @strong{Outputs}
 ## @table @var
 ## @item amp
-## sart(I^2 + Q^2)
+## 2*sart(I^2 + Q^2)
 ## @item phase
 ## atan(Q/I)
 ## @end table
 ##
 ## @end deftypefn
 
-function [amp, phase] = coherent_detect(x, fc, n, varargin)
+function varargout = coherent_detect(x, fc, n, varargin)
   if ! nargin
     print_usage();
   endif
@@ -38,6 +38,13 @@ function [amp, phase] = coherent_detect(x, fc, n, varargin)
   Qout = filter(maf2, 1, multi_cos);
   amp = 2*sqrt(Iout.^2 + Qout.^2);
   phase = atan(Qout./Iout);
+
+  switch nargout
+    case 1
+      varargout = {struct("amp", amp, "phase" ,phase, "I", Iout, "Q", Qout)};
+    case 2
+      varargout = {amp, phase};
+  endswitch
 endfunction
 
 # 
