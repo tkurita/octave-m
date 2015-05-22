@@ -13,13 +13,7 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2015-02-20
-## * enhanced. renamed to figuresize.
-## 2014-11-13
-## * first implementaion
-
-function retval = figuresize(varargin)
+function varargout = figuresize(varargin)
   if ! nargin
     print_usage();
   endif
@@ -41,10 +35,13 @@ function retval = figuresize(varargin)
   switch opt
     case "default"
       set(gcf, "position", default_pos);
-      retval = default_pos;
+      varargout = {default_pos};
       return;
     otherwise
       retval = __settings__(opt, default_pos);
+      if !isempty(retval)
+        varargout = {retval};
+      endif
       return;
   endswitch
 
@@ -52,6 +49,7 @@ endfunction
 
 function retval = __settings__(command, defpos)
   settings = struct("tall", 600);
+  retval = [];
   switch command
     case "list"
       for [v, key] = settings
