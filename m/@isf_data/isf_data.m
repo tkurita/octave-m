@@ -50,20 +50,22 @@ function retval = isf_data(varargin)
     filename = varargin{1};
   endif
   pkg load struct;
-  
+
   zipfilename = [];
   if !exist(filename, "file")
     zipfilename = [filename, ".zip"];
     if !exist(zipfilename, "file")
       error(["Can't found a file : ", filename]);
     endif
+  elseif !isempty(regexp(filename, "\.zip$"))
+    zipfilename = filename;
   endif
-
+  
   if isempty(zipfilename)
     fid = fopen(filename, "r");
     frewind(fid);
   else
-    fid = popen(sprintf("unzip -p '%s' '%s'",zipfilename, basename(filename)), "r");
+    fid = popen(sprintf("unzip -p '%s' '%s'",zipfilename, basename(zipfilename, "\.zip")), "r");
   endif
   
   preambles = struct;
