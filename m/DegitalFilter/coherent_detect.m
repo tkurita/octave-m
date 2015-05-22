@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{amp}, @var{phase} =} coherent_detect(@var{x}, @var{fc}, @var{n})
+## @deftypefn {Function File} {[@var{amp}, @var{phase}] =} coherent_detect(@var{x}, @var{fc}, @var{n})
 ## coherent detection
 ## @strong{Inputs}
 ## @table @var
@@ -14,15 +14,12 @@
 ## @strong{Outputs}
 ## @table @var
 ## @item amp
-## amplitude
+## sart(I^2 + Q^2)
 ## @item phase
+## atan(Q/I)
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-## 2014-11-13
-## * first implementation
 
 function [amp, phase] = coherent_detect(x, fc, n, varargin)
   if ! nargin
