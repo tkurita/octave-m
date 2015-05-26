@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{dE} =} dE_with_dp_p(@var{dpp}, @var{E}, @var{paricle})
-## description
+## Evaluate energy variation correlated with momentum variation.
 ## @strong{Inputs}
 ## @table @var
 ## @item dpp
@@ -17,9 +17,6 @@
 ##
 ## @end deftypefn
 
-##== History
-##
-
 function dE = dE_with_dp_p(dpp, E, particle)
   if ! nargin
     print_usage();
@@ -28,7 +25,8 @@ function dE = dE_with_dp_p(dpp, E, particle)
   lv = physical_constant("speed of light in vacuum");
   w = mass_e + E; # total energy
   b2 = 1- (mass_e/w)^2;
-  dE = b2*dpp*E;
+  #dE = b2*dpp*E;
+  dE = b2*dpp*w;
 endfunction
 
 %!test
