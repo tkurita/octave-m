@@ -8,7 +8,7 @@ function retval = amp(x)
   n_half = floor(nsample/2);
   # 複素数表示のフーリエ係数から振幅を求めるときは 2倍する必要がある。
   # /Users/tkurita/Dropbox/Study/Mathematical Basic/フーリエ変換/FourierTransformer.pdf
-  retval = 2*abs(x.fft_result(1:n_half)/nsample);
+  retval = 2*abs(x.fft_result(1:n_half)/nsample)/x.acf;
 endfunction
 
 %!test

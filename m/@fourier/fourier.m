@@ -74,14 +74,17 @@ function varargout = fourier(varargin)
   
   do_plot = false;
   plot_opts = {};
+  acf = 1;
+  ns = length(y);
   while arg_idx <= length(varargin)
     opt = varargin{arg_idx};
     switch opt
       case "window"
         wf = varargin{++arg_idx};
         if !isempty(wf)
-          wf = feval(wf, length(y));
+          wf = feval(wf, ns);
           y = y .* wf;
+          acf = sum(wf)/ns; # amplitude correction factor
         endif
       case "plot"
         do_plot = true;
@@ -94,11 +97,10 @@ function varargout = fourier(varargin)
       arg_idx += 1;
   endwhile
   fft_result = fft(y);
-  ns = length(y);
   n_half = floor(ns/2);
   df = 1/(ts * ns);
   frequency = 0:df:((n_half-1)*df);
-  fft_rec = append_fields(fft_rec, fft_result, frequency, df, ns);
+  fft_rec = append_fields(fft_rec, fft_result, frequency, df, ns, acf);
   fft_rec = class(fft_rec, "fourier");
   if nargout
     varargout{1} = fft_rec;
