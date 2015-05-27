@@ -3,16 +3,12 @@
 ## return amplitude
 ## @end deftypefn
 
-##== History
-## 2015-02-05
-## * first implementation
-
 function retval = amp(x)
-  retval = abs(x.fft_result);
   nsample = length(x.fft_result);
   n_half = floor(nsample/2);
-  #retval = retval(1:n_half)/(nsample/2); 
-  retval = retval(1:n_half)/(nsample); 
+  # 複素数表示のフーリエ係数から振幅を求めるときは 2倍する必要がある。
+  # /Users/tkurita/Dropbox/Study/Mathematical Basic/フーリエ変換/FourierTransformer.pdf
+  retval = 2*abs(x.fft_result(1:n_half)/nsample);
 endfunction
 
 %!test
