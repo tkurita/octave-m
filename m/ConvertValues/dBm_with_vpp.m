@@ -15,7 +15,7 @@ function retval = dBm_with_vpp(vpp, r = 50)
     print_usage();
   endif
   vrms = vpp/(2*sqrt(2));
-  mw = vrms^2/r*1e3; # power in mW
+  mw = vrms.^2/r*1e3; # power in mW
   retval = 10*log10(mw);
 endfunction
 
