@@ -26,29 +26,6 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2015-04-09
-## * improved parameter handling.
-## * added support a window function.
-## 2015-02-13
-## * The number of sampling data "ns" is appended into a result structure.
-## 2014-11-26
-## * accept xy data.
-## 2014-11-21
-## * if a structre is not passed, data and interval field of the returned value 
-##   will be empty to save memory.
-## 2014-11-17
-## * moved to class
-## 2014-11-13
-## * added support of plot options 
-## 2014-04-23
-## * amplitude is normalized.
-## 2014-04-15
-## * added "plot" option.
-## 2013-11-06
-## * accept non structure parameter.
-## * make a plot if no output aguments.
-
 function varargout = fourier(varargin)
   if ! nargin
     print_usage();
@@ -63,12 +40,12 @@ function varargout = fourier(varargin)
     ti = linspace(t(1), t(end), length(t))';
     y = interp1(t, varargin{1}(:,2), ti);
     ts = mean(diff(ti));
-    fft_rec = struct("data", [], "interval", []);
+    fft_rec = struct("data", [], "interval", ts);
   else
     #fft_rec = struct("data", varargin{1}, "interval", varargin{2});
-    fft_rec = struct("data", [], "interval", []);
     y = varargin{1};
     ts = varargin{2};
+    fft_rec = struct("data", [], "interval", ts);
     arg_idx = 3;
   endif
   
