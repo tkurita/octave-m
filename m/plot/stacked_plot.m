@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{hax} =} stacked_plot(@var{rows}, @var{index})
 ## @deftypefnx {Function File} {} stacked_plot("margin", @var{margin})
+## @deftypefnx {Function File} {} stacked_plot("spacing", @var{spacing})
 ## Set up a plot grid removing vertical spaces between subwindows.
 ## @strong{Inputs}
 ## @table @var
@@ -12,11 +13,9 @@
 ## 4 elements vector of [left, bottom, right, top]
 ## @end table
 ##
+## If some figures vanish, fine adjust margins or spacing
+## 
 ## @end deftypefn
-
-##== History
-## 2015-01-22
-## * first implemantaion
 
 function retval = stacked_plot(varargin)
   if ! nargin
@@ -27,27 +26,66 @@ function retval = stacked_plot(varargin)
   persistent bm = dm(2); # bottom margin
   persistent rm = dm(3); # right margin
   persistent tm = dm(4); # top margin
-  if ischar(varargin{1}) && strcmp(varargin{1}, "margin")
-    if (length(varargin) == 1)
-      retval = [lm, bm, rm, tm];
-      return;
-    endif
-    margin = varargin{2};
-    if ischar(margin) && strcmp(margin, "default")
-      margin = dm;
-    endif
-    lm = margin(1);
-    bm = margin(2);
-    rm = margin(3);
-    tm = margin(4);
+  persistent defspacing = 0;
+  persistent spacing = 0;
+  if ischar(varargin{1})
+    n = 1;
+    while n <= length(varargin)
+      switch varargin{n} 
+        case "margin"
+          if (length(varargin) == 1)
+            retval = [lm, bm, rm, tm];
+            return
+          endif
+          margin = varargin{++n};
+          if ischar(margin)
+            switch margin
+              case "default"
+                margin = dm;
+                retval = margin;
+              otherwise
+                disp margin;
+                error("Unknown option for the margin parameter.");
+            endswitch
+            return
+          endif
+          lm = margin(1);
+          bm = margin(2);
+          rm = margin(3);
+          tm = margin(4);
+        case "spacing"
+          if (length(varargin) == 1)
+            retval = spacing;
+            return;
+          endif
+          sp = varargin{++n};
+          if ischar(sp)
+            switch sp
+              case "default"
+                spacing = defspacing;
+                retval = spacing;
+              otherwise
+                disp sp;
+                error("Unknown option for the spacing parameter.");
+            endswitch
+            return
+          endif
+          spacing = sp;
+        otherwise
+          disp varargin{n};
+          error("Unknown parameter label.");
+        endswitch
+        n++;
+      endwhile
     return;
   endif
+  
   nrows = varargin{1};
   pltindex = varargin{2};
   aw = 1 - lm - rm;
-  fh = 1 - bm - tm; # figure height
+  fh = 1 - bm - (tm -spacing); # figure height
   ah = fh/nrows; # axes hight
-  retval = subplot("position", [lm, bm+ah*(nrows-pltindex), aw, ah]);
+  retval = subplot("position", [lm, bm+ah*(nrows-pltindex), aw, ah-spacing]);
 endfunction
 
 %!test
