@@ -84,6 +84,78 @@ function retval = plotgrid(varargin)
           bm = margin(2);
           rm = margin(3);
           tm = margin(4);
+        case "top margin"
+          if (length(varargin) == 1)
+            retval = tm;
+            return
+          endif
+          m = varargin{++n};
+          if ischar(m)
+            switch m
+              case "default"
+                tm = dm(4);
+                retval = tm;
+              otherwise
+                disp m;
+                error("Unknown option for the top margin parameter.");
+            endswitch
+            return
+          endif
+          tm = m;
+        case "bottom margin"
+          if (length(varargin) == 1)
+            retval = bm;
+            return
+          endif
+          m = varargin{++n};
+          if ischar(m)
+            switch m
+              case "default"
+                bm = dm(3);
+                retval = bm;
+              otherwise
+                disp m;
+                error("Unknown option for the bottom margin parameter.");
+            endswitch
+            return
+          endif
+          bm = m;
+        case "left margin"
+          if (length(varargin) == 1)
+            retval = lm;
+            return
+          endif
+          m = varargin{++n};
+          if ischar(m)
+            switch m
+              case "default"
+                lm = dm(1);
+                retval = lm;
+              otherwise
+                disp m;
+                error("Unknown option for the left margin parameter.");
+            endswitch
+            return
+          endif
+          lm = m;
+        case "right margin"
+          if (length(varargin) == 1)
+            retval = rm;
+            return
+          endif
+          m = varargin{++n};
+          if ischar(m)
+            switch m
+              case "default"
+                rm = dm(2);
+                retval = rm;
+              otherwise
+                disp m;
+                error("Unknown option for the right margin parameter.");
+            endswitch
+            return
+          endif
+          rm = m;
         case "vertical spacing"
           if (length(varargin) == 1)
             retval = vspacing;
@@ -137,12 +209,13 @@ function retval = plotgrid(varargin)
   ridx = varargin{1};
   cidx = varargin{2};
   fw = 1 - lm - rm; # figure width
-  aw = (fw - hspacing*(ncolumns-1))/nrows;
+  aw = (fw - hspacing*(ncolumns-1))/ncolumns;
   fh = 1 - bm - tm; # figure height
   ah = (fh - vspacing*(nrows-1))/nrows; # axes hight
   # [left, bottom, width, height]
   ft = 1 - tm; # figure top position
-  retval = subplot("position", [lm + (aw + hspacing)*(cidx-1), ft - (ah + vspacing)*(ridx) - vspacing, aw, ah]);
+  p = [lm + (aw + hspacing)*(cidx-1), ft - (ah + vspacing)*(ridx) - vspacing, aw, ah];
+  retval = subplot("position", p);
 endfunction
 
 %!test
