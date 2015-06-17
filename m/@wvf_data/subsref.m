@@ -8,16 +8,22 @@
 ####
 ## @end deftypefn
 
-##== History
-## 2015-02-03
-## * first implementation
-
 function retval = subsref(x, s)
   if (isempty(s))
     error("missing index");
   endif
   switch s(1).type
     case "()"
+    case "."
+      fld = s.subs;
+      switch fld
+        case "data"
+          retval = x.data;
+        case "info"
+          retval = x.info;
+        otherwise
+          retval = x.info.(fld);
+      endswitch
     case "{}"
       idxes = s.subs;
       if length(idxes) < 2
