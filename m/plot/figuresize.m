@@ -18,51 +18,65 @@ function varargout = figuresize(varargin)
     print_usage();
   endif
   
-  persistent default_pos = get(gcf, "position");
-  
+  persistent default_size = get(gcf, "position")(3:4);
+
   n = 1;
   if isnumeric(varargin{1})
     if (length(varargin) > 1) && (isnumeric(varargin{2}))
-     retval = [default_pos(1:2), varargin{1}, varargin{2}];
+      newsize = [varargin{1}, varargin{2}];
     else
-      retval = [default_pos(1:3), varargin{1}];
+      newsize = varargin{1};
     endif
-    set(gcf, "position", retval);
-    return;
+    retval = __change_size__(newsize);
+    if !isempty(retval) && nargout
+      varargout = {retval};
+    endif
+    return
   endif
   
   opt = varargin{1};
   switch opt
     case "default"
-      set(gcf, "position", default_pos);
-      varargout = {default_pos};
-      return;
+      current_pos = get(gcf, "position");
+      current_pos(3:4) = default_size;
+      retval = __change_size__(default_size);
     otherwise
-      retval = __settings__(opt, default_pos);
-      if !isempty(retval)
-        varargout = {retval};
-      endif
-      return;
+      retval = __settings__(opt, default_size);
   endswitch
-
+  if !isempty(retval) && nargout
+    varargout = {retval};
+  endif
 endfunction
 
-function retval = __settings__(command, defpos)
+function retval = __change_size__(newsize)
+  retval = [];
+  current_pos = get(gcf, "position");
+  newpos = [current_pos(1:4-length(newsize)), newsize];
+  if all(newpos(3:4) == current_pos(3:4))
+    return
+  endif
+  newpos(2) = current_pos(2) + (current_pos(4) - newpos(4));
+  set(gcf, "position", newpos);
+  retval = newpos;
+endfunction
+
+function retval = __settings__(command, default_size)
   settings = struct("tall", 600);
   retval = [];
   switch command
     case "list"
+      current_pos = get(gcf, "position");
       for [v, key] = settings
         printf("%s : ", key);
-        disp([defpos(1:4-length(v)), v]);
+        disp([current_pos(1:4-length(v)), v]);
       endfor
     otherwise
       v = settings.(command);
-      newpos = [defpos(1:4-length(v)), v];
-      set(gcf, "position", newpos);
-      printf("new figure position : ");
-      disp(newpos);
-      retval = newpos;
+      retval = __change_size__(v);
+      if !isempty(retval)
+        printf("new figure position : ");
+        disp(retval);
+      endif
   endswitch
 endfunction
 %!test
