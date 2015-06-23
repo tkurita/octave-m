@@ -1,17 +1,17 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{ps}, @var{sin_ps} =} synchro_phase(@var{bl}, @var{tline}, @var{vline}, @var{C})
-## Calculate of phase of synchronous particle.
+## @deftypefn {Function File} {@var{ps}, @var{sin_ps} =} synchro_phase(@var{brho}, @var{tline}, @var{vline}, @var{C})
+## Calculate of phase of synchronous particle (synchronus phase).
 ## 
 ## @strong{Inputs}
 ## @table @var
-## @item brho
-## BM pattern in BL [T*m]
+## @item bl
+## BM pattern in Brho [T*m]
 ## @item tline
 ## list of time in [ms]
 ## @item vline
 ## RF voltage pattern [V]
 ## @item C
-## circumference [m], 33.201 mm for WERC
+## circumference [m], 33.201 m for WERC
 ## @end table
 ##
 ## @strong{Outputs}
@@ -26,6 +26,8 @@
 ## @end deftypefn
 
 ##== History
+## 2015-06-04
+## * accept Brho instead of BL
 ## 2011-01-25
 ## * accept Brho instead of BL -- not correct
 ## * help with texinfo
@@ -36,12 +38,13 @@
 ## 2009-10-30
 ## * It looks that gradient(tline/1000) is needed. gradient was changed ?
 
-function [ps,sin_ps] = synchro_phase(bl, tline, vline, C)
+function [ps,sin_ps] = synchro_phase(brho, tline, vline, C)
   # C = 33.201
   # A charge number as a parameter is not required,
   # because it is cancled between bl and vline.
-  dbdt=gradient(bl, (tline/1000));
-  sin_ps = (C*dbdt/(pi/4))./vline;
+  dbdt=gradient(brho, (tline/1000));
+  #sin_ps = (C*dbdt/(pi/4))./vline;
+  sin_ps = (C*dbdt)./vline;
   sin_ps(isnan(sin_ps)) = 0;
   ps =asin(sin_ps);
 endfunction
