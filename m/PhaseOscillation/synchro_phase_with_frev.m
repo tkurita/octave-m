@@ -6,10 +6,9 @@
 ## @item frev
 ## revolution frequency. The hamonics is assumed as 1.
 ## Therefor @var{frev} should be RF frequency/harmonics.
-## 
 ## @item rfv
 ## RF voltage pattern.
-## @item tmsec
+## @item tsec
 ## time in seconds.
 ## @item C
 ## circumference [m], 33.201 m for WERC
