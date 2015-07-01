@@ -1,16 +1,9 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{val}, @var{ind} =} ymax(@var{xy}, ["xrange", @var{xrange}])
+## @deftypefn {Function File} {[@var{xy_at_ymax}, @var{ind}] =} ymax(@var{xy}, ["xrange", @var{xrange}])
 ## 
 ## return a row acooding to maxmum y
 ##
 ## @end deftypefn
-
-##== History
-## 2009-06-02
-## * add "xrange" property.
-##
-## 2008-02-20
-## * renamed from maxY
 
 function varargout = ymax(xy, varargin)
   if (!nargin)
