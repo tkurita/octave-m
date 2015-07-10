@@ -1,11 +1,15 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} subsref(@var{arg})
+## @deftypefn {Function File} {@var{retval} =} subsref(@arg{obj}, @var{idx})
 ## 
-## isfdata.v returns values in units of volt.
-##
-## isfdata.preambles returns preambles of isf file as a dict object.
-##
-## isfdata.preambles("name") returns a value of "name" entry in the preambles.
+## ## @table @code
+## @item fdBm
+## @item fdB
+## @item xy
+## @item amp
+## @item amplitude
+## @item phase
+## @item freq
+## @end table
 ##
 ## @end deftypefn
 
