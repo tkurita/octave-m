@@ -24,6 +24,16 @@
 ##
 ## If @var{xy} is given, y value is resampled with mean iterval of x value.
 ##
+## @strong{Methods}
+## @table @code
+## @item inv
+## @item inv_fourier
+## @item inv_real
+## @item phase
+## @item amp
+## @item peak_freq
+## @end table
+##
 ## @end deftypefn
 
 function varargout = fourier(varargin)
