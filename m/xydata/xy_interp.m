@@ -22,8 +22,9 @@ function xyi = xy_interp(xy, xi, method = "linear")
   if ! nargin
     print_usage();
   endif
-  yi = interp1(xy(:, 1), xy(:, 2), xi, method);
-  xyi = [xi, yi]; 
+  vxi = xi(:);
+  yi = interp1(xy(:, 1), xy(:, 2), vxi, method);
+  xyi = [vxi, yi]; 
 endfunction
 
 %!test
