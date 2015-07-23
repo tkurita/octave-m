@@ -7,6 +7,7 @@
 ## @table @code
 ## @item fontsize
 ## @item papersize
+## in inch. default value is "screen". 72dpi.
 ## @item paperposition
 ## @item position
 ## @item orient
@@ -17,39 +18,12 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2014-11-11
-## * revived "papersize" option.
-## 2014-10-23
-## * added "paperorigin" option.
-## * improved "paperposition" setteing for gnuplot.
-## 2014-10-01
-## * paper is fit to figure. when paper orient is landscape.
-## 2014-07-31
-## * the device parameter is obtained from the path extension.
-## * renamed from print_pdf.
-## 2014-07-22
-## * if device is not "pdf", pdfcrop will not be prformed.
-## * support fontname property.
-## 2014-04-10
-## * utilize pdfcrop to make paper size fit the graphics.
-## 2012-10-16
-## * default paper size is changed to [8,5.5] from [8,5] to fit fltk output.
-## 2012-07-27
-## * if fontsize is not given, fontsize is not changed.
-## 2011-07-28
-## * "position" property can be cell array for multi-plot
-## 2011-01-13
-## * fixed : errors when one plot.
-## 2011-01-06
-## * fixed : "fontsize" are applied to plots in multiplot
-
 function save_plot(fname, varargin)
   p = inputParser();
   p.FunctionName = "save_plot";
   p = p.addParamValue("fontsize", NA);
   p = p.addParamValue("fontname", NA);
-  p = p.addParamValue("papersize", NA);
+  p = p.addParamValue("papersize", "screen");
   p = p.addParamValue("paperposition", NA);
   p = p.addParamValue("paperorigin", NA);
   p = p.addParamValue("position", NA);
@@ -57,6 +31,7 @@ function save_plot(fname, varargin)
   p = p.addParamValue("margins", "10 10 10 10");
   p = p.addParamValue("device", NA);
   p = p.addParamValue("crop", false);
+  
   p = p.parse(varargin{:});
   opts = p.Results;
 
@@ -78,6 +53,16 @@ function save_plot(fname, varargin)
   pre_ps = get(gcf, "papersize");
 
   if isna(opts.paperposition) && strcmp(opts.orient, "landscape")
+    if !ischar(opts.papersize)
+      opts.papersize = [pre_pp(3), pre_pp(4)];
+    else strcmp(opts.papersize, "screen");
+      fps = get(gcf, "position");
+      opts.papersize = [fps(3), fps(4)]./72;
+      if (isna(opts.paperorigin))
+        opts.paperorigin = [0, 0];
+      endif
+    endif
+
     if (isna(opts.paperorigin))
       if (strcmp(graphics_toolkit, "fltk"))
         opts.paperorigin = [-0.15, -0.25];
@@ -85,12 +70,9 @@ function save_plot(fname, varargin)
         opts.paperorigin = [0, 0];
       endif
     endif
-    if isna(opts.papersize)
-      opts.papersize = [pre_pp(3), pre_pp(4)];
-    endif
+
     opts.paperposition = ...
     [opts.paperorigin(1), opts.paperorigin(2), opts.papersize(1), opts.papersize(2)];
-    opts
     set(gcf, "paperposition", opts.paperposition);
     set(gcf, "papersize", opts.papersize);
   endif
