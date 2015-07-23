@@ -21,7 +21,7 @@
 ## 2014-11-11
 ## * revived "papersize" option.
 ## 2014-10-23
-## * added "paperorientation" option.
+## * added "paperorigin" option.
 ## * improved "paperposition" setteing for gnuplot.
 ## 2014-10-01
 ## * paper is fit to figure. when paper orient is landscape.
@@ -45,69 +45,80 @@
 ## * fixed : "fontsize" are applied to plots in multiplot
 
 function save_plot(fname, varargin)
-  [fs, fn, ps, pp, po, ax_pos, ort, margins, device, crop] = get_properties(varargin,...
-            {"fontsize", "fontname", ...
-            "papersize", "paperposition", "paperorientation", "position", ... 
-            "orient", "margins", "device", "crop"},...
-            {NA, NA, NA, NA, NA, NA, "landscape", "10 10 10 10", NA, false});
+  p = inputParser();
+  p.FunctionName = "save_plot";
+  p = p.addParamValue("fontsize", NA);
+  p = p.addParamValue("fontname", NA);
+  p = p.addParamValue("papersize", NA);
+  p = p.addParamValue("paperposition", NA);
+  p = p.addParamValue("paperorigin", NA);
+  p = p.addParamValue("position", NA);
+  p = p.addParamValue("orient", "landscape");
+  p = p.addParamValue("margins", "10 10 10 10");
+  p = p.addParamValue("device", NA);
+  p = p.addParamValue("crop", false);
+  p = p.parse(varargin{:});
+  opts = p.Results;
 
-  if !ischar(device)
+  if !ischar(opts.device)
     [d , bn, ext, v] = fileparts(fname);
     if !length(ext)
       error("device is not specified.");
     endif
-    device = ext(2:end);
+    opts.device = ext(2:end);
   endif
 
   pre_orient = NA;
-  if ischar(ort)
+  if ischar(opts.orient)
     pre_orient = orient;
-    orient(ort);
+    orient(opts.orient);
   endif
 
   pre_pp = get(gcf, "paperposition");
   pre_ps = get(gcf, "papersize");
-  #if isna(pp) && isna(ps) && strcmp(ort, "landscape")
-  if isna(pp) && strcmp(ort, "landscape")
-    if (isna(po))
+
+  if isna(opts.paperposition) && strcmp(opts.orient, "landscape")
+    if (isna(opts.paperorigin))
       if (strcmp(graphics_toolkit, "fltk"))
-        po = [-0.15, -0.25];
+        opts.paperorigin = [-0.15, -0.25];
       else
-        po = [0, 0];
+        opts.paperorigin = [0, 0];
       endif
     endif
-    if isna(ps)
-      ps = [pre_pp(3), pre_pp(4)];
+    if isna(opts.papersize)
+      opts.papersize = [pre_pp(3), pre_pp(4)];
     endif
-    pp = [po(1), po(2), ps(1), ps(2)];
-    set(gcf, "paperposition", pp);
-    set(gcf, "papersize", ps);
+    opts.paperposition = ...
+    [opts.paperorigin(1), opts.paperorigin(2), opts.papersize(1), opts.papersize(2)];
+    opts
+    set(gcf, "paperposition", opts.paperposition);
+    set(gcf, "papersize", opts.papersize);
   endif
   
   ##=== axes position
   pre_axpos = NA;
   ax = findobj(gcf, "type", "axes");
-  if (iscell(ax_pos))
+  if (iscell(opts.position))
     pre_axpos = get(ax, "position");
-    apply_property(ax, "position", ax_pos);
+    apply_property(ax, "position", opts.position);
 #
 #    if length(ax_list) > 1
 #      pre_axpos = [];
 #      for n = 1:length(ax)
 #        pre_axpos(n,:) = get(ax{n}, "position");
-#        set(ax{n}, "position", ax_pos(n,:));
+#        set(ax{n}, "position", opts.position(n,:));
 #      endfor
 #    else
 #      pre_axpos = get(gca, "position");
-#      set(gca, "position", ax_pos);
+#      set(gca, "position", opts.position);
 #    endif
   endif
   
   ##=== ticks label
   #pre_ticks = get(gca, "fontsize");
   pre_axfontsize = get(ax, "fontsize");
-  #set(gca, "fontsize", fs); # axis ticks label
-  if !isnan(fs) set(ax, "fontsize", fs); endif
+  #set(gca, "fontsize", opts.fontsize); # axis ticks label
+  if !isnan(opts.fontsize) set(ax, "fontsize", opts.fontsize); endif
   
   ##=== xlabel
   lh = get(ax, "xlabel");
@@ -118,8 +129,8 @@ function save_plot(fname, varargin)
   pre_xls = NA;
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
-    if !isnan(fs) set(xlabel_handles, "fontsize", fs); endif
-    if ischar(fn) set(xlabel_handles, "fontname", fn); endif
+    if !isnan(opts.fontsize) set(xlabel_handles, "fontsize", fontsize); endif
+    if ischar(opts.fontname) set(xlabel_handles, "fontname", opts.fontname); endif
   endif
   
 
@@ -132,20 +143,20 @@ function save_plot(fname, varargin)
   pre_yls = NA;
   if (length(ylabel_handles) > 0)
     pre_yls = get(ylabel_handles, "fontsize");
-    if !isnan(fs) set(ylabel_handles, "fontsize", fs); endif
-    if ischar(fn) set(ylabel_handles, "fontname", fn); endif
+    if !isnan(opts.fontsize) set(ylabel_handles, "fontsize", opts.fontsize); endif
+    if ischar(opts.fontname) set(ylabel_handles, "fontname", opts.fontname); endif
   endif
   
   ##=== fontname
-  if ischar(fn)
-    set(findobj(gcf, "-property", "fontname"), "fontname", fn);
+  if ischar(opts.fontname)
+    set(findobj(gcf, "-property", "fontname"), "fontname", opts.fontname);
   endif
 
-  #print(["-d",device], fname); 
-  if isnan(fs)
-    print(["-d",device], fname);
+  #print(["-d",opts.device], fname); 
+  if isnan(opts.fontsize)
+    print(["-d",opts.device], fname);
   else
-    print(["-F:", num2str(fs)], ["-d",device], fname);
+    print(["-F:", num2str(opts.fontsize)], ["-d",opts.device], fname);
   endif
     # gnuplot 4.2
     #  -F は legend だけに効く 
@@ -167,9 +178,9 @@ function save_plot(fname, varargin)
   if !isna(pre_ps) set(gcf, "papersize", pre_ps); endif
   if !isna(pre_pp) set(gcf, "paperposition", pre_pp); endif
   if ischar(pre_orient) orient(pre_orient); endif
-  if (crop && strcmp(device, "pdf"))
+  if (opts.crop && strcmp(opts.device, "pdf"))
     # disp("will pdfcrop")
-    pdfcrop(fname, "margins", margins);
+    pdfcrop(fname, "margins", opts.margins);
   endif
 endfunction
 
