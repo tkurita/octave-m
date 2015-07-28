@@ -13,12 +13,6 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2014-12-10
-## * added support of axes labels.
-## 2014-09-15
-## * first implementaion
-
 function retval = apply_to_axes(propname, varargin)
   if ! nargin
     print_usage();
@@ -33,9 +27,15 @@ function retval = apply_to_axes(propname, varargin)
     return
   endif
   
-  for n = 1:length(ax)
-    set(ax(n), propname, varargin{1});
-  endfor
+  if strcmp("grid", propname)
+    for n = 1:length(ax)
+      grid(ax(n), varargin{:});
+    endfor  
+  else
+    for n = 1:length(ax)
+      set(ax(n), propname, varargin{1});
+    endfor
+  endif
 endfunction
 
 %!test
