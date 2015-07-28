@@ -111,7 +111,7 @@ function save_plot(fname, varargin)
   pre_xls = NA;
   if (length(xlabel_handles) > 0)
     pre_xls = get(xlabel_handles, "fontsize");
-    if !isnan(opts.fontsize) set(xlabel_handles, "fontsize", fontsize); endif
+    if !isnan(opts.fontsize) set(xlabel_handles, "fontsize", opts.fontsize); endif
     if ischar(opts.fontname) set(xlabel_handles, "fontname", opts.fontname); endif
   endif
   
