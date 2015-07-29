@@ -37,8 +37,12 @@ function varargout = coherent_detect(x, fc, n, varargin)
   Iout = filter(maf2, 1, multi_sin);
   Qout = filter(maf2, 1, multi_cos);
   amp = 2*sqrt(Iout.^2 + Qout.^2);
-  phase = atan(Qout./Iout);
-
+  if mean(abs(Qout)) > mean(abs(Iout)) # I が 0 付近だと、Q/I が発散する。
+    phase = acos(Iout./(amp/2));
+  else
+    phase = atan(Qout./Iout);
+  endif
+  
   switch nargout
     case 1
       varargout = {struct("amp", amp, "phase" ,phase, "I", Iout, "Q", Qout)};
