@@ -40,6 +40,10 @@
 ## * added to shared function files.
 
 function frev = frev_with_brho_pattern(brhos, C, particle, q, f0)
+if !nargin
+  print_usage();
+  return;
+endif
 frev = [f0];
 pref = f0;
 m0c2 = mass_energy(particle)*1e6;
