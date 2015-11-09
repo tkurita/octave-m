@@ -43,8 +43,11 @@ function obj = cod(varargin)
         case "template"
           template = varargin{2};
           return
+        case "ring"
+          ring = varargin{2};
+          return
         otherwise
-          if isstruct(template)
+          if isstruct(template) # if template is defined
             obj = template;
           else
             obj.ring = ring;
