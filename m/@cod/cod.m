@@ -1,5 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{obj} =} cod("BPM1", @var{v1}, ...)
+## @deftypefnx {Function File} {@var{obj} =} cod("BPMs", struct("BPM1", @var{bpm1},...) ) 
 ## make a cod object with positions measured with BPMs.
 ## @deftypefnx {Function File} cod("kickers", {"kicker1, "kicker2", ...}, "kick_angles", @var{kick_angles})
 ## make a cod object with kick angles.
@@ -18,10 +19,6 @@
 ## 
 ##
 ## @end deftypefn
-
-##== History
-## 2013-11-26
-## * first implementation
 
 function obj = cod(varargin)
   persistent ring = NA;
@@ -58,6 +55,8 @@ function obj = cod(varargin)
             case "kickers"
               kickers = varargin{2};
               additionals = struct(varargin{3:end});
+            case "BPMs"
+              at_bpms = varargin{2};
             otherwise
               at_bpms = struct(varargin{:});
           endswitch
