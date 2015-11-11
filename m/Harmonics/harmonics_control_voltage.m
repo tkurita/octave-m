@@ -75,12 +75,13 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
     dBLdtList = gradient(blpattern(:,2), blpattern(:,1)/1000);
     dBLdtList = interp1(blpattern(:,1), dBLdtList, msecList, "linear");
   else
-    [bLine, msecList] = bvalues_for_period(blpattern, tStep, 0, timmings.endDataTime);
+    [bLine, msecList] = bvalues_for_period(blpattern, tStep ...
+                                    , 0, timmings.endDataTime);
     dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
   endif
   #plot(msecList,bLine, "-*")
+  #plot(msecList, dBLdtList, "-");xlabel("[ms]");ylabel("dBL/dt");return
   secList = msecList/1000;
-  #plot(secList,dBLdtList,";dBLdt;");
   # plot(dBLdtList)
   #dBLdtList = gradient(bLine)./gradient(secList);
   ##== 加速電圧パターンの構築
@@ -100,7 +101,7 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
     preVelocity = C*opts.freq_base/h;
     velocityList = [];
     dvdtList = [];
-    for dBLdt = dBLdtList
+    for dBLdt = dBLdtList'
       v = preVelocity;
       b = v/lv;
       dbrho_dt = dBLdt/(pi/4);
@@ -108,7 +109,7 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
       dvdt = (lv^2 * dbrho_dt)/(proton_ev * (g + b^2 * (1- b^2 )^(-3/2) ));
       dvdtList = [dvdtList; dvdt];
       preVelocity = preVelocity + dvdt*(tStep/1000);
-      velocityList = [velocityList; preVelocity];
+      velocityList(end+1) = preVelocity;
     endfor
   else
     bbase = bLine(1)/opts.bmangle;
@@ -123,7 +124,7 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   #plot(secList,dvdtList,";dvdt;",secList,velocityList,";velocity;")
    
   rfHzList = h*velocityList./C;
-  #plot(msecList,rfHzList,";RF [Hz];")
+  # plot(msecList,rfHzList,";RF [Hz];");xlabel("[ms]");ylabel("[Hz]");
   
   ##= 加速位相の計算
   sinphi = (C.*dBLdtList(:)./(pi/4))./vList(:);
