@@ -179,7 +179,17 @@ function retval = _tek1(filepath)
 endfunction
 
 function retval = _yokogawa1(filepath)
-  [fid, msg] = fopen(filepath, "r");
+  zipfilename = find_zipfile(filepath);
+  
+  if isempty(zipfilename)
+    [fid, msg] = fopen(filepath, "r");
+  else
+    fid = popen(sprintf("unzip -p '%s' '%s'" ...
+                ,zipfilename, basename(zipfilename, "\.zip")), "r");
+    if (fid == -1)
+      msg = "Faild to popen for unzip";
+    endif
+  endif
   if (fid == -1)
     error(msg);
   endif
@@ -206,9 +216,10 @@ function retval = _yokogawa1(filepath)
     retval.(cells{1}) = cells(2:end);
     aline = deblank(fgetl(fid));
   endwhile
-  fclose(fid);
+  #fclose(fid);
   
-  data = csvread(filepath, nhead, 0);
+  #data = csvread(filepath, nhead, 0);
+  data = csvread(fid, 0, 0); fclose(fid);
   block_size = retval.BlockSize{1};
   sample_rate = retval.SampleRate{1};
   switch (retval.SampleRate{2})
@@ -225,4 +236,16 @@ function retval = _yokogawa1(filepath)
     retval.data{end+1} = [msec(:), data(:,n)];
     #retval.data = {[msec(:), data(:,1)], [msec(:), data(:,2)]};
   endfor
+endfunction
+
+function zipfilename = find_zipfile(filename)
+  zipfilename = [];
+  if !exist(filename, "file")
+    zipfilename = [filename, ".zip"];
+    if !exist(zifilename, "file");
+      error(["Can't find a file : ", filename]);
+    endif
+  elseif !isempty(regexp(filename, "\.zip$"))
+    zipfilename = filename;
+  endif
 endfunction
