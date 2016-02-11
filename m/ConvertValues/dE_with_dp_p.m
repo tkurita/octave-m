@@ -15,6 +15,7 @@
 ## energy error in MeV
 ## @end table
 ##
+## @seealso{/Users/tkurita/Dropbox/Study/シンクロトロン/運動量広がりとエネルギー広がり/delPtodelE.pdf}
 ## @end deftypefn
 
 function dE = dE_with_dp_p(dpp, E, particle)
