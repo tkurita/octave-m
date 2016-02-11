@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} moving_average_xy(@var{xy}, @var{n})
-## apply moving average to y value of @var{xy}
+## apply moving average to y value of @var{xy}.
+##
 ## @strong{Inputs}
 ## @table @var
 ## @item arg1
