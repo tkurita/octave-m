@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{ps} =} synchro_phase_with_frev(@var{frev}, @var{rfv}, @var{tsec}, @var{C}, @var{particle}, @var{q})
+## @deftypefn {Function File} {[@var{ps}, @var{sin_ps}, @var{dpdt} =} synchro_phase_with_frev(@var{frev}, @var{rfv}, @var{tsec}, @var{C}, @var{particle}, @var{q})
 ## Evaluate synchronus phase with revolution frequency.
 ## @strong{Inputs}
 ## @table @var
@@ -22,14 +22,16 @@
 ##
 ## @end deftypefn
 
-function [ps, sin_ps] = synchro_phase_with_frev(frev, rfv, tsec, C, particle, q)
+function [ps, sin_ps, dpdt] = synchro_phase_with_frev(frev, rfv, tsec, C, particle, q)
   if ! nargin
     print_usage();
   endif
   dfdt = gradient(frev, tsec);
   m0c2 = mass_energy(particle)*1e6;
   lv = physical_constant("speed of light in vacuum");
-  sin_ps = (m0c2./(q*rfv)).*(1- (C*frev/lv).^2).^(-3/2)*(C/lv)^2.*dfdt;
+  dpdt = (m0c2*C/(lv^2)).*(1- (C*frev/lv).^2).^(-3/2).*dfdt;
+  #sin_ps = (m0c2./(q*rfv)).*(1- (C*frev/lv).^2).^(-3/2)*(C/lv)^2.*dfdt;
+  sin_ps = (C./(q*rfv)).*dpdt;
   sin_ps(isnan(sin_ps)) = 0;
   ps = asin(sin_ps);
 endfunction
