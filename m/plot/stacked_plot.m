@@ -15,6 +15,17 @@
 ##
 ## If some figures vanish, fine adjust margins or spacing
 ## 
+## @strong{Example}
+## @example
+## stacked_plot("margin", [0.11, 0.12, 0.05, 0.1]); #opional
+## stacked_plot("spacing", 0.1); #optional
+## stacked_plot(2,1);
+## plot(x1);
+## stacked_plot(2,2);
+## plot(x2);
+## @end example
+## 
+## @seealso{subplot}
 ## @end deftypefn
 
 function retval = stacked_plot(varargin)
