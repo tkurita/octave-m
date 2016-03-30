@@ -1,8 +1,8 @@
-## Usage : open(filepath)
+## Usage : macopen(filepath)
 ##         
 ##      Open a file with Finder
 
-function open(filepath)
+function macopen(filepath)
   if (nargin == 0)
     warning("No argument.");
     return
