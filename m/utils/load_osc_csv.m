@@ -51,9 +51,7 @@ function retval = load_osc_csv(filepath, varargin)
   if length(varargin) < 2
     error("Number of optional arguments is invalid. It must be 2.");
   endif
-
-  opts = get_properties(varargin,...
-                        {"model"}, {NA});
+  opts = get_properties(varargin, {"model", NA});
   if !ischar(opts.model)
     opts.model = default_osc_model();
   endif
@@ -242,7 +240,7 @@ function zipfilename = find_zipfile(filename)
   zipfilename = [];
   if !exist(filename, "file")
     zipfilename = [filename, ".zip"];
-    if !exist(zifilename, "file");
+    if !exist(zipfilename, "file");
       error(["Can't find a file : ", filename]);
     endif
   elseif !isempty(regexp(filename, "\.zip$"))
