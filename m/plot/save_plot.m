@@ -21,22 +21,24 @@
 function save_plot(fname, varargin)
   p = inputParser();
   p.FunctionName = "save_plot";
-  p = p.addParamValue("fontsize", NA);
-  p = p.addParamValue("fontname", NA);
-  p = p.addParamValue("papersize", "screen");
-  p = p.addParamValue("paperposition", NA);
-  p = p.addParamValue("paperorigin", NA);
-  p = p.addParamValue("position", NA);
-  p = p.addParamValue("orient", "landscape");
-  p = p.addParamValue("margins", "10 10 10 10");
-  p = p.addParamValue("device", NA);
-  p = p.addParamValue("crop", false);
+  p.addParamValue("fontsize", NA);
+  p.addParamValue("fontname", NA);
+  p.addParamValue("papersize", "screen");
+  p.addParamValue("paperposition", NA);
+  p.addParamValue("paperorigin", NA);
+  p.addParamValue("position", NA);
+  p.addParamValue("orient", "landscape");
+  p.addParamValue("margins", "10 10 10 10");
+  p.addParamValue("device", NA);
+  p.addParamValue("crop", false);
   
-  p = p.parse(varargin{:});
+  p.parse(varargin{:});
+
   opts = p.Results;
 
   if !ischar(opts.device)
-    [d , bn, ext, v] = fileparts(fname);
+    fname
+    [d , bn, ext] = fileparts(fname);
     if !length(ext)
       error("device is not specified.");
     endif
