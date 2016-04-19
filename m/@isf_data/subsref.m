@@ -1,22 +1,20 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} subsref(@var{arg})
 ## 
-## isfdata.v returns values in units of volt.
-##
-## isfdata.preambles returns preambles of isf file as a dict object.
-##
-## isfdata.preambles("name") returns a value of "name" entry in the preambles.
+## @table @code
+## @item .v
+## returns values in units of volt.
+## @item .t
+## returns time series
+## @item .ts
+## returns sampling interval
+## @item .preambles
+## returns preambles of isf file as a dict object.
+## @item .preambles("name")
+## returns a value of "name" entry in the preambles.
+## @end table
 ##
 ## @end deftypefn
-
-##== History
-## 2014-12-08
-## * use struct instead of dict.
-## 2014-11-13
-## * added .t
-## * added .ts (sampling interval)
-## 2012-10-16
-## * initial implementation
 
 function retval = subsref(x, s)
   if (isempty(s))
