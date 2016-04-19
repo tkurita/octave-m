@@ -1,10 +1,12 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} subsref(@arg{obj}, @var{idx})
+## @deftypefn {Function File} {@var{retval} =} subsref(@var{obj}, @var{idx})
 ## 
-## ## @table @code
+## @table @code
 ## @item fdBm
 ## @item fdB
 ## @item xy
+## returns [frequency, amplitude]. 
+## amplituede is not passed through log10.
 ## @item amp
 ## @item amplitude
 ## @item phase
@@ -12,17 +14,6 @@
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-## 2015-02-05
-## * added "amp", "amplitude", "phase", "freq"
-## 2015-02-04
-## * subscription "xy" returns [frequency, amplitude]. 
-##   amplituede is not passed through log10.
-## 2014-12-23
-## * added "fdB".
-## 2014-11-17
-## * first implementation
 
 function retval = subsref(x, s)
   if (isempty(s))
