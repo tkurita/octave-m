@@ -1,22 +1,27 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} zc_envelop(@var{arg})
-## obtain min an mas in on cycle crossing zero.
+## @deftypefn {Function File} {@var{retval} =} zc_envelope(@var{xy}, @var{diff_threshold})
+## obtain min an max in on cycle crossing zero.
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
+## @item xy
+## two column matrix
+## @item diff_threshold
+## when differences between indexes of positive values is greator than 
+## @var{diff_threshold}, it is considered that @var{xy} crosses zero axes.
 ## @end table
 ##
 ## @strong{Outputs}
-## @table @var
-## @item retval
-## description of @var{retval}
+## When nargout is 1, a structure of which has following fields will be return.
+## Otherwise multiple values will be returned.
+## @table @code
+## @item up_xy
+## @item up_indexes
+## @item down_xy
+## @item down_indexes
+## @item zc_indexes
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-##
 
 function varargout = zc_envelope(xy, diff_threshold)
   if ! nargin
@@ -40,9 +45,17 @@ function varargout = zc_envelope(xy, diff_threshold)
     max_indexes(n) = zc_indexes(n)+ix-1;
   endfor
   
-  varargout = {[t(max_indexes)(:), max_values(:)], max_indexes,...
-               [t(min_indexes)(:), min_values(:)], min_indexes,...
-               zc_indexes};
+  if (nargout > 2)
+    varargout = {[t(max_indexes)(:), max_values(:)], max_indexes,...
+                 [t(min_indexes)(:), min_values(:)], min_indexes,...
+                 zc_indexes};
+  else
+    varargout{end+1} = struct("up_xy", [t(max_indexes)(:), max_values(:)], ...
+                       "up_indexes", max_indexes, ...
+                       "down_xy", [t(min_indexes)(:), min_values(:)],...
+                       "down_indexes", min_indexes, ...
+                       "zc_indexes", min_indexes);
+  endif
 endfunction
 
 %!test
