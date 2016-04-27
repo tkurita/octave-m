@@ -15,6 +15,7 @@
 ## @end deftypefn
 
 function retval = apply_fir1(n, fcn, v);
+  pkg load signal;
   fir = fir1(n, fcn);
   retval = filter(fir, 1, v);
 endfunction
