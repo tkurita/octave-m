@@ -34,6 +34,11 @@
 ## @item peak_freq
 ## @end table
 ##
+## amp and phase of frequency f means
+## @example
+## amp.*cos (2*pi*f*ts*n + phase)
+## @end example
+## 
 ## @end deftypefn
 
 function varargout = fourier(varargin)
