@@ -12,14 +12,24 @@
 ## time interval between data points [sec]
 ## @end table
 ##
-## The following field added into @var{fft_rec} as output.
+## @strong{Fields of an output object}
 ## @table @code
 ## @item fft_result
 ## output of fft function
-## @item amplitude
+## @item amp
 ## abs(fft_result)
+## @item amplitude
+## a synonim of amp
 ## @item frequency
 ## frequency according to the amplitude
+## @item fdBm
+## @item fdB
+## @item xy
+## returns [frequency, amplitude]. 
+## amplituede is not passed through log10.
+## @item phase
+## @item phase_unwrap
+## @item freq
 ## @end table
 ##
 ## If @var{xy} is given, y value is resampled with mean iterval of x value.

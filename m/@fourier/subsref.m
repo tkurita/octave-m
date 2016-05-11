@@ -36,6 +36,8 @@ function retval = subsref(x, s)
             retval = amp(x); 
         case "phase"
             retval = phase(x);
+        case "phase_unwrap"
+            retval = unwrap(phase(x));
         case "freq"
             retval = x.frequency;
         otherwise
