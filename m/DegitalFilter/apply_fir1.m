@@ -14,10 +14,22 @@
 ##
 ## @end deftypefn
 
-function retval = apply_fir1(n, fcn, v);
+function varargout = apply_fir1(n, fcn, v, varargin);
   pkg load signal;
+  opts = get_properties(varargin, {"delay_correction", false});
   fir = fir1(n, fcn);
-  retval = filter(fir, 1, v);
+  v = filter(fir, 1, v);
+  if opts.delay_correction
+    gd = round(mean(grpdelay(fir,1, length(fir))));
+    v = v(gd+1:end);
+  else
+    gd = NA;
+  endif
+  if nargout > 1
+    varargout = {v, gd};
+  else
+    varargout = {v};
+  endif
 endfunction
 
 %!test
