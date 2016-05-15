@@ -20,17 +20,22 @@ function retval = xy_in_xrange(xy, varargin)
     print_usage();
   endif
   
-  switch length(varargin)
-    case 1
-      xmin = varargin{1}(1);
-      xmax = varargin{1}(2);
-    otherwise
-      xmin = varargin{1};
-      xmax = varargin{2};
-  endswitch
+  if is_function_handle(varargin{1})
+    f = varargin{1};
+    retval = xy(f(xy(:,1)), :);
+  else
+    switch length(varargin)
+      case 1
+        xmin = varargin{1}(1);
+        xmax = varargin{1}(2);
+      otherwise
+        xmin = varargin{1};
+        xmax = varargin{2};
+    endswitch
 
-  x = xy(:,1);
-  retval = xy((x >= xmin) & (x <= xmax), :);
+    x = xy(:,1);
+    retval = xy((x >= xmin) & (x <= xmax), :);
+  endif
 endfunction
 
 %!test

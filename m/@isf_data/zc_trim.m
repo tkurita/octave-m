@@ -17,7 +17,6 @@ function retval = zc_trim(isf)
   v = isf.v;
   t = subsref(isf, struct("type", ".", "subs", "t"));
   xzero = str2num(isf.preambles.XZE);
-  xinc = subsref(isf, struct("type", ".", "subs", "ts"));
   # trim head
   if v(1) > 0
     chpoloar_idxes = find(v < 0);

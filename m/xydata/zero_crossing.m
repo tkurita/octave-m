@@ -51,7 +51,7 @@ function xzc = zero_crossing(xy, varargin)
 
   if plot_flag
     yzc = interp1(xy(:,1), xy(:,2), xzc);
-    xyplot(xy, "-", [xzc(:), yzc(:)], "*")
+    xyplot(xy, "-", [xzc(:), yzc(:)], "*");
   endif
 endfunction
 

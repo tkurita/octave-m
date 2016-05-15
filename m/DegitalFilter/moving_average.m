@@ -14,4 +14,5 @@ function retval = moving_average(v, n)
   maf1 = ones(n,1)./n;
   maf2 = normalize_filter(hamming(n).*maf1, 0);
   retval = filter(maf2, 1, v);
+  retval = retval(n:end, :);
 endfunction

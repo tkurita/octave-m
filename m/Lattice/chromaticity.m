@@ -35,13 +35,6 @@ function chrom = chromaticity(lattice_rec)
   klList.h = [];
   klList.v = [];
   for n = 1:length(allElements)
-    ##if (regexp(allElements{n}.name, "^QD"))
-#      klList.h(end+1) = focusingPower(allElements{n}, "h");
-#      klList.v(end+1)= focusingPower(allElements{n}, "v");
-#      betaList.v(end+1) = allElements{n}.centerBeta.v;
-#      betaList.h(end+1) = allElements{n}.centerBeta.h;
-#    endif
-
     if (is_BM(allElements{n}))
       klList.h(end+1) = allElements{n}.edgeK.h;
       klList.h(end+1) = allElements{n}.edgeK.h;
@@ -51,16 +44,13 @@ function chrom = chromaticity(lattice_rec)
       betaList.h(end+1) = allElements{n}.entranceBeta.h;
       betaList.h(end+1) = allElements{n}.exitBeta.h;
       betaList.v(end+1) = allElements{n}.entranceBeta.v;
-      betaList.v(end+1) = allElements{n}.exitBeta.v;
-#    endif
-      
+      betaList.v(end+1) = allElements{n}.exitBeta.v;      
     else
       klList.h(end+1) = focusingPower(allElements{n}, "h");
       klList.v(end+1)= focusingPower(allElements{n}, "v");
       betaList.v(end+1) = allElements{n}.centerBeta.v;
       betaList.h(end+1) = allElements{n}.centerBeta.h;
     endif
-
   endfor
   
   chrom.h = -sum(klList.h .* betaList.h)/(4*pi);

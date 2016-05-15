@@ -20,7 +20,7 @@ function varargout = apply_fir1(n, fcn, v, varargin);
   fir = fir1(n, fcn);
   v = filter(fir, 1, v);
   if opts.delay_correction
-    gd = round(mean(grpdelay(fir,1, length(fir))));
+    gd = round(mean(grpdelay(fir, 1, length(fir)*2)));
     v = v(gd+1:end);
   else
     gd = NA;

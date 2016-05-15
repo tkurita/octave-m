@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{amp}, @var{phase}] =} coherent_detect(@var{x}, @var{fc}, @var{n})
+## @deftypefn {Function File} {[@var{amp}, @var{phase}] =} coherent_detect(@var{x}, @var{fc})
 ## coherent detection
 ## @strong{Inputs}
 ## @table @var
@@ -7,8 +7,6 @@
 ## time series data
 ## @item fc
 ## carrier frequency. should be normalized with sampling frequency in Hz.
-## @item n
-## amplitude of n*bwc
 ## @end table
 ##
 ## @strong{Outputs}
@@ -21,7 +19,7 @@
 ##
 ## @end deftypefn
 
-function varargout = coherent_detect(x, fc, n, varargin)
+function varargout = coherent_detect(x, fc)
   if ! nargin
     print_usage();
   endif
@@ -31,7 +29,7 @@ function varargout = coherent_detect(x, fc, n, varargin)
   multi_cos = x.*cos(2*pi*fc*t);
   
   # moving average + hamming
-  nfo = round(2/fc);
+  nfo = round(2/fc); # filter order
   maf1 = ones(nfo,1)./nfo;
   maf2 = normalize_filter(hamming(nfo).*maf1, 0);
   Iout = filter(maf2, 1, multi_sin);
