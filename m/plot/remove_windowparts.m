@@ -5,18 +5,19 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2014-11-14
-## * first implementation
-
 function retval = remove_windowparts(filename)
   if ! nargin
     print_usage();
   endif
   [status, outtext] = system(["identify -format '%w %h' ", filename]);
   wh = strsplit(outtext, " ");
-  bottom_margin = 20;
-  top_margin = 42;
+  bottom_margin = 22;
+  top_margin = 47;
+  is_retina = system("/usr/sbin/system_profiler SPDisplaysDataType | grep 'Display Type: Retina'  > /dev/null 2>&1");
+  if (is_retina == 0)
+    bottom_margin *= 2;
+    top_margin *=2;
+  endif
   height = str2num(wh{2})-top_margin-bottom_margin;
   [retval, outtext] = system(sprintf("convert -crop %dx%d+%d+%d %s %s",...
                      str2num(wh{1}), height, 0, top_margin, filename, filename));
