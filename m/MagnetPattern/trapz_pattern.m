@@ -15,7 +15,7 @@
 ##
 ## @end table
 ##
-## @seealso{smooth_trapz}
+## @seealso{smooth_trapz, build_pattern}
 ##
 ## @end deftypefn
 
