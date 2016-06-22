@@ -1,18 +1,20 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{prop_values} =} get_properties(@var{params}, @var{prop_defvals})
-## @deftypefnx {Function File} {@var{prop_values} =} get_properties(@var{params}, @var{prop_names}, @var{def_values})
+## @deftypefn {Function File} {@var{prop_values} =} get_properties(varargin, @var{prop_defvals})
+## @deftypefnx {Function File} {@var{prop_values} =} get_properties(varargin, @var{prop_names}, @var{def_values})
 ##
-## parse cell array of property/values pairs.
+## Parse cell array of property/values pairs.
 ## 
 ## @example
-## x = get_properties(@{"prop_a", val_a, "switch_b", "prob_c",..@},
+## varargin = @{"prop_a", val_a, "switch_b", "prob_c",..@};
+##
+## opts = get_properties(varargin,
 ##                       @{"prop_a"  , def_val_a; ...
 ##                         "switch_b", boolean  ; ...
 ##                         "flag_c", def_val_c @})
 ##
 ##    or
 ##
-## x = get_properties(@{"prop_a", val_a, "switch_b", "prob_c", ...@},
+## opts = get_properties(varargin,
 ##                       @{"prop_a", "switch_b","flag_c", ...@},
 ##                       @{def_val_a, boolean, def_val_c, ...@})
 ## @end example
