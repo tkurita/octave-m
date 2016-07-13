@@ -69,15 +69,15 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   h = opts.harmonics;
   
   ##== 偏向電磁石パターン dBL/dt の構築
-  if ismatrix(blpattern)
+  if iscell(blpattern)
+    [bLine, msecList] = bvalues_for_period(blpattern, tStep ...
+                                    , 0, timmings.endDataTime);
+    dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
+  else
     msecList = 0:tStep:timmings.endDataTime;
     bLine = interp1(blpattern(:,1), blpattern(:,2), msecList, "linear");
     dBLdtList = gradient(blpattern(:,2), blpattern(:,1)/1000);
     dBLdtList = interp1(blpattern(:,1), dBLdtList, msecList, "linear");
-  else
-    [bLine, msecList] = bvalues_for_period(blpattern, tStep ...
-                                    , 0, timmings.endDataTime);
-    dBLdtList = dbdt_at_time(blpattern, msecList)*1000;
   endif
   #plot(msecList,bLine, "-*")
   #plot(msecList, dBLdtList, "-");xlabel("[ms]");ylabel("dBL/dt");return
