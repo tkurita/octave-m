@@ -1,11 +1,5 @@
 ## usage: plot_bpattern(patternSet1,paterrnSet2,...,ylabel)
 
-##== History
-## 2008-12-03
-## * use bvalues_for_period instead of BValuesForTimes
-## 2008-07-28
-## * renamed from plotMagnetPattern
-
 function plot_bpattern(varargin)
   #varargin = {BM_p200}
   narg = length(varargin);
@@ -27,7 +21,7 @@ function plot_bpattern(varargin)
     endfor
     argPlot = {argPlot{:},tLine,bLine,"",tPoints,bPoints,"@"};
   endfor
-  xlabel("[msec]");
+  xlabel("time [ms]");
   ylabel(varargin{end});
   plot(argPlot{:});
 endfunction
