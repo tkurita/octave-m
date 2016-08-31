@@ -51,9 +51,17 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
 #   A2PM2file = "A2_PM2_20121212.csv"
 #   varargin = {"freq_base", captureFreq, "freq_top", 5944300,"particle", "carbon", "harmonics", 1}
 #   varargin = {"freq_base", captureFreq, "freq_top", 5104300}
+
   opts = get_properties(varargin, ...
-                  {"bmangle", "circumference","freq_base", "freq_top", "particle", "harmonics"}, ...
-                  {pi/4, 33.201, NA, NA, "proton", 1});
+                  {"bmangle", pi/4;
+                  "circumference", 33.201;
+                  "freq_base", NA;
+                  "freq_top", NA;
+                  "particle", "proton";
+                  "harmonics", 1 ;
+                  "ampfit_order", 8;
+                  "phasefit_order", 6;
+                  "method", "polyfit"});
 
   ##== タイミングデータをインデックスに変換
   tStep = timmings.tStep;
@@ -143,7 +151,9 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   #A2_PM2 = csvread(file_in_loadpath("A2_PM2_20090713.csv"));
   A2_PM2 = csvread(file_in_loadpath(A2PM2file));
   A2_PM2(1,:) = [];
-  biasControlV = HzToPhaseControlV(rfHzList, A2_PM2);
+  biasControlV = HzToPhaseControlV(rfHzList, A2_PM2, ...
+                                  "method", opts.method, ...
+                                  "fitorder", opts.phasefit_order);
 
   phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #特性データ
   bias_rad = controlVToRad(biasControlV, phase_shifter);
@@ -155,7 +165,9 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   #plot(msecList,phaseCtrlV,";phaseCtrlV;")
 
   ##= 2倍高調波の振幅の制御電圧を計算
-  ampCtrlV = HzToAmpControlV(rfHzList, A2_PM2);
+  ampCtrlV = HzToAmpControlV(rfHzList, A2_PM2, ...
+                            "method", opts.method, ...
+                            "fitorder", opts.ampfit_order);
   
   ##== 立ち上がりを0Vから直線で立ち上げる。
   startingLineY = [0, ampCtrlV(startCapIndex)];
