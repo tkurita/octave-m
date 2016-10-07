@@ -1,16 +1,6 @@
 ## BM pattern of H+ 9MeV -> 200MeV 9200
 1; #script file
 
-#function timeSet = timeRegion
-#  timeSet.capture = [0,35];
-#  timeSet.initialAcc = [35,60,85];
-#  timeSet.acc = [85, 607.1];
-#  timeSet.postAcc = [607.1, 632.1, 657.1];
-#  timeSet.flatTop = [657.1, 1167.9];
-#  timeSet.preExt = [657.1, 669.6, 694.6, 707.1];
-#  timeSet.extract = [707.1, 1117.9];
-#endfunction
-
 function patternSet = QFPattern
   ## [msec], [(T/m)*m]
   pattern_cells = ...
