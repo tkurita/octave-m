@@ -13,16 +13,12 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2011-02-16
-## * First Implementation.
-
 function retval = velocity_with_momentum(p, particle)
   if nargin < 2
     print_usage();
   endif
   mass_e = mass_energy(particle);
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+  lv = physical_constant("speed of light in vacuum");
   x = lv*p/mass_e; # beta/(sqrt(1-beta^2))
   b2 = x.^2./(1+x.^2);
   retval = sqrt(b2)*lv;
