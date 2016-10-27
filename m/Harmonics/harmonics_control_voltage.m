@@ -22,16 +22,6 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2012-12-12
-## * update for new physical_constants package.
-##
-## 2012-10-04
-## * A2PM2 filename must be given.
-##
-## 2009-06-26
-## * renamed from calcHarmonicsControlV
-
 function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,...
                                                                A2PM2file, varargin)
   if !nargin
@@ -154,11 +144,16 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   biasControlV = HzToPhaseControlV(rfHzList, A2_PM2, ...
                                   "method", opts.method, ...
                                   "fitorder", opts.phasefit_order);
-
   phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #特性データ
   bias_rad = controlVToRad(biasControlV, phase_shifter);
-  phaseCtrlV = radToControlV(bias_rad(:) + phiList(:), phase_shifter);
-  #phaseCtrlV2 = biasControlV + radToControlV(phiList, phase_shifter);
+  # phase shifter の校正曲線を使って、rad から制御電圧への逆変換が
+  # はいくらかずれる。多項式近似をしているためと思われる。
+  # 変化文を計算し、位相0を与える電圧に足し合わせる。
+  phaseCtrlV = biasControlV(:) ...
+        + (radToControlV(bias_rad(:) + phiList(:), phase_shifter) ...
+            - radToControlV(bias_rad(:), phase_shifter));
+  
+  #phaseCtrlV = radToControlV(bias_rad(:) + phiList(:), phase_shifter);
   #plot(phaseCtrlV, "-;1;", phaseCtrlV2, "-;2;")
   ##== stopPhaseTime以降を一定にする。
   phaseCtrlV(stopRFIndex:length(phaseCtrlV)) = phaseCtrlV(stopRFIndex);
