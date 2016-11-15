@@ -102,7 +102,8 @@ function varargout = fourier(varargin)
   n_half = floor(ns/2);
   df = 1/(ts * ns);
   frequency = 0:df:((n_half-1)*df);
-  fft_rec = append_fields(fft_rec, fft_result, frequency, df, ns, acf);
+  _aux = struct;
+  fft_rec = append_fields(fft_rec, fft_result, frequency, df, ns, acf, _aux);
   fft_rec = class(fft_rec, "fourier");
   if nargout
     varargout{1} = fft_rec;

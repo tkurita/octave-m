@@ -19,7 +19,8 @@ function retval = rfv_to_csv(rfv, varargin)
     print_usage();
   endif
   
-  opts = get_properties(varargin, {"outfile", NA, "fs", 10e3});
+  opts = get_properties(varargin, {"outfile", NA;
+                                  "fs", 10e3});
   ts = 1/opts.fs;
 
   t_msec = (0:ts:2)*1e3;

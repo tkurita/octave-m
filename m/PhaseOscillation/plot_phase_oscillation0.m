@@ -34,7 +34,6 @@ function plot_phase_oscillation0(tline,bline,bPoints_set,vlist,omega_s,phi_s)
   ax = plotyy(tline, vlist, tline, bline); grid on;
   ylabel(ax(1), "RF Voltage [V]");
   ylabel(ax(2), "BM Pattern");
-  ylim(ax(1), [0,450]);
   hold on;
   plot(ax(2), bPoints_set(:,1), bPoints_set(:,2), "*")
   hold off;

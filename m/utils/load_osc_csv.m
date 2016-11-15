@@ -62,6 +62,8 @@ function retval = load_osc_csv(filepath, varargin)
       retval = _tek1(filepath);
     case "DPO4000"
       retval = _tek2(filepath);
+    case "TDS2000"
+      retval = _tek3(filepath)
     case "auto"
       try
         retval = _tek2(filepath);
@@ -74,7 +76,11 @@ function retval = load_osc_csv(filepath, varargin)
   retval.filepath = filepath;
 endfunction
 
-function retval = _tek2(filepath)
+function retval = _tek3(filepath) # for TDS2000
+  #  not implemented
+endfunction
+
+function retval = _tek2(filepath) # for DPO400
   # filepath = "tek00013CH3.csv";
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)

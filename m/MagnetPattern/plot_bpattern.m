@@ -21,7 +21,7 @@ function plot_bpattern(varargin)
     endfor
     argPlot = {argPlot{:},tLine,bLine,"",tPoints,bPoints,"@"};
   endfor
+  plot(argPlot{:});
   xlabel("time [ms]");
   ylabel(varargin{end});
-  plot(argPlot{:});
 endfunction
