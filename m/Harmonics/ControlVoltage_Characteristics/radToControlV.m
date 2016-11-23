@@ -11,6 +11,6 @@ function ctrlVList = radToControlV(radList, phaseShifter)
   shiftRad = phaseShifter(:,3);
   controlV = phaseShifter(:,4);
 
-  p = polyfit(shiftRad,controlV,5);
+  p = polyfit(shiftRad,controlV, length(controlV)-1);
   ctrlVList = polyval(p,radList);
 endfunction

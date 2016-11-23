@@ -10,6 +10,6 @@ function radList = controlVToRad(ctrlVList, phaseShifter)
   shiftRad = phaseShifter(:,3);
   controlV = phaseShifter(:,4);
 
-  p = polyfit(controlV, shiftRad,5);
-  radList = polyval(p,ctrlVList);
+  p = polyfit(controlV, shiftRad, 8);
+  radList = polyval(p, ctrlVList);
 endfunction

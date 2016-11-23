@@ -38,7 +38,7 @@ function retval = stacked_plot(varargin)
   persistent rm = dm(3); # right margin
   persistent tm = dm(4); # top margin
   persistent defspacing = 0;
-  persistent spacing = 0;
+  persistent spacing = 1e-6;
   if ischar(varargin{1})
     n = 1;
     while n <= length(varargin)
