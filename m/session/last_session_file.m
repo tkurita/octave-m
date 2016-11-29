@@ -12,17 +12,9 @@
 ## @seealso{save_session, load_session, purge_session}
 ## @end deftypefn
 
-## $Date::                           $
-## $Rev$
-## $Auther$
-
-##== History
-## 2015-02-25
-## * Become independent of load_session
-
 function lastssfile = last_session_file(varargin)
   lastssfile = [];
-  optname = [];
+  optname = "";
   if length(varargin)
     optname = [varargin{1}, "-"];
   endif
