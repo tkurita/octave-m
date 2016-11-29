@@ -9,29 +9,13 @@
 ## Optional. An optional name to give an unique name to a session file.
 ## @end table
 ## 
+## If "session-init.m" exists in the current directory,
+## the file will be loaded just before the session file.
+## The "session-init.m" can be used to load packages required for the session.
+##
 ## @seealso{save_session, purge_session}
 ## @end deftypefn
 
-## $Date::                           $
-## $Rev$
-## $Auther$
-
-##== History
-## 2015-02-25
-## * reimplement as a function.
-## 2014-11-25
-## * added SESSION_ID support.
-## 2014-11-17
-## * fixed for 3.8.2.
-## 2014-08-01
-## * if "session_init.m" exists in load paths, 
-##   the file will be preformed as a script file.
-## 2013-10-25
-## * A variable session_file is not used. 
-##   Because if same name variable is included in the loaded session file, 
-##   the file name in the message will be invalid.
-## 2011-03-03
-## * First Implementaion
 
 function load_session(varargin)
   ssid = [];
