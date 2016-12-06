@@ -33,13 +33,6 @@ function load_session(varargin)
     init_file = ["session-", ssid, "-init.m"];
   endif
   
-  try
-    evalin("caller", sprintf("load '%s'", ssfilename))
-    disp(["Success to load ", ssfilename]);
-  catch
-    disp(["Failed to load ", ssfilename]);
-    return;
-  end_try_catch
   
   if exist(init_file, "file")
     try
@@ -49,4 +42,12 @@ function load_session(varargin)
       disp(["Failed to evaluate ", init_file]);
     end_try_catch
   endif
+
+  try
+    evalin("caller", sprintf("load '%s'", ssfilename))
+    disp(["Success to load ", ssfilename]);
+  catch
+    disp(["Failed to load ", ssfilename]);
+    return;
+  end_try_catch
 endfunction
