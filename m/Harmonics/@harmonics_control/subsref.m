@@ -3,7 +3,7 @@
 ##
 ## @end deftypefn
 
-function retval = subsref(x, s)
+function retval = subsref(self, s)
   if (isempty(s))
     error("missing index");
   endif
@@ -15,11 +15,19 @@ function retval = subsref(x, s)
       fld = s.subs;
       switch fld
         case "phis_vs_t"
-          retval = [x._properties.phis, x._properties.t_in_ms];
+          retval = [self._properties.phis, self._properties.t_in_ms];
         case "phase_ctrlv_amp"
-          retval = max(x._properties.phase_ctrlv) - min(x._properties.phase_ctrlv);
+          retval = max(self._properties.phase_ctrlv) - min(self._properties.phase_ctrlv);
+        case "phis_for_frev"
+          f = s(2).subs{1};
+          retval = interp1(self._properties.rf_in_Hz, self._properties.phis, f);
+          if (numel(s) > 2)
+            s = s(2:end);
+          else
+            return;
+          endif
         otherwise
-          retval = x._properties.(fld);
+          retval = self._properties.(fld);
       endswitch
     otherwise
       error("invalid subscript type");
