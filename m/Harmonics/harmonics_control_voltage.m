@@ -144,11 +144,12 @@ function varargout = harmonics_control_voltage(blpattern, rfvpattern, timmings,.
   biasControlV = HzToPhaseControlV(rfHzList, A2_PM2, ...
                                   "method", opts.method, ...
                                   "fitorder", opts.phasefit_order);
+
   phase_shifter = load(file_in_loadpath("PhaseShifter.dat")); #特性データ
   bias_rad = controlVToRad(biasControlV, phase_shifter);
   # phase shifter の校正曲線を使って、rad から制御電圧への逆変換が
   # はいくらかずれる。多項式近似をしているためと思われる。
-  # 変化文を計算し、位相0を与える電圧に足し合わせる。
+  # 変化分を計算し、位相0を与える電圧に足し合わせる。
   dv = radToControlV(bias_rad(:) + phiList(:), phase_shifter) ...
             - radToControlV(bias_rad(:), phase_shifter);
   phaseCtrlV = biasControlV(:) + dv;
