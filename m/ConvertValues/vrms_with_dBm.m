@@ -18,7 +18,7 @@
 ## @end deftypefn
 
 function retval = vrms_with_dBm(dbm, r)
-  p = 10^(dbm/10); # power in mW
+  p = 10.^(dbm/10); # power in mW
   retval = sqrt(r*p*1e-3);
 endfunction
 
