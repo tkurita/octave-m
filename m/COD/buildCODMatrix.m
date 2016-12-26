@@ -69,13 +69,13 @@ function result = buildCODMatrix(codRecord, varargin);
     positions = [];
     for n = 1:length(lattice)
       currentElement = lattice{n};
-      refPhaseList = [refPhaseList\
+      refPhaseList = [refPhaseList ...
         , currentElement.centerPhase.(horv), currentElement.exitPhase.(horv)];
-      refBetaList = [refBetaList\
+      refBetaList = [refBetaList ...
         , currentElement.centerBeta.(horv), currentElement.exitBeta.(horv)];
-      refDispersionList = [refDispersionList\
+      refDispersionList = [refDispersionList ...
         ; currentElement.centerDispersion; currentElement.exitDispersion];
-      positions = [positions\
+      positions = [positions ...
         ; currentElement.centerPosition; currentElement.exitPosition];
     endfor
     result.positions = positions;
