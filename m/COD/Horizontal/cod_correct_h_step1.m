@@ -31,8 +31,9 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM, varargin)
   cod_rec.targetCOD = cod_list_with_bpms(cod_rec);
   cod_rec = lFitCOD(cod_rec);
   cod_rec.correctCOD = cod_list_with_kickers(cod_rec);
-  [positions, units] = get_properties(varargin...
-                        , {"positions", "units"}, {[0.5,-1,-2.5], "data"});
+  [positions, units] = get_properties(varargin ...
+                        , {"positions", [0.5,-1,-2.5];
+                           "units", "data"});
   cod_rec_BM = setfields(cod_rec, "steererNames", bm_names);
   cod_rec_BM = lFitCOD(cod_rec_BM);
   cod_rec_BM.correctCOD = cod_list_with_kickers(cod_rec_BM);
@@ -47,8 +48,6 @@ function cod_rec = cod_correct_h_step1(cod_rec, codAtBPM, varargin)
   hold on
   xyplot(cod_rec_BM.correctCOD, ";fit with kicks at BM;")
   hold off
-  #setBPandSHonXaxis(cod_rec.lattice, positions, units);
-  #positions
   elements_on_plot({"^BPM\\d*$"}, cod_rec.lattice...
               , "yposition", sprintf("first %f", positions(1)));
   elements_on_plot({"BMPe1$", "BMPe2$", "STH*"}, cod_rec.lattice...
