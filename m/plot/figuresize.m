@@ -61,7 +61,7 @@ function retval = __change_size__(newsize)
 endfunction
 
 function retval = __settings__(command, default_size)
-  settings = struct("tall", 600);
+  settings = struct("tall", 600, "wide", [800, 420] );
   retval = [];
   switch command
     case "list"
