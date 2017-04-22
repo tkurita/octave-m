@@ -12,6 +12,8 @@
 ## Tektronics
 ## @item "DPO4000"
 ## Tektronics
+## @item "TDS2000"
+## Tektronics
 ## @item "auto"
 ## try model "DPO4000" and next try "TDS3000"
 ## @end table
@@ -63,7 +65,7 @@ function retval = load_osc_csv(filepath, varargin)
     case "DPO4000"
       retval = _tek2(filepath);
     case "TDS2000"
-      retval = _tek3(filepath)
+      retval = _tek3(filepath);
     case "auto"
       try
         retval = _tek2(filepath);
@@ -76,8 +78,61 @@ function retval = load_osc_csv(filepath, varargin)
   retval.filepath = filepath;
 endfunction
 
+function [fid, msg] = _open_file(filepath)
+  zipfilename = find_zipfile(filepath);
+  msg = "sucess to open file";
+  if isempty(zipfilename)
+    [fid, msg] = fopen(filepath, "r");
+  else
+    fid = popen(sprintf("unzip -p '%s' '%s'" ...
+                ,zipfilename, basename(zipfilename, "\.zip")), "r");
+    if (fid == -1)
+      msg = "Faild to popen for unzip";
+    endif
+  endif
+endfunction
+
 function retval = _tek3(filepath) # for TDS2000
-  #  not implemented
+  [fid, msg] = _open_file(filepath);
+  if (fid == -1)
+    error(msg);
+  endif
+  
+  ## read header
+  retval = struct();
+  nhead = 0;
+  data = [];
+  while(1)
+    aline = fgetl(fid);
+    nhead++;
+    cells = csvexplode(aline);
+    data(end+1, :) = [cells{4}, cells{5}];
+    if strcmp(cells{1}, "Firmware Version")
+      break;
+    else
+      alabel = strrep(cells{1}, " ", "_");
+      retval.(alabel) = cells{2};
+    endif
+  endwhile
+
+  databuff = csvread(fid, 0, 0);
+  fclose(fid);
+  data(end+1:end+rows(databuff), :) = databuff(1:end,4:5);
+  retval.data = {};
+  retval.samplerate = 1/(data(2,1) - data(1,1));
+  t = data(:,1);
+  switch (retval.Horizontal_Units)
+    case ("s")
+      t = t*1e3;
+  endswitch
+  
+  # in somecase, last data is invalid
+  if (t(end) == 0) && (t(end) < t(end-1))
+    t(end) = [];
+    data = data(1:end-1,:);
+  endif
+  
+  retval.data{1} = [t, data(:,2)];
 endfunction
 
 function retval = _tek2(filepath) # for DPO400
@@ -181,6 +236,7 @@ function retval = _tek1(filepath)
 
   retval.samplerate = 1/(data(2,1) - data(1,1));
 endfunction
+
 
 function retval = _yokogawa1(filepath)
   zipfilename = find_zipfile(filepath);
