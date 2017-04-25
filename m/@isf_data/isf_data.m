@@ -89,7 +89,8 @@ function retval = isf_data(varargin)
   [totalbyte, msg] = fscanf(fid, ["%", c, "d"], 1);
   byte_per_point = str2num(find_field(preambles, {":WFMP:BYT_N", ":WFMPRE:BYT_NR"}));
   totalpoints = totalbyte/byte_per_point;
-  y = fread(fid, totalpoints, sprintf("%d*int16", totalpoints), "ieee-be");
+  bit_n = str2num(find_field(preambles, {"BIT_N"}));
+  y = fread(fid, totalpoints, sprintf("%d*int%d", totalpoints, bit_n), "ieee-be");
   fclose(fid);
   ymulti = str2num(find_field(preambles, {"YMU", "YMULT"}));
   yoffset = str2num(find_field(preambles, {"YOF", "YOFF"}));
