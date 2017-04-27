@@ -17,7 +17,7 @@ function retval = remove_windowparts(filename)
       top_margin = 47;
     case "qt"
       top_margin = 66;
-      bottom_margin = 0;
+      bottom_margin = 40;
     otherwise
       error([graphics_toolkit, " is not supprted."]);
   endswitch
