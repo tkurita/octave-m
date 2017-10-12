@@ -1,19 +1,27 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} apply_to_axes(@var{propname}, @var{value})
-## change property @var{propname} of each axis object of the current figure.
+## @deftypefn {Function File} {} apply_to_lines(@var{propname}, @var{value})
+## @deftypefnx {Function File} {} apply_to_lines(@var{HAX}, @var{propname}, @var{value})
+## change property @var{propname} of each line objects in the specified axes
 ## @strong{Inputs}
 ## @table @var
+## @item HAX
+## A handle to an axis object. If it is omitted, gca will be used.
 ## @item propname
 ## property name
 ## @item value
 ## new value to set to @var{propname}.
 ## @end table
 ##
-## @end table
+## @strong{Examples:}
+## @example
+## apply_to_lines("MarkerSize", 10);
+## apply_to_lines("LineWidth", 2);
+## @end example
 ##
+## @seealso(apply_to_axes)
 ## @end deftypefn
 
-function retval = apply_to_lines(varargin)
+function apply_to_lines(varargin)
   if ! nargin
     print_usage();
   endif
