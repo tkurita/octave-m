@@ -1,4 +1,5 @@
-## cellidx ‚ğg‚¤
+## find(ismember(c, s) ã‚’ä½¿ã†ã€‚
+## cellidx ã‚’ä½¿ã† -- version 3.4 ã‹ã‚‰ obsolute
 function result = indexInStringCells(cellArray, theValue)
   result = 0;
   for n = 1:length(cellArray)
