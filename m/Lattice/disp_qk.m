@@ -1,21 +1,21 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{result} =} func_name(@var{arg})
+## @deftypefn {Function File} {@var{result} =} disp_qk(@var{lattice})
+## 
+## print qfk and qdk
 ##
 ## @end deftypefn
 
-## usage : [formatedText =] disp_tune(@var)
-##
-
 ##== History
-## not implemented
+## 2018-03-06
+## * first implementaion
 
-function varargout = disp_tune(tune)
-  tune.v_comment = sprintf("vertial ture:%g",tune.v);
-  tune.h_comment = sprintf("horizontal ture:%g",tune.h);
+function varargout = disp_qk(latrec)
+  qk.f = sprintf("qfk : %g", latrec.qfk);
+  qk.d = sprintf("qdk : %g", latrec.qdk);
   if (nargout > 0)
-    varargout = {[tune.h_comment;tune.v_comment]};
+    varargout = {[qk.f;qk.d]};
   else
-    printf("%s\n", tune.h_comment);
-    printf("%s\n", tune.v_comment);
+    disp(qk.f);
+    disp(qk.d);
   endif
 endfunction
