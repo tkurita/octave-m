@@ -18,12 +18,16 @@
 ##  * .twmat.v : 縦方向の twiss parameter を計算する matrix
 
 ##== History
+## 2018-03-07
+## * deprecated because negative drift tube is used to take the effective length into the calculation.
+## 
 ## 2013-10-29
 ## * call print_usage if no arguments are given.
 ## 2007-10-18
 ## * accept a structure as an argument
 
 function all_elements = buildWERCMatrix(varargin)
+  warning("buildWERCMatrix is deprecated. Use build_matrix_WMAST");
   if ! nargin
     print_usage();
   endif
