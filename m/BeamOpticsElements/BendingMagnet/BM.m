@@ -9,7 +9,7 @@
 ## @item bmangle
 ## [rad]. Angle of bending magnet.
 ## @item radius
-## [m]. radius of beam axis.
+## [m]. radius of beam axis. Optional. If omited, efflen is required.
 ## @item edgeangle
 ## [rad] edge angle.
 ## @item efflen
@@ -19,6 +19,9 @@
 ## @end deftypefn
 
 ##== History
+## 2018-03-06
+## * If radius is omitted, the length will be matched with the effective length.
+##
 ## 2008-06-02
 ## * edgeK の符号が逆になっていた。
 ## * chromaticity の計算がおかしくなる。
@@ -56,8 +59,16 @@ function bm_struct = BM(varargin)
     endwhile
   endif
   
-  bm_struct.len = bm_struct.radius*bm_struct.bmangle;
   hasEfflen = isfield(bm_struct, "efflen"); #effective length info exists
+  has_radius = isfield(bm_struct, "radius");
+  if has_radius
+    bm_struct.len = bm_struct.radius*bm_struct.bmangle;
+  elseif !hasEfflen
+    error("Either radius or efflen is requird.");
+  else
+    bm_struct.len = bm_struct.efflen;
+  endif
+  
   ##== horizontal
   ##=== full
   if (hasEfflen)
