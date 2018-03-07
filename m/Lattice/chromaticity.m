@@ -12,6 +12,9 @@
 ## @end deftypefn
 
 ##== History
+## 2018-03-07
+## * if output arguments are nothing, the result is printed out into stdout.
+##
 ## 2008-06-02
 ## * BM does not contribute chromaticity.
 ## * Edges of BMs are considered.
@@ -23,7 +26,7 @@
 ## * help with texinfo format
 ## * accept lattice_rec structure
 
-function chrom = chromaticity(lattice_rec)
+function varargout = chromaticity(lattice_rec)
   if (isstruct(lattice_rec))
     allElements = lattice_rec.lattice;
   else
@@ -55,4 +58,10 @@ function chrom = chromaticity(lattice_rec)
   
   chrom.h = -sum(klList.h .* betaList.h)/(4*pi);
   chrom.v = -sum(klList.v .* betaList.v)/(4*pi);
+  if nargout > 0
+    varargout{1} = chrom;
+  else
+    printf("%23s : %f\n", "Horizontal Chromaticity", chrom.h);
+    printf("%23s : %f\n", "Vertical Chormaticity", chrom.v);
+  endif
 endfunction
