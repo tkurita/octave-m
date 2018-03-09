@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} plot_phase_oscillation(@var{tline}, @var{bline}, @var{bpoints}, @var{vlist}, @var{ws}, @var{deltaEFromB}, @var{e_area}, @var{d_emax}, @var{nM}, @var{totalEnergy}, @var{phi1})
+## @deftypefn {Function File} {} plot_phase_oscillation(@var{tline}, @var{bline}, @var{bpoints}, @var{vlist}, @var{ws}, @var{deltaEFromB}, @var{e_area}, @var{d_emax}, @var{nM}, @var{totalEnergy})
 ## plot ...
 ## @itemize
 ## @item synchrotron frequency and Phase angle of synchronus particle.
@@ -29,13 +29,13 @@
 ## mass number
 ## @item totalEnergy
 ## total energy [eV]
-## @item phi1
-## unstable fixed point
 ## @end table
 ##
 ## @end deftypefn
 
 ##= History
+## 2018-03-09
+## * removed phi1(unstabel fixed point), becuse it is not used.
 ## 2015-06-03
 ## * xyyplot が動作しない。
 ## * plotyy を使って再実装しようとしたが、subplot, legend などと相性が悪いらしく、
@@ -46,7 +46,7 @@
 ## * reimplemented for Octave 3.2
 ## * renamed from plotPhaseOsillation
 
-function plot_phase_oscillation(tline,bline,bPoints_set,vlist,ws,phi_s,deltaEFromB,e_area, d_emax,nM,totalEnergy,phi1)
+function plot_phase_oscillation(tline,bline,bPoints_set,vlist,ws,phi_s,deltaEFromB,e_area, d_emax,nM,totalEnergy)
   # phi_s = ps;
   # deltaEFromB = d_e;
   # totalEnergy = Ee;
