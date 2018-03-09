@@ -18,6 +18,8 @@
 ##  * .twmat.v : 縦方向の twiss parameter を計算する matrix
 
 ##== History
+## 2018-03-08
+## * considered effective length of sextupole magents.
 ## 2018-03-07
 ## * improved treatment of the effective length from buildWERCMatrix
 ## * don't use negative drift tube to take the effective length into the calculation.
@@ -66,6 +68,11 @@ function all_elements = build_matrix_WMAST(varargin)
   qlength.len = qefflen; 
   qdl = (qefflen - qlen)/2;
 
+  ##== properties of sextuaple
+  sxefflen = 0.244;
+  sxlen = 0.2;
+  sxdl = (0.244-0.2)/2;
+
   ##== Duct サイズ
   ## xmax, xmin, ymax, ymin
   ## xmax(-xmin), ymax(-ymin)
@@ -112,9 +119,9 @@ function all_elements = build_matrix_WMAST(varargin)
   DT(0.230,"DPR1IN", [176e-3/2]),
   DT(0,"PR1", [176e-3/2]),
   DT(0.2, "DPR1OUT",[176e-3/2]);  
-  DT(0.445,"MRD2IN", MRD2),
-  DT(0.20,"SX1", MRD2),
-  DT(0.125, "MRD2OUT", MRD2),
+  DT(0.445-sxdl,"MRD2IN", MRD2),
+  DT(sxefflen,"SX1", MRD2),
+  DT(0.125-sxdl, "MRD2OUT", MRD2),
   DT(0.175-bmdl, "BMD1IN", bmDuct1),
   BM(bmprop, "BM1", bmDuct1),
   DT(0.175-bmdl, "BMD1OUT", bmDuct1),
@@ -149,9 +156,9 @@ function all_elements = build_matrix_WMAST(varargin)
   DT(0.140, "DSCROUT", 152e-3/2),
   DT(0.185,"MRD7IN", MRD7),
   DT(0.2,"STV1", MRD7),
-  DT(0.2,"MRD7M", MRD7),
-  DT(0.2,"SX2", MRD7),
-  DT(0.145,"MRD7OUT", MRD7),
+  DT(0.2-sxdl,"MRD7M", MRD7),
+  DT(sxefflen,"SX2", MRD7),
+  DT(0.145-sxdl,"MRD7OUT", MRD7),
   DT(0.175-bmdl, "BMD3IN", bmDuct2),
   BM(bmprop, "BM3", bmDuct2),
   DT(0.175-bmdl, "BMD3OUT", bmDuct2),
@@ -213,9 +220,9 @@ function all_elements = build_matrix_WMAST(varargin)
   DT(0.1375,"DBPM5OUT",bpmDuct),
   DT(0.13, "MRD13IN", MRD13),
   DT(0.2, "STV2", MRD13),
-  DT(0.525, "MRD13M", MRD13),
-  DT(0.2,"SX3", MRD13),
-  DT(0.145,"MRD13OUT", MRD13),
+  DT(0.525-sxdl, "MRD13M", MRD13),
+  DT(sxefflen,"SX3", MRD13),
+  DT(0.145-sxdl,"MRD13OUT", MRD13),
   DT(0.175-bmdl,"BMD7IN",bmDuct2),
   BM(bmprop, "BM7", bmDuct2),
   DT(0.175-bmdl,"BMD7OUT", bmDuct2),
