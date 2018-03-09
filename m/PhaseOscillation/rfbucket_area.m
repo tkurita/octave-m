@@ -1,13 +1,14 @@
-## usage : [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(
+## -- Function File :
+##   [eArea,eArea2,deltaEmax,phi1] = rfbucket_area(
 ##                                vlist, nM, Ee, eta, h, phi_s, C)
-## parameters : 
+## == parameters : 
 ## vlist : RF Voltage Pattern, must be (voltage * charge state)
 ## phi_s : phase angle of synchronus particle
 ## Ee : Total energy
 ## nM : mass number of the particle
 ## C : シンクロトロンの周長
 ## 
-## results : 
+## == results : 
 ## eArea : RF Bucket Area in deltaE-phi coordinate [eV]
 ## eArea2 : RF Bucket Area in deltaE/(h omega_rev) -phi coordinate [ev sec]
 ## deltaEmax : bucket height [eV]

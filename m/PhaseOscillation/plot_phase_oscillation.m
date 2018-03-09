@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {} plot_phase_oscillation(@var{tline}, @var{bline}, @var{bpoints}, @var{vlist}, @var{ws}, @var{deltaEFromB}, @var{e_area}, @var{d_emac}, @var{nM}, @var{totalEnergy}, @var{phi1})
+## @deftypefn {Function File} {} plot_phase_oscillation(@var{tline}, @var{bline}, @var{bpoints}, @var{vlist}, @var{ws}, @var{deltaEFromB}, @var{e_area}, @var{d_emax}, @var{nM}, @var{totalEnergy}, @var{phi1})
 ## plot ...
 ## @itemize
 ## @item synchrotron frequency and Phase angle of synchronus particle.
@@ -9,12 +9,28 @@
 ##
 ## @strong{Inputs}
 ## @table @var
-## @item vlist
-## RF Voltage Pattern
+## @item tline
 ## @item bline
 ## pattern of bending magnet
+## @item bPoints_set
+## @item vlist
+## RF Voltage Pattern
 ## @item ws
 ## synchrotron frequency in [rad/sec]
+## @item phi_s
+## synchronus phase [rad]
+## @item deltaEFromB
+## energy changes evaluated from BM field changes.
+## @item e_area
+## RF bucket area [eV]
+## @item d_emax
+## RF bucket hight [eV]
+## @item nM
+## mass number
+## @item totalEnergy
+## total energy [eV]
+## @item phi1
+## unstable fixed point
 ## @end table
 ##
 ## @end deftypefn

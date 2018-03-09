@@ -27,7 +27,7 @@
 ## @item ws
 ## sinchrotoron frequency in [rad/sec]
 ## @item Ee
-## total energy evaluated from @var{brho}
+## total energy evaluated from @var{brho} [MeV]
 ## @item eta
 ## alpha - 1/gamma^2 
 ## @end table
