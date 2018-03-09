@@ -37,7 +37,7 @@ function save_plot(fname, varargin)
   opts = p.Results;
 
   if !ischar(opts.device)
-    fname
+    # fname
     [d , bn, ext] = fileparts(fname);
     if !length(ext)
       error("device is not specified.");
