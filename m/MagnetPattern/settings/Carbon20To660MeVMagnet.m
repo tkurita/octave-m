@@ -66,6 +66,20 @@ function retval = QDPattern
   retval = build_pattern(pattern_cells);
 endfunction
 
+function retval = SXPattern
+  pattern_data = {
+      0	, 0	, "linear"; 
+      690.2	, 0	, "spline"; 
+      702.7	, 2.7 	, "";
+      727.7	, 29.2 	, "";
+      740.2	, 31.8 	, "linear";
+      1084.8	, 31.8 	, "spline";
+      1097.3	, 29.2 	, ""
+      1122.3	, 2.7 	, "";
+      1134.8	, 0	, "linear";
+      2000	, 0	, 0} ;
+  retval = build_pattern(pattern_data);
+end
 %!test
 %! Carbon20To660MeVMagnet;
 %! plot_bpattern(BMPattern, QFPattern, QDPattern, "B")
