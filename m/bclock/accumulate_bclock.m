@@ -34,7 +34,7 @@ function retval = accumulate_bclock(bclock_data, db, bl_fb,
   pw = 5e-6; # B-Clock パルス幅 [sec]
   xydata = xy(bclock_data);
   dy = diff(xydata(:,2));
-  dt = str2num(bclock_data.preambles("XIN"));
+  dt = bclock_data.ts;
   lind = find(dy < th);
 
   # 5usec 以内の重複したデータは若いindex を残して削除する。
