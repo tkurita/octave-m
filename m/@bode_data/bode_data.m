@@ -1,22 +1,35 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} bode_data(@var{tf})
-## description
+## @deftypefn {Function File} {@var{obj} =} bode_data(@var{tf}, [@var{option}])
+##
+## Evaluate data of @var{tf} for bode diagram.
+##
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
+## @item tf
+## transfer function
 ## @end table
 ##
+## @strong{Options Key}
+## @table @code
+## @item scale
+## @item InputDelay
+## @end table
+## 
 ## @strong{Outputs}
 ## @table @var
-## @item retval
-## description of @var{retval}
+## @item obj
+## bode_data object
 ## @end table
 ##
+## @strong{methods}
+## @table @code
+## @item gain
+## @item phase
+## @item gain_10dB
+## @item set_frequency
+## @end table
+## 
 ## @end deftypefn
-
-##== History
-##
 
 function retval = bode_data(varargin)
   retval = struct("tf", NA, "params", NA, "f_in", NA);
