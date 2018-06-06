@@ -1,5 +1,8 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{h} =} vline(@var{x} , [@var{properties}])
+## @deftypefnx {Function File} {@var{h} =} vline(@var{axh_list},, @var{x})
+## @deftypefnx {Function File} {@var{h} =} vline(@var{figh}, @var{x})
+##
 ## Draw vertical lines.
 ##
 ## @strong{Inputs}
@@ -13,31 +16,29 @@
 ## @strong{Outputs}
 ## @table @var
 ## @item @var{h}
-## graphics handles of vertical lines.
+## a cell array of graphics handles of vertical lines.
 ## @end table
 ##
 ## @end deftypefn
 
-##== History
-## 2013-11-08
-## * fixed error of treatments of properties.
-## 2013-06-13
-## * remove persisitent _ylim in _vline
-## 2012-07-23
-## * use arrayfun instead of map.
-## 2011-07-27
-## * first argument can be axes object
-## 2007-10-31
-## * use line instead of __gnuplot_raw__
-## * The code chekcing automatic_replot is removed for compatibility to 2.9.14
-
 function result = vline(varargin)
-  if (length(varargin) > 1 &&  ishandle(varargin{1}))
-    ca = varargin{1};
-    set(gcf, "currentaxes", ca);
+  if length(varargin) > 1
+    if ishandle(varargin{1})
+      switch get(varargin{1}, "type")
+        case "figure"
+          axlist = find_axes(varargin{1});
+        case "axes";
+          axlist = varargin{1};
+      end
+    elseif ismatrix(varargin{1})
+      axlist = varargin{1};
+    else
+      error("First argument is invalid.");
+    end
+    #set(gcf, "currentaxes", ca);
     varargin(1) = [];
   else
-    ca = gca();
+    axlist = gca();
   endif
   
   x = varargin{1};
@@ -46,22 +47,36 @@ function result = vline(varargin)
   if (length(varargin) > 1)
     _vline("properties", varargin);
   end
+  _vline("axes", axlist);
 
-  result = arrayfun(@_vline, x);
+  result = arrayfun(@_vline, x, "UniformOutput", false);
 endfunction
 
 function result = _vline(varargin)
   persistent _prop;
+  persistent _axes;
   if (ischar(varargin{1}))
-    [_prop] = get_properties(varargin, {"properties"}, {_prop});
-    return;
+    switch varargin{1}
+      case "properties"
+        _prop = varargin{2};
+        return;
+      case "axes"
+        _axes = varargin{2};
+        return;
+      otherwise
+        error([varargin{1}, " is unknown key."]);
+    end
   end
   
   x = varargin{1};
-  if (length(_prop) > 0)
-    result = line([x x], ylim(), _prop.properties{:});
-  else
-    result = line([x x], ylim());
-  endif
+  result = [];
+  for n = 1:length(_axes)
+    an_axes = _axes(n);
+    if (length(_prop) > 0)
+      result(end+1) = line(an_axes, [x x], ylim(), _prop.properties{:});
+    else
+      result(end+1) = line(an_axes, [x x], ylim());
+    end
+  end
 endfunction
 
