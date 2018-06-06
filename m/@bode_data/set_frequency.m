@@ -21,6 +21,8 @@
 
 function X = set_frequency(X, f_in)
   X.f_in = f_in;
+  X.response = NA;
+  X = frequency_response(X);
 endfunction
 
 %!test

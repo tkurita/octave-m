@@ -22,16 +22,12 @@
 ## * first implementation
 
 function retval = phase(X, varargin)
-  params = X.params;
-  if length(varargin)
-    params = join_struct(params, varargin{:});
-  endif
-  a_tf = X.tf;
-  if isa(a_tf, "function_handle") || isa(a_tf, "char")
-    a_tf = feval(a_tf, params);
-  endif
-  [m,p,w] = bode(a_tf, 2*pi*X.f_in);
-  retval = [w/(2*pi), p];
+
+  [a_ft, params] = eval_tf(X, varargin{:});
+  X = frequency_response(X);
+
+  p = unwrap(arg(X.response))*180/pi;
+  retval = [X.f_in(:), p(:)];
 endfunction
 
 %!test
