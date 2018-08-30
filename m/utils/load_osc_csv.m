@@ -198,7 +198,7 @@ endfunction
 
 function retval = _tek1(filepath)
   # filepath = "tek00013CH3.csv";
-  [fid, msg] = fopen(filepath, "r");
+  [fid, msg] = _open_file(filepath, "r");
   if (fid == -1)
     error(msg);
   endif
@@ -222,9 +222,9 @@ function retval = _tek1(filepath)
     aline = deblank(fgetl(fid));
 
   endwhile
-  fclose(fid);
   
-  data = csvread(filepath, nhead, 0);
+  data = csvread(fid, nhead, 0);
+  fclose(fid);
   if (data(end,1) < data(end-1, 1) )
     data(end,:) = []; # remove last row ,
                       # because last row may 0 value due to last empty line
