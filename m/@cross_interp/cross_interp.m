@@ -6,7 +6,7 @@
 ## @table @code
 ## @item forward_interp(@var{ci}, @var{xi})
 ## Obtain a value at @var{xi} with spline interpolation.
-## @item reverse_interp(@var{ci}, @var{yi}
+## @item reverse_interp(@var{ci}, @var{yi})
 ## Obtain a value for @var{yi}.
 ## @end table
 ##
