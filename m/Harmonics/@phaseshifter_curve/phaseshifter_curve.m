@@ -1,16 +1,15 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {@var{retval} =} phaseshifter_curve(@var{arg})
-## description
+## @deftypefn {Function File} {@var{retval} =} phaseshifter_curve(@var{v}, @var{rad})
+## make phaseshifter_curve object with array of voltages @var{v} and array of angles @var{rad}.
+## 
+## The methods 'rad_for_v' and 'v_for_rad' can be used to obtain corresponding values betwee @var{v} and @var{rad}. 'interp1' is utilized for linear interpolation.
+##
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
-## @end table
-##
-## @strong{Outputs}
-## @table @var
-## @item retval
-## description of @var{retval}
+## @item v
+## Array of voltages.
+## @item rad
+## Array of angles.
 ## @end table
 ##
 ## @end deftypefn
