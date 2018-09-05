@@ -10,7 +10,6 @@
 function retval = find_low(ylist, varargin)
   [hbin, threshold] = get_properties(varargin, {"bin", "threshold"}, {200, 5});
   [yh, xh] = hist(ylist, hbin);
-  bar(xh, yh);
   py = yh(1);
   start_ind  = 1;
   for n = 1:length(yh);
@@ -31,5 +30,9 @@ function retval = find_low(ylist, varargin)
     py = yh(n);
   endfor  
   retval = xh(yi);
-  vline(retval);
+  
+  subplot(2,1,1);
+  bar(xh, yh);vline(retval);
+  subplot(2,1,2);
+  plot(ylist); hline(retval);
 endfunction
