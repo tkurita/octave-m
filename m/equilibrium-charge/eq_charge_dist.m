@@ -1,12 +1,14 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{qflist} =} eq_charge_dist(@var{z}, @var{particle}, @var{mev}, [@var{opts}])
 ## 
-## Obtain fractions of charge states around equilibrium charge state.
-## The charge states of which fraction is above 0.05 are outputed.
+## Obtain fractions of charge states around equilibrium charge state
+## with Sayer's distribution.
+## The charge states of which fraction is above 0.01 are outputed.
 ## If output variable is not specified, 
 ## print distribution of equilibirium charge state.
 ##
-## Input parameters are follows.
+## @strong{Inputs}
+##
 ## @table @code
 ## @item @var{z}
 ## Atomic number
@@ -16,8 +18,8 @@
 ## Kinetic Energy in MeV
 ## @end table
 ##
+## @strong{Labels of options}
 ##
-## Here is labels of options.
 ## @table @code
 ## @item stripper
 ## "gas" or "carbon". 
@@ -26,25 +28,16 @@
 ## @item threshold
 ## @end table
 ## 
-## Here is the structure of output.
+## @strong{A structure of output}
+##
 ## @example
 ## [charge1, fractoion1; charge2, fraction2; ...]
 ## @end example
 ##
 ## @seealso{eq_charge}
+##
+## R.O.Sayer Review. de. Phys. App. 12(’77)1543
 ## @end deftypefn
-
-##== History
-## 2014-01-10
-## * maximum and deviation will be displayed.
-## 2009-06-12
-## * use Sayer's distribution. R.O.Sayer Review. de. Phys. App. 12(’77)1543
-## 2009-06-11
-## * add options "minq", "maxq", "threshold"
-## 2009-04-09
-## * can have an output argument.
-## 2008-12-09
-## * First implementation
 
 function retval = eq_charge_dist(varargin)
   if (nargin < 3)
@@ -59,7 +52,7 @@ function retval = eq_charge_dist(varargin)
   [z, particle, mev] = div_elem(args);
   opts = get_properties(prop, 
                       {"stripper", "minq", "maxq", "threshold"}, 
-                      {"gas", 1, z, 0.05});
+                      {"gas", 1, z, 0.01});
   b = beta_with_mev(mev, particle);
   switch (opts.stripper)
     case "gas"
@@ -92,6 +85,7 @@ function retval = eq_charge_dist(varargin)
     retval = [qlist(:), fracs(:)];
     retval(retval(:,2) <= opts.threshold, :) = [];
   else
+    printf("  stripper: %s\n", opts.stripper);
     printf("  maximum : %.3f\n", q0);
     printf("deviation : %.3f\n", rho);
     for n=1:length(qlist)
