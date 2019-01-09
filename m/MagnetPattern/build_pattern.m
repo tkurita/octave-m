@@ -1,6 +1,16 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{result} =} build_pattern(@var{pattern_cells})
 ##
+## @example
+## pattern_cells = {...
+## 607.1, 1.6473, "spline";
+## 632.1, 1.6968, "";
+## 657.1, 1.7067, "end"};
+## build_pattern(pattern_cells)
+## @end example
+## The lenght of the value of third column of last row must be greater than 0 
+## to indicate end of span.
+##
 ## @seealso{span_with_cells}
 ## @end deftypefn
 
@@ -15,6 +25,7 @@ function span_struct_list = build_pattern(pattern_cells)
       beg_span = n;
     endif
   endfor
+
   span_struct_list = {};
   for n = 1:length(span_list)
       span_struct_list{n} = span_with_cells(span_list{n});
