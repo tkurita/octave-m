@@ -5,14 +5,8 @@
 ##
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
-## @end table
-##
-## @strong{Outputs}
-## @table @var
-## @item retval
-## description of @var{retval}
+## @item ignore_freq_response_of_ps
+## If this option is given, polynominal curve will be used to interpolate phase shifter characteristics.
 ## @end table
 ##
 ## @end deftypefn
