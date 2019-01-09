@@ -80,6 +80,37 @@ function retval = SXPattern
       2000	, 0	, 0} ;
   retval = build_pattern(pattern_data);
 end
+
+function retval = BMPe1Pattern
+  p = {...
+    0.0,0.0,"linear"
+    740.2,0.0,"spline";
+    752.7,10.2,"";
+    777.7,112.6,""
+    790.2,122.8,"linear"
+    1084.8,122.8,"spline";
+    1097.3,112.6,"";
+    1122.3,10.2,""
+    1134.8,0.0,"linear";
+    2000.0,0.0,"end"};
+  retval = build_pattern(p);
+endfunction
+
+function retval = BMPe2Pattern
+  p = {...
+    0.0,0.0,"linear"
+    740.2,0.0,"spline";
+    752.7,10.1,"";
+    777.7,110.8,""
+    790.2,120.9,"linear"
+    1084.8,120.9,"spline";
+    1097.3,110.8,"";
+    1122.3,10.1,""
+    1134.8,0.0,"linear";
+    2000.0,0.0,"end"};
+  retval = build_pattern(p);
+endfunction
+
 %!test
 %! Carbon20To660MeVMagnet;
 %! plot_bpattern(BMPattern, QFPattern, QDPattern, "B")
