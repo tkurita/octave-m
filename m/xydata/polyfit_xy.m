@@ -23,6 +23,7 @@ function retval = polyfit_xy(xy_in, n, varargin)
   endif
   [p, retval] = polyfit(xy_in(:,1), xy_in(:,2), n);
   retval.p = p;
+  retval.xy = [xy_in(:,1), retval.yf];
 endfunction
 
 %!test
