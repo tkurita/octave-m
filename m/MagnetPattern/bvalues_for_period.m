@@ -1,5 +1,6 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{blist}, @var{tlist} =} bvalues_for_period(@var{patternSet}, @var{tstep}, @var{tstart}, @var{tend})
+## @deftypefn {Function File} {[@var{blist}, @var{tlist}] =} bvalues_for_period(@var{patternSet}, @var{tstep}, @var{tstart}, @var{tend})
+## @deftypefnx {Function File} {@var{tblist} =} bvalues_for_period(@var{patternSet}, @var{tstep}, @var{tstart}, @var{tend})
 ##
 ## stat points of each region are always included.
 ## 前後に外挿するときは、一定値とする。
@@ -21,24 +22,15 @@
 ## @item @var{blist}
 ## values genelated form @var{patternSet}. May BL [T*m] or GL [(T/m)*m].
 ## @item @var{tlist}
-## tiems [msec]
+## tiems [ms]
+## @item @var{tblist}
+## [tlist, blist]
 ## @end table
 ## 
 ## @seealso{value_at_time}
 ## @end deftypefn
 
-##== History
-## 2009-10-30
-## * avoided duplicatoion in tlist
-##
-## 2009-10-29
-## * result is column wise vector 
-## * help is written by texinfo.
-##
-## 2008-12-03
-## * renamed from BValuesForTimes
-
-function [blist, tlist] = bvalues_for_period(patternSet, varargin)
+function varargout = bvalues_for_period(patternSet, varargin)
   # patternSet = BMPattern
   # timeInfo = {1,675,730}
   timeInfo = varargin;
@@ -100,8 +92,11 @@ function [blist, tlist] = bvalues_for_period(patternSet, varargin)
     endif
     
   endif
-  tlist = tlist(:);
-  blist = blist(:);
+  if nargout > 1 
+    varargout = {blist(:), tlist(:)};
+  else
+    varargout = {[tlist(:), blist(:)]};
+  endif
 endfunction
 
 function tlist = timeLine(tpoints, tstep)
