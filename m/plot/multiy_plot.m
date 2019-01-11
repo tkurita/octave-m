@@ -11,9 +11,9 @@
 ##   plot(t, sin(t));
 ##   multiy_plot(2, "ylabel", "tan");
 ##   plot(t, tan(t));
-##   xlim(ax, [500, 1500]);
 ##   xlabel(ax, "[rad]");
-## 
+##   xlim(ax, [1,2]); # changing xlim reflected to both plots.
+##
 ## see also : append_yaxes
 
 function retval = multiy_plot(varargin)
@@ -84,17 +84,13 @@ function retval = multiy_plot(varargin)
     pos(3) = pos(3) - pos(1) + pos1;
     set(base_axes, "position", pos);
     retval = base_axes;
-#    cf = get(base_axes, "parent");
-#    set (cf, "nextplot", "add");
-#    hold on;
-#    return;
   else
     if isna(base_axes)
       base_axes = gca();
     endif
-    retval = axes("position", get(base_axes, "position"), "color", "none" ...
+    retval = axes("position", get(base_axes, "position")
+      , "color", "none", "visible", "off"...
       , "xticklabel", {}, "yticklabel", {}, "ytick", [], "xtick", []);
-    axis(retval, "off");
     addlistener(base_axes, "xlim", {@_xlimchanged, retval});
   endif
 
