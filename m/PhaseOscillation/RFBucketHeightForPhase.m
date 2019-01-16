@@ -19,7 +19,7 @@
 ## * nM parameter is replaced with particle
 
 function [deltaE,delEE,delpp] = RFBucketHeightForPhase(V, particle, Ee, eta, h, phi_s, C, phi)
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM");
+  lv = physical_constant("speed of light in vacuum");
 
   bucketPot_c = cos(phi) + phi.*sin(phi_s);
   bucketPot_s = cos(phi_s) + phi.*sin(phi_s);
