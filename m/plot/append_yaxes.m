@@ -32,7 +32,8 @@ function retval = append_yaxes(ax, offset, varargin)
       opts.color = corder(corderidx,:);
     endif
   endif
-  yax = axes("position", pos, "xcolor", opts.color, "ycolor", opts.color);
+  yax = axes("position", pos, "xcolor", opts.color, "ycolor", opts.color ...
+    , "xtick", []);
   set(yax, "ylim", get(ax, "ylim"));
   addlistener(ax, "ylim", {@_ylimchanged, yax});
   tickslabel_off(yax, "x");
