@@ -48,7 +48,7 @@
 function [ws,Ee,eta] = synchro_freq(alpha, particle, q, brho, h, sin_ps, vline, C)
   lv = physical_constant("speed of light in vacuum"); #光速
   m0c2 = mass_energy(particle)*1e6; #[eV]
-  Ee2 = m0c2^2 + brho.^2 .*lv^2; #[ev2]
+  Ee2 = m0c2^2 + (q*brho).^2 .*lv^2; #[ev2]
   Ee = sqrt(Ee2); #[eV]
   eta = alpha - m0c2^2./Ee2;
   cosphi = - sqrt(1 - sin_ps.^2);
