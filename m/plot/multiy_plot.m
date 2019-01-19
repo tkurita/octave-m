@@ -1,4 +1,4 @@
-## multiy_plot("spacing", yspace, "nplot", nplot, ["ylabelfontsize", fsize])
+## multiy_plot("nplot", nplot, ["spacing", yspace, "ylabelfontsize", fsize])
 ## ax = multiy_plot(index, ["ylabel", labelname, "color", c])
 ##
 ## Create y axis and axes as a plot region for multi y axes plot.
