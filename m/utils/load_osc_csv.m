@@ -10,7 +10,7 @@
 ## YOKOGAWA
 ## @item "TDS3000"
 ## Tektronics
-## @item "DPO4000"
+## @item "DPO4000", "DPO2000"
 ## Tektronics
 ## @item "TDS2000"
 ## Tektronics
@@ -63,6 +63,8 @@ function retval = load_osc_csv(filepath, varargin)
     case "TDS3000"
       retval = _tek1(filepath);
     case "DPO4000"
+      retval = _tek2(filepath);
+    case "DPO2000"
       retval = _tek2(filepath);
     case "TDS2000"
       retval = _tek3(filepath);
@@ -135,7 +137,7 @@ function retval = _tek3(filepath) # for TDS2000
   retval.data{1} = [t, data(:,2)];
 endfunction
 
-function retval = _tek2(filepath) # for DPO400
+function retval = _tek2(filepath) # for DPO4000, DPO2000
   # filepath = "tek00013CH3.csv";
   [fid, msg] = fopen(filepath, "r");
   if (fid == -1)
