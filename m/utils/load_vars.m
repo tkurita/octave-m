@@ -12,7 +12,7 @@ function varargout = load_vars(varargin)
   endif
   pre_varnames = who;
   load(varargin{1});
-  varnames = who
+  varnames = who;
   pre_varnames{end+1} = "pre_varnames";
   varnames = setdiff(varnames, pre_varnames);
   no = nargout;
