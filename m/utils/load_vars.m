@@ -6,17 +6,13 @@
 ##
 ## @end deftypefn
 
-##== History
-## 2009-06-26
-## * first implementation
-
 function varargout = load_vars(varargin)
   if nargin < 1
     print_usage();
   endif
-  pre_varnames = who("-variables");
+  pre_varnames = who;
   load(varargin{1});
-  varnames = who("-variables");
+  varnames = who
   pre_varnames{end+1} = "pre_varnames";
   varnames = setdiff(varnames, pre_varnames);
   no = nargout;
@@ -27,6 +23,9 @@ function varargout = load_vars(varargin)
   
   if length(varargin) > 1
     vnames = varargin{2};
+    if !iscell(vnames)
+      vnames = {vnames};
+    endif
   else
     vnames = varnames;
   endif
