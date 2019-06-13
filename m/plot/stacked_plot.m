@@ -1,8 +1,9 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{hax} =} stacked_plot(@var{rows}, @var{index})
+## @deftypefnx {Function File} {@var{hax} =} stacked_plot(@var{rows}, @var{cols}, @var{index})
 ## @deftypefnx {Function File} {} stacked_plot("margin", @var{margin})
 ## @deftypefnx {Function File} {} stacked_plot("spacing", @var{spacing})
-## Set up a plot grid removing vertical spaces between subwindows.
+## Set up a plot grid removing vertical and horizontal spaces between subwindows.
 ## @strong{Inputs}
 ## @table @var
 ## @item rows
@@ -19,10 +20,21 @@
 ## @example
 ## stacked_plot("margin", [0.11, 0.12, 0.05, 0.1]); #opional
 ## stacked_plot("spacing", 0.1); #optional
+## # vertical stack
 ## stacked_plot(2,1);
 ## plot(x1);
 ## stacked_plot(2,2);
 ## plot(x2);
+##
+## # matrix stack
+## stacked_plot(2,2,1);
+## plot(x1);
+## stacked_plot(2,2,2);
+## plot(x2); 
+## stacked_plot(2,2,3);
+## plot(x3); 
+## stacked_plot(2,2,4);
+## plot(x4); 
 ## @end example
 ## 
 ## @seealso{subplot}
@@ -91,12 +103,26 @@ function retval = stacked_plot(varargin)
     return;
   endif
   
-  nrows = varargin{1};
-  pltindex = varargin{2};
-  aw = 1 - lm - rm;
+  switch length(varargin)
+    case 2
+      nrows = varargin{1};
+      pltindex = varargin{2};
+      ncols = 1;
+    case 3
+      nrows = varargin{1};
+      ncols = varargin{2};
+      pltindex = varargin{3};
+    otherwise
+      error("Invalid number of arguments.");
+  endswitch
+
+  fw = 1 - lm - (rm-spacing); # figure width
+  aw = fw/ncols; # axes width
   fh = 1 - bm - (tm -spacing); # figure height
   ah = fh/nrows; # axes hight
-  retval = subplot("position", [lm, bm+ah*(nrows-pltindex), aw, ah-spacing]);
+  rowidx = ceil(pltindex/ncols);
+  colidx = pltindex - (rowidx-1)*ncols;
+  retval = subplot("position", [lm+aw*(colidx-1), bm+ah*(nrows-rowidx), aw-spacing, ah-spacing]);
 endfunction
 
 %!test
