@@ -21,6 +21,11 @@ function retval = subsref(x, s)
           retval = x.data;
         case "info"
           retval = x.info;
+        case "ntrace"
+          retval = 0;
+          for [val, key] = x.data
+            retval += length(fieldnames(val));
+          endfor
         otherwise
           retval = x.info.(fld);
       endswitch
