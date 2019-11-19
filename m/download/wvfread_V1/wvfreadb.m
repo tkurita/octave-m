@@ -142,22 +142,34 @@ if isempty(filename)
 end
 
 
-[pname,fname] = fileparts(filename);
+[pname,fname,ext] = fileparts(filename);
 if isempty(pname)
     pname='.';
 end
-if exist(fullfile(pname,[fname,'.wvf']),'file')~=2
-    error(['Invalid file name: ' pname,'\',fname,'.wvf']);
-end
+
 if exist(fullfile(pname, [fname,'.hdr']),'file')~=2
     error(['Invalid file name: ' pname,'\',fname,'.hdr']);
 end
 
 info=hdrread(fullfile(pname, [fname,'.hdr']));
 
-filename= fullfile(pname,[fname,'.wvf']);
 
-[fid,message]=fopen(filename);
+if exist(fullfile(pname,[fname, ext]),'file')~=2
+  if exist(fullfile(pname,[fname,ext,'.zip']),'file')~=2 # added support of zip-file by tkurita 2019/08/30 
+      error(['Invalid file name: ' pname,'\',fname,'.wvf']);
+  else
+    filename= fullfile(pname,[fname,'.WVF.zip']);
+    fid = popen(sprintf("unzip -p '%s' '%s'" ...
+                  ,filename, basename(filename, "\.zip")), "r");
+    if (fid == -1)
+      message = "Faild to popen for unzip";
+    endif
+    % filename= fullfile(pname,[fname,'.wvf']);
+  endif
+else
+  filename= fullfile(pname,[fname, ext]);
+  [fid,message]=fopen(filename);
+end
 
 if fid==-1
     error(message);
@@ -272,7 +284,8 @@ else
 end
 
 offset=offset+(startind-1)*ByteNum;
-fseek(fid, double(offset),'bof');    % go to start byte
+#fseek(fid, double(offset),'bof');    % go to start byte
+fread(fid, offset); # use fread instead of fseek, because fseek does not work with popen.
 
 nop_all= double(info.(['Group' num2str(Group)]).(['Trace' num2str(Trace)]).BlockSize); %number of data points stored in the selected trace in the file
 nop=nop_all-startind+1;
