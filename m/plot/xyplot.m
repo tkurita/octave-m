@@ -1,15 +1,12 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{h} =} xyplot(@var{XY}, @var{format},...)
+## plot @var{XY}.
 ##
-## plot column wise 2 dimensional matrix @var{XY} as X-Y data.
+## @var{XY} is a column wise 2 dimensional matrix or a structure which has fields of "x" and "y".
 ##
 ## returned values are handles of line objects.
 ##
 ## @end deftypefn
-
-##== History
-## 2010-12-28
-## * add help of texinfo format.
 
 function lh = xyplot(varargin)
   plotarg = {};
@@ -18,7 +15,9 @@ function lh = xyplot(varargin)
     if (ischar(item))
       plotarg{end+1} = item;
     else
-      if (columns(item) == 2) 
+      if isstruct(item)
+        plotarg = {plotarg{:}, item.x, item.y};
+      elseif (columns(item) == 2) 
         plotarg = {plotarg{:}, item(:,1), item(:,2)};
       else
         plotarg{end+1} = item;
