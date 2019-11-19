@@ -58,15 +58,17 @@ function varargout = loop_du_Vn(varargin)
     return;
   endif
 
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); # [m/s] light velocity
+  lv = physical_constant("speed of light in vacuum"); # [m/s] light velocity
   g2 = 1/(1-(C*fr/lv)^2);
   eta = alp - (1/g2);
   wr = 2*pi*fr; # [rad/s] 周回周波数
   w_norm = linspace(1e-2, 1e2, 5000);
   w = w_norm * ws;
   s = i*w;
-  if (isnumeric(config.gr))
+  if isnumeric(config.gr)
     gr = config.gr;
+  elseif isstruct(config.gr)
+    gr = (config.gr.K_P.*s + config.gr.K_I)./s;
   else
     gr = config.gr(s);
   endif
@@ -78,8 +80,11 @@ function varargout = loop_du_Vn(varargin)
   m = abs(trf);
   p = angle(-1*trf); # du は Vn に対して極性が反転しているから
   if !nargout
-    semilogx(w,20*log10(m));xlim([1e-2,1e1]);grid on;...
-    ylabel("{/Symbol D}u / V_n [dB]");xlabel("{/Symbol w}/{/Symbol w}_s");
+    ax = plotyy(w_norm, 20*log10(m), w_norm, p*180/pi, @semilogx, @semilogx); grid on;...
+    apply_to_axes("xlim", [1e-2,1e2]);
+    ylim(ax(1), [-150, 0]);
+    ylabel(ax(1), "\\Delta u / V_n [dB]");ylabel(ax(2), "phase [degree]");...
+    xlabel("\\omega / \\omega_s");
   elseif nargout == 3
     varargout = {m, p, w};
   else

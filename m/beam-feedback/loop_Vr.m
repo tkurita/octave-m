@@ -59,7 +59,7 @@ function varargout = loop_Vr(varargin)
     return;
   endif
 
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); # [m/s] light velocity
+  lv = physical_constant("speed of light in vacuum"); # [m/s] light velocity
 
   g2 = 1/(1-(C*fr/lv)^2);
   eta = alp - (1/g2);
@@ -69,6 +69,8 @@ function varargout = loop_Vr(varargin)
   s = i*w;
   if (isnumeric(config.gr))
     gr = config.gr;
+  elseif isstruct(config.gr)
+    gr = (config.gr.K_P.*s + config.gr.K_I)./s;
   else
     gr = config.gr(s);
   endif
@@ -84,8 +86,12 @@ function varargout = loop_Vr(varargin)
 #  vr = tf([-D], [1, P/ws, 1]);
 #  [m, p, w] = bode(vr, linspace(1e-2, 1e1, 200));
   if !nargout
-    semilogx(w,20*log10(m));xlim([1e-2,1e1]);grid on;...
-    ylabel("{/Symbol D}R / V_n [dB]");xlabel("{/Symbol w}/{/Symbol w}_s");
+    ax = plotyy(w_norm, 20*log10(m), w_norm, p*180/pi, @semilogx, @semilogx); grid on;...
+    apply_to_axes("xlim", [1e-2,1e2]);
+    ylim(ax(1), [-100, 40]);
+    ylim(ax(2), [-180, 0]);
+    ylabel(ax(1), "V'_r / V_r [dB]");ylabel(ax(2), "phase [degree]");...
+    xlabel("\\omega / \\omega_s");
   elseif nargout == 3
     varargout = {m, p, w};
   else

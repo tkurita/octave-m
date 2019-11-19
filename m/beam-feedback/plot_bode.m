@@ -55,12 +55,12 @@ ylabel("gain [dB]");
 if !isna(opts.xlim) 
   xlim(opts.xlim);
 endif
-if !isna(opts.title) 
+if ischar(opts.title) 
   title(opts.title);
 endif
 subplot(2,1,2)
 plot(pargs{:}); set(gca, "xscale", "log"); grid on;
-ylabel("phase [degree]"); xlabel("{/Symbol w}/{/Symbol w}_s");
+ylabel("phase [degree]"); xlabel("\\omega /\\omega_s");
 if !isna(opts.xlim) 
   xlim(opts.xlim);
 endif

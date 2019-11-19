@@ -40,7 +40,7 @@ function gr = gr_for_D(config, d)
   fr = config.fr;
   h = config.h; # harmonics
   alp = config.alpha;
-  lv = physical_constant("SPEED_OF_LIGHT_IN_VACUUM"); # [m/s] light velocity
+  lv = physical_constant("speed of light in vacuum"); # [m/s] light velocity
 
   g2 = 1/(1-(C*fr/lv)^2);
   eta = alp - (1/g2);

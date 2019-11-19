@@ -28,8 +28,15 @@ function varargout = loop_Vp_Vn(varargin)
   
   result.mag = result.mag.*result.Gp.*result.gp;
   if !nargout
-    semilogx(result.w_norm,20*log10(result.mag));xlim([1e-2,1e2]);grid on;...
-    ylabel("{/Symbol D}u / V_n [dB]");xlabel("{/Symbol w}/{/Symbol w}_s");
+    w_norm = result.w_norm;
+    ax = plotyy(w_norm, 20*log10(result.mag) ...
+            , w_norm, result.phase, @semilogx, @semilogx); grid on;...
+    apply_to_axes("xlim", [1e-2,1e2]);
+    ylim(ax(1), [-60, 10]);
+    ylim(ax(2), [-185, 185]);
+    ylabel(ax(1), "V_p / V_n [dB]");
+    ylabel(ax(2), "phase [degree]");...
+    xlabel("\\omega / \\omega_s");
   elseif nargout == 3
     varargout = {result.mag, result.phase, result.w};
   else
