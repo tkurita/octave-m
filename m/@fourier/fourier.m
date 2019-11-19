@@ -1,6 +1,6 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{fft_rec} =} fourier(@var{fft_rec}, [opts,...])
-## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, [opts,...])
+## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{data}, @var{interval}, [opts,...])
 ## @deftypefnx {Function File} {@var{fft_rec} =} fourier(@var{xy}, [opts,...])
 ## @deftypefnx {Function File} {@var{fft_rec} =} fourier(... , ["window", wf],  ["plot", @var{plotopts},...])
 ## 
