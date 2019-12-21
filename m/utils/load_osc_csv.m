@@ -14,6 +14,8 @@
 ## Tektronics
 ## @item "TDS2000"
 ## Tektronics
+## @item "TDS5000"
+## Tektronics
 ## @item "auto"
 ## try model "DPO4000" and next try "TDS3000"
 ## @end table
@@ -68,6 +70,8 @@ function retval = load_osc_csv(filepath, varargin)
       retval = _tek2(filepath);
     case "TDS2000"
       retval = _tek3(filepath);
+    case "TDS5000"
+      retval = _tds5000(filepath);
     case "auto"
       try
         retval = _tek2(filepath);
@@ -91,6 +95,36 @@ function [fid, msg] = _open_file(filepath)
     if (fid == -1)
       msg = "Faild to popen for unzip";
     endif
+  endif
+endfunction
+
+function retval = _tds5000(filepath)
+  [fid, msg] = _open_file(filepath);
+  if (fid == -1)
+    error(msg);
+  endif
+  aline = fgetl(fid);
+  cells = csvexplode(aline);
+  if length(cells) > 4
+    retval = struct();
+    #retval.data = [];
+    retval.x = [];
+    retval.y = [];
+    while(1)
+      retval.(cells{1}) = struct("value", cells{2}, ...
+                                "unit", cells{3});
+      #retval.data(end+1,:) = [cells{4}, cells{5}];
+      retval.x(end+1) = cells{4};
+      retval.y(end+1) = cells{5};
+      aline = fgetl(fid);
+      if aline == -1
+        fclose(fid);
+        break;
+      endif
+    endwhile
+  else
+    fclose(fid);
+    retval = csvread(filepath)
   endif
 endfunction
 
