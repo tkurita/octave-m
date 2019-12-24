@@ -16,9 +16,9 @@
 ##      .data -- [time, y]
 
 function trcRec = loadtrc(filepath)
+  pkg load io;
   #filepath = "008.trc"
-  mat = load(filepath);
-  [fid, msg] = fopen(filepath, "r");
+  [fid, msg] = _open_file(filepath);
   aline = fgetl(fid);
   while (findstr(aline, "#", 0))
     # match = regexp("^# (.+)=(.+)$", aline) #vesion 2.1 用
@@ -30,7 +30,10 @@ function trcRec = loadtrc(filepath)
     trcRec.(deblank(key)) = deblank(val);
     aline = fgetl(fid);
   endwhile
+  mat = dlmread (fid, "\t");
   fclose(fid);
+  mat1 = cell2mat(csvexplode(aline, "\t"));
+  mat = [mat1;mat];
   #xscale = str2num(trcRec.XScale(1:end-1));
   #xmin = str2num(xmin)*order;
   
@@ -44,6 +47,32 @@ function trcRec = loadtrc(filepath)
   xlist = xmin:delx:(xmax);
   size(xlist);
   trcRec.data = [xlist(:), vec(mat(:,1))];
+endfunction
+
+function [fid, msg] = _open_file(filepath)
+  zipfilename = find_zipfile(filepath);
+  msg = "sucess to open file";
+  if isempty(zipfilename)
+    [fid, msg] = fopen(filepath, "r");
+  else
+    fid = popen(sprintf("unzip -p '%s' '%s'" ...
+                ,zipfilename, basename(zipfilename, "\.zip")), "r");
+    if (fid == -1)
+      msg = "Faild to popen for unzip";
+    endif
+  endif
+endfunction
+
+function zipfilename = find_zipfile(filename)
+  zipfilename = [];
+  if !exist(filename, "file")
+    zipfilename = [filename, ".zip"];
+    if !exist(zipfilename, "file");
+      error(["Can't find a file : ", filename]);
+    endif
+  elseif !isempty(regexp(filename, "\.zip$"))
+    zipfilename = filename;
+  endif
 endfunction
 
 function result = str_with_unit2num(instring)
