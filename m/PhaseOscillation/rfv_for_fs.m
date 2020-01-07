@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{retval} =} rfv_for_fs(@var{fs}, @var{particle}, @var{q}, @var{brho}, @var{h}, @var{ps}, @var{C})
 ## Obtain RF voltage which give synchrtoron frequency.
+##
 ## @strong{Inputs}
 ## @table @var
 ## @item arg1
@@ -14,9 +15,6 @@
 ## @end table
 ##
 ## @end deftypefn
-
-##== History
-##
 
 function retval = rfv_for_fs(fs, particle, q, brho, h, ps, C, alpha)
   if ! nargin
