@@ -121,6 +121,7 @@ function retval = _tds5000(filepath)
         fclose(fid);
         break;
       endif
+      cells = csvexplode(aline);
     endwhile
   else
     fclose(fid);
@@ -172,8 +173,8 @@ function retval = _tek3(filepath) # for TDS2000
 endfunction
 
 function retval = _tek2(filepath) # for DPO4000, DPO2000
-  # filepath = "tek00013CH3.csv";
-  [fid, msg] = fopen(filepath, "r");
+  # filepath = "T0128ALL.CSV";
+  [fid, msg] = _open_file(filepath); # fopen(filepath, "r");
   if (fid == -1)
     error(msg);
   endif
@@ -211,7 +212,9 @@ function retval = _tek2(filepath) # for DPO4000, DPO2000
   endwhile
   fclose(fid);
   
-  data = csvread(filepath, nhead, 0);
+  [fid, msg] = _open_file(filepath);
+  # data = csvread(filepath, nhead, 0);
+  data = csvread(fid, nhead, 0);
   data = data(1:end-1,:);
   retval.data = {};
   retval.samplerate = 1/(data(2,1) - data(1,1));
@@ -230,6 +233,7 @@ function retval = _tek2(filepath) # for DPO4000, DPO2000
   for n = 2:ndata
     retval.data{end+1} = [t, data(:,n)];
   endfor
+  fclose(fid);
 endfunction
 
 function retval = _tek1(filepath)
