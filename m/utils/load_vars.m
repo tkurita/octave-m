@@ -1,5 +1,5 @@
 ## -*- texinfo -*-
-## @deftypefn {Function File} {[@var{v1}, @var{v2},..] =} load_vars( @var{file},{"v1", "v2",...}, @var{opts})
+## @deftypefn {Function File} {[@var{v1}, @var{v2},..] =} load_vars( @var{file}, @{"v1", "v2",...@}, @var{opts})
 ##
 ## Load specifeid varables from data file and return as results.
 ## 
