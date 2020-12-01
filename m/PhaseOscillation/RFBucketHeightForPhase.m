@@ -22,11 +22,15 @@ function [deltaE,delEE,delpp] = RFBucketHeightForPhase(V, particle, Ee, eta, h, 
   lv = physical_constant("speed of light in vacuum");
 
   bucketPot_c = cos(phi) + phi.*sin(phi_s);
-  bucketPot_s = cos(phi_s) + phi.*sin(phi_s);
+  # bucketPot_s = cos(phi_s) + phi.*sin(phi_s);
+  bucketPot_s = -cos(phi_s) + (pi-phi_s)*sin(phi_s);
 
   m0c2 = mass_energy(particle)*1e6; # [eV]
   beta2 = 1 - (m0c2^2)./(Ee.^2);
-  
+#  m0c2
+#  Ee
+#  beta2
+
   bucketFactor = (Ee.*V.*beta2)./(pi.*eta.*h);
   
   deltaE = sqrt(abs(bucketFactor.*(bucketPot_c - bucketPot_s)));

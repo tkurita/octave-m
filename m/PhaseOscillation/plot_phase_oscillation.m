@@ -67,28 +67,30 @@ function plot_phase_oscillation(tline,bline,bPoints_set,vlist,ws,phi_s,deltaEFro
   kEList = totalEnergy - m0c2*1e6; #Kinetic Energy
 
   relative_e_area_set = [tline, (e_area./(kEList*4*pi)).*100]; #[msec; %]
-  stacked_plot("margin", [0.110000, 0.120000 , 0.110000, 0.100000])
+  stacked_plot("margin", [0.14, 0.12, 0.11, 0.05]);
+  #stacked_plot("margin", [0.110000, 0.120000 , 0.110000, 0.100000])
   stacked_plot(3,1);
   ax = plotyy(tline, ws./(2*pi)*1e-3, tline, phi_s.*360./(2*pi));
 #  ax = xyyplot({ws_set, "-;synchrotorn Frequency [KHz];"},...
 #               {phi_s_set, "-g;phase angle of synchronus particle [degree];"});...
   ylabel(ax(1), "synchrotorn frequency [kHz]");
   ylabel(ax(2), "phase angle [degree]");
-  legend("synchrotorn frequency [kHz]", "phase angle of synchronus particle [degree]");
-  tickslabel_off(ax, "x");  
+  legend("synchrotorn frequency [kHz]", "phase angle of synchronus particle [degree]", "location", "south");
+  tickslabel_off(ax, "x");
+  legend("location", "south");
   stacked_plot(3,2);
 #  ax = xyyplot(
 #      {d_emax_set, "-;RF bucket height [KeV];",...
 #        e_area_set, "-;Bucket Area [10 KeV];",...
-#        deltaEFromB_set, "-r;Energy gain/1 BClocl [KeV];"},...
+#        deltaEFromB_set, "-r;Energy gain/1 B-Clock [KeV];"},...
 #      {relative_e_area_set, "-c;Relative Bucket Area [%];"});...
   ax = plotyy(tline, [d_emax*1e-3, e_area/10000, deltaEFromB*1e-3] ...
             , tline, (e_area./(kEList*4*pi)).*100);
   ylabel(ax(1), "Bucket Height [KeV]\nBucket Area [10KeV]");...
   ylabel(ax(2), "Relative Bucket Area [%]");
-  # なぜか、legend を設定すると、図が消えちゃう。
   legend("RF bucket height [keV]", "Bucket Area [10 keV]" ...
-          ,"Energy gain/1 BClocl [keV]", "Relative Bucket Area [%]");
+          ,"Energy gain/1 BClocl [keV]", "Relative Bucket Area [%]" ...
+          , "location",  "north");
   tickslabel_off(ax, "x"); 
   stacked_plot(3,3);
 #  ax = xyyplot({bline_set,"-;BM Pattern;", bPoints_set, "*"},...
@@ -97,5 +99,5 @@ function plot_phase_oscillation(tline,bline,bPoints_set,vlist,ws,phi_s,deltaEFro
   ylabel(ax(1), "BL value of BM [T m]");
   ylabel(ax(2), "RF Voltage [V]");
   ylim(ax(2), [0,500]);xlabel("Time [msec]");
-  legend("BM Pattern", "RF Voltage");
+  legend("BM Pattern", "RF Voltage", "location", "northwest");
 endfunction
