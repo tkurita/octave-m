@@ -1,5 +1,5 @@
 
-## usage : xyyplot({[X,Y], format ...}, {[X, Y2], format ...})
+## ax_list = xyyplot({[X,Y], format ...}, {[X, Y2], format ...})
 ##
 ## accept column wise 2 dimensional matrix as X-Y data
 
@@ -8,6 +8,7 @@
 ## * First implementation for Octave 3.2
 
 function ax = xyyplot(xy1arg, xy2arg)
+  clf;
   f = get(0, "currentfigure");
   if (isempty(f))
     f = figure();
@@ -21,6 +22,7 @@ function ax = xyyplot(xy1arg, xy2arg)
     ax = get(ca, "__plotyy_axes__");
     is_plotyy_axes = true;
   else
+    "aaa"
     ax = ca;
   endif
   
@@ -35,11 +37,10 @@ function ax = xyyplot(xy1arg, xy2arg)
     ax(1) = axes();
     ax(2) = axes();
   endif
-  
+  ax
   axes(ax(1))
   newplot()
   xyplot(xy1arg{:});
-  #set(ax(1), "keypos", "northwest");
   cf = gcf();
   set(cf, "nextplot", "add");
   
@@ -49,6 +50,7 @@ function ax = xyyplot(xy1arg, xy2arg)
   
   set(ax(2), "yaxislocation", "right");
   set(ax(2), "position", get(ax(1), "position"));
+  set(ax(2), "color", "none");
   xmax = realmin;
   xmin = realmax;
   for n = 1:length(ax)
@@ -68,16 +70,16 @@ function ax = xyyplot(xy1arg, xy2arg)
   
   ## Tag the plotyy axes, so we can use that information
   ## not to mirror the y axis tick marks
-  set(ax, "tag", "plotyy")
-
-  ## Store the axes handles for the sister axes.
-  if (is_plotyy_axes) 
-    set(ax(1), "__plotyy_axes__", ax);
-    set(ax(2), "__plotyy_axes__", ax);
-  else
-    addproperty ("__plotyy_axes__", ax(1), "data", ax);
-    addproperty ("__plotyy_axes__", ax(2), "data", ax);
-  endif
-
+#  set(ax, "tag", "plotyy")
+#
+#  ## Store the axes handles for the sister axes.
+#  if (is_plotyy_axes) 
+#    set(ax(1), "__plotyy_axes__", ax);
+#    set(ax(2), "__plotyy_axes__", ax);
+#  else
+#    addproperty ("__plotyy_axes__", ax(1), "data", ax);
+#    addproperty ("__plotyy_axes__", ax(2), "data", ax);
+#  endif
+  set(get(ax(1), "__legend_handle__"), "location", "northwest");
   set(cf, "nextplot", "replace");
 endfunction

@@ -3,6 +3,8 @@
 ##
 ## Output plot as PDF file of which paper size fit the graphics.
 ##
+## For gnuplot, "dpi", 144, "fontsize", 10 is closed to screen.
+## 
 ## @strong{Available options}
 ## @table @code
 ## @item fontsize
@@ -31,6 +33,7 @@ function save_plot(fname, varargin)
   p.addParamValue("margins", "10 10 10 10");
   p.addParamValue("device", NA);
   p.addParamValue("crop", false);
+  p.addParamValue("dpi", 72);
   
   p.parse(varargin{:});
 
@@ -59,7 +62,7 @@ function save_plot(fname, varargin)
       opts.papersize = [pre_pp(3), pre_pp(4)];
     else strcmp(opts.papersize, "screen");
       fps = get(gcf, "position");
-      opts.papersize = [fps(3), fps(4)]./72;
+      opts.papersize = [fps(3), fps(4)]./opts.dpi;
       if (isna(opts.paperorigin))
         opts.paperorigin = [0, 0];
       endif

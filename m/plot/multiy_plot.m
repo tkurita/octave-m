@@ -123,6 +123,8 @@ endfunction
 function _set_color(ax, c)
   if ischar(c)
     rgb = name2rgb(c);
+  else
+    rgb = c;
   endif
   co = get(ax, "colororder");
   set(ax, "colororder", [rgb; co]);

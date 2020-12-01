@@ -68,7 +68,7 @@ function result = _vline(varargin)
       otherwise
         error([varargin{1}, " is unknown key."]);
     end
-  end
+  endif
   x = varargin{1};
   result = [];
   for n = 1:length(_axes)

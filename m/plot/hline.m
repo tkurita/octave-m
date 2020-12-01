@@ -1,5 +1,5 @@
-## usage : hline(x)
-##  縦線を表示する。
+## usage : hline(y)
+##  横線を表示する。
 ## arguments
 
 ##== History

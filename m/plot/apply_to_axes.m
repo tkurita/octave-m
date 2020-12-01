@@ -18,7 +18,8 @@ function retval = apply_to_axes(propname, varargin)
     print_usage();
   endif
   
-  ax = findobj(gcf, "type", "axes", "tag", "");
+  ax = find_axes(gcf);
+  #findobj(gcf, "type", "axes", "tag", "");
   
   if ! isempty(regexp(propname, "^.label"))
     for a = ax(:)'
