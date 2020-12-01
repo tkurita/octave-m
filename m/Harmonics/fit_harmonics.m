@@ -6,8 +6,17 @@
 ## description
 ## @strong{Inputs}
 ## @table @var
-## @item arg1
-## description of @var{arg}
+## @item parames_init(1)
+## @item params(1)
+## a1 : Amplitude of fundamental wave
+## @item params_init(2)
+## a2ratio : Ratio of amplitude between fundamental and second harmonics
+## @item params_init(3)
+## f : Frequency of fundamental wave.
+## @item params_init(4)
+## phis : Synchronus phase.
+## @item params_inits(5)
+## DC offset
 ## @end table
 ##
 ## @strong{Outputs}

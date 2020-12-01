@@ -25,6 +25,7 @@ function retval = phaseshifter_polycurve(filename)
 
   v_to_rad = polyfit(v, rad, length(v)-1);
   rad_to_v = polyfit(rad, v, length(v)-1);
+  self = tars(rad, v); # for the disyplay method
   self._properties = tars(v_to_rad, rad_to_v);
   retval = class(self, "phaseshifter_polycurve");
 endfunction
