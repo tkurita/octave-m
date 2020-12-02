@@ -12,7 +12,7 @@
 ##  See also: 
 
 function data = load_NA_csv(filepath)
-  fid = open_zip_file(filepath)
+  fid = open_zip_file(filepath);
   while(1)
     l = fgetl(fid);
     spos = strfind(l, "BEGIN");
