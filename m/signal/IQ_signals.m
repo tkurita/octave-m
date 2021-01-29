@@ -5,7 +5,8 @@
 ## @strong{Inputs}
 ## @table @var
 ## @item RF
-## target signal
+## target signal. 
+## isf filename or xy data.
 ## @item LO
 ## carrier wave
 ## @end table
@@ -26,6 +27,7 @@
 ## @item Iout
 ## @item Qout
 ## @item amp
+## 2*sqrt(Iout^2 + Qout^2)
 ## @item tan_phi
 ## @item cos_phi
 ## @item sin_phi
@@ -59,6 +61,11 @@ classdef IQ_signals < handle
         RF_v = RF_isf.v;
         ts = LO_isf.ts;
         t = LO_isf.t;
+      elseif (isstruct(LO))
+        t = RF.x;
+        ts = t(2) - t(1);
+        LO_v = LO.y;
+        RF_v = RF.y;
       else
         t = RF(:,1);
         ts = t(2) - t(1);
@@ -88,7 +95,8 @@ classdef IQ_signals < handle
         fc = 0.443/(filterorder*ts);
       else
         fc = opts.fc;
-        filterorder = round(0.443/(fc*ts));
+        ts
+        filterorder = round(0.443/(fc*ts))
       endif
       printf("LPF cutoff : %f [Hz], order : %d \n", fc, filterorder);
       fc_normalized = 2*fc*ts;
