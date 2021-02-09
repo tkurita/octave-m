@@ -4,15 +4,15 @@
 ##
 ##  * Inputs *
 ##    b, a : 制御対象の伝達関数。The length of b and a must be 3.
-##           b(1) + b(2)*s + b(3)*s^2 ...
-##           -----------------------------
-##           a(1) + a(2)*s + a(3)*s^2 ...
+##             b(1)s^n + b(2)*s^(n-1) + ... + b(n)
+##             ------------------------------------
+##             a(1)s^n + a(2)*s^(n-1) + ... + a(n)
+##
+##           高い次数が先
 ##
 ##    model : 参照モデル optional
 ##        0: 10% オーバーシュート
 ##        1: オーバーシュートなしで制定
-##        a_n : 配列
-##             1/(SUM_(n=0) a_n sigma^n s^n)
 ##
 ##  * Outputs *
 ##    K_p + K_I/s
@@ -39,6 +39,10 @@ function [K_P, K_I] = model_match_PI(b, a, varargin)
     A = opts.model
   endif
   
+  # 低い次数を先にする。
+  b = flip(b);
+  a = flip(a);
+
   # 長さが 3以下なら 0を追加する。
   b = _add_taling_zeros(b);
   a = _add_taling_zeros(a);
@@ -75,9 +79,6 @@ function x = _add_taling_zeros(x)
     x = [x; zeros(3-length(x), 1)];
   endif
 end
-
-function _plot_bode(b, a, K_P, K_I)
-endfunction
 
 %!test
 %! func_name(x)
