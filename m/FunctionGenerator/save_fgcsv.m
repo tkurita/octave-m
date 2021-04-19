@@ -1,7 +1,6 @@
-## 任意関数発生器で読み込まれる CVS形式でdataを保存
-## usage: saveAsFGFormat(filename,data)
-function saveAsFGFormat(filename,data,comment)
-  warning("saveAsFGFormat is deprecated. Use save_fgcsv");
+## 三光社任意関数発生器で読み込まれる CVS形式でdataを保存
+## usage: save_fgcsv(filename,data)
+function save_fgcsv(filename, data, comment)
   maxPoints = 131072;
   breakNum = 32768;
   if (length(data) < maxPoints)
