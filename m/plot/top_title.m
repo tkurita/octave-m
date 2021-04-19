@@ -10,7 +10,7 @@
 ##
 ## @end deftypefn
 
-function retval = top_title(title_text)
+function h = top_title(title_text)
   if ! nargin
     print_usage();
   endif
