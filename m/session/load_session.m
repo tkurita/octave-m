@@ -21,7 +21,7 @@ function load_session(varargin)
   ssid = [];
   if length(varargin)
     ssid = varargin{1};
-  elseif evalin("caller", "exist SESSION_ID var")
+  elseif evalin("caller", "exist('SESSION_ID', 'var')")
     ssid = evalin("caller", "SESSION_ID");
   endif
 
