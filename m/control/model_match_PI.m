@@ -21,7 +21,7 @@
 ##
 ##  See also: 
 
-function [K_P, K_I] = model_match_PI(b, a, varargin)
+function varargout = model_match_PI(b, a, varargin)
   if ! nargin
     print_usage();
     return;
@@ -71,6 +71,7 @@ function [K_P, K_I] = model_match_PI(b, a, varargin)
   printf("h = %s", disp(h))
   printf("sigma = %f, c = %s", z, disp(c))
   printf("K_P = %f, K_I = %f \n", K_P, K_I);
+  varargout = {K_P, K_I};
 endfunction
 
 function x = _add_taling_zeros(x)

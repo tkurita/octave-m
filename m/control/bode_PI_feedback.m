@@ -19,7 +19,7 @@
 ##
 ##  See also: 
 
-function bode_PI_feedback(b, a, K_P, K_I, f)
+function varargout = bode_PI_feedback(b, a, K_P, K_I, f)
   if ! nargin
     print_usage();
     return;
@@ -28,8 +28,8 @@ function bode_PI_feedback(b, a, K_P, K_I, f)
   
   Gp = tf(b, a);
   Gc = tf([K_P, K_I], [1, 0]);
-  
-  bd1 = set_frequency(bode_data(Gc*Gp/(1 + Gc*Gp)), f);
+  Gall = Gc*Gp/(1 + Gc*Gp);
+  bd1 = set_frequency(bode_data(Gall), f);
   bd2 = set_frequency(bode_data(Gc), f);
   subplot(2,2,1);
   xyplot(gain_20dB(bd1)); ylabel("Magnitude [dB]")
@@ -44,6 +44,10 @@ function bode_PI_feedback(b, a, K_P, K_I, f)
   apply_to_axes("xscale", "log");
   apply_to_axes("grid", "on");
   apply_to_axes("xlabel", "Frequency [Hz]");
+  if nargout > 0
+    retval = tars(Gall, Gp, Gc, K_P, K_I);
+    varargout = {retval};
+  endif
 endfunction
 
 %!test
