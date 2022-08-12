@@ -1,6 +1,7 @@
 ## -*- texinfo -*-
 ## @deftypefn {Function File} {@var{prop_values} =} get_properties(varargin, @var{prop_defvals})
 ## @deftypefnx {Function File} {@var{prop_values} =} get_properties(varargin, @var{prop_names}, @var{def_values})
+## @deftypefnx {Function File} {} get_properties(varargin, @var{prop_defvals})
 ##
 ## Parse cell array of property/values pairs.
 ## 
@@ -19,6 +20,7 @@
 ##                       @{def_val_a, boolean, def_val_c, ...@})
 ## @end example
 ## 
+##
 ## @strong{Inputs}
 ## @table @var
 ## @item params
@@ -32,6 +34,7 @@
 ## @end table
 ##
 ## @strong{Outputs}
+## If an output variable is omimited (nargoutout is 0), values are set as local variables in the context.
 ## @table @var
 ## @item prop_values
 ## If nargout is 1, @var{prop_values} will be a structure of which fields are @var{propnames}.
@@ -76,7 +79,14 @@ function varargout = get_properties(prop_list, varargin)
     end
   end
   
-  if ((nargout <= 1))
-    varargout{1} = struct_fields_values(prop_names, varargout);
-  end
+  switch nargout
+    case 0
+      n = 1;
+      for pname = prop_names
+        assignin("caller", pname{1}, varargout{n++});
+      endfor
+    case 1
+      varargout{1} = struct_fields_values(prop_names, varargout);
+    otherwise
+  endswitch
 end
