@@ -18,6 +18,11 @@
 ## @item @var{h}
 ## a cell array of graphics handles of vertical lines.
 ## @end table
+## 
+## @strong{Example}
+## @example
+## vline(10, "displayname", "at 10", "color", "red", "linewidth", 3, "linestyle", "--")
+## @end example
 ##
 ## @end deftypefn
 
@@ -70,15 +75,15 @@ function result = _vline(varargin)
     end
   endif
   x = varargin{1};
-  result = [];
+  result = NA(1, length(_axes));
   for n = 1:length(_axes)
     an_axes = _axes(n);
-    if (length(_prop) > 0)
-      #result(end+1) = line(an_axes, [x x], ylim(), _prop.properties{:});
-      result(end+1) = line(an_axes, [x x], ylim(), _prop{:});
-    else
-      result(end+1) = line(an_axes, [x x], ylim());
-    end
+    if (length(_prop) == 0)
+      _prop = {"handlevisibility", "off"};
+    elseif (!ismember("displayname", _prop))
+      _prop = [_prop, {"handlevisibility", "off"}];
+    endif
+    result(end+1) = line(an_axes, [x x], ylim(), _prop{:});
   end
 endfunction
 
