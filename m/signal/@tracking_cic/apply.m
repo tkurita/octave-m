@@ -1,4 +1,4 @@
-## -- retval = apply(tcic, inwave)
+## -- [outwave, combout] = apply(tcic, inwave)
 ##     inwave に Tracking CIC を適用する
 ##
 ##  * Inputs *
@@ -6,13 +6,14 @@
 ##    inwave : input data
 ##
 ##  * Outputs *
-##    output of function
-##    
+##    outwave : filter 出力
+##    combout : システムクロックでリサンプリングする前
+##
 ##  * Exmaple *
 ##
 ##  See also: 
 
-function outwave = apply(tcic, inwave)
+function [outwave, combout] = apply(tcic, inwave)
   # 積分
   sig_after_intgl = filter(1, [1, -1], inwave);
   #size(sig_after_intgl)
@@ -44,4 +45,5 @@ function outwave = apply(tcic, inwave)
 #  amp = (max(sig_after_comb) + abs(min(sig_after_comb)))/2;
   # normalize
   outwave = vout*tcic.frev/tcic.fs;
+  combout = sig_after_comb*tcic.frev/tcic.fs;;
 endfunction

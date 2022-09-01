@@ -1,11 +1,12 @@
-## -- tcic = tracking_cic(arg1, arg2)
+## -- tcic = tracking_cic(frev, fs, cem, ts)
 ##     tracing cic のシミュレーション
 ##     CE パルスでリサンプルされた出力はシステムクロックで補間する。
 ##
 ##  * Inputs *
 ##    frev : frequency of first notch in Hz
 ##    fs : frequency of system clock
-##    cem : multipulication number and delay of clock enable pulse 
+##    cem : multipulication number and delay of clock enable pulse
+##    ts : サンプリングする時間の配列 0:1/fs:tmax (処理する最大時間)
 ##
 ##  * Outputs *
 ##    Instance of Tracking CIC filtter object.
