@@ -7,7 +7,7 @@
 
 function a_struct = append_fields(a_struct, varargin)
   for n = 2:nargin
-    a_struct.(deblank(argn(n,:))) = varargin{n-1};
+    a_struct.(deblank(inputname(n))) = varargin{n-1};
   endfor
   
 endfunction
