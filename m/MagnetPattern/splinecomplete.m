@@ -66,13 +66,13 @@ function pp = splinecomplete (x, y, valc)
     valc = [0, 0];
   endif
   
-  dg(2:n-1) = 2 * (h(1:n-2) .+ h(2:n-1));
+  dg(2:n-1) = 2 * (h(1:n-2) + h(2:n-1));
   dg(1) = 2*h(1);
   dg(n) = 2*h(n-1);
   dg=dg';
   
   delta = diff(a)./h;
-  g(2:n-1) = delta(2:n-1) .- delta(1:n-2);
+  g(2:n-1) = delta(2:n-1) - delta(1:n-2);
   g(1) = delta(1) - valc(1);
   g(n) = valc(2) - delta(n-1);
   g=g';
