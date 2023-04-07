@@ -113,6 +113,12 @@ function self = build_pattern(self, blpattern ...
   
   ##= 加速位相の計算
   sinphi = (C.*dBLdt_pattern(:)./(pi/4))./rfv_pattern(:);
+  stacked_plot(2,1);
+  plot(dBLdt_pattern(:)./(pi/4), "-;dBrho;");
+  stacked_plot(2,2);
+  plot(rfv_pattern, "-;RF Voltage;");
+  save_plot("syncphase-rfv.pdf");
+  
   # 電圧が発生されるまでを強制的に 0 にする。
   sinphi(1:start_cap_idx) = zeros(start_cap_idx, 1);
   phis=asin(sinphi);
