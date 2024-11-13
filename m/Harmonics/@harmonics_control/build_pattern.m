@@ -133,7 +133,7 @@ function self = build_pattern(self, blpattern ...
       rf_in_Hz(n)
       pscurve = pstable.curve_for_Hz(rf_in_Hz(n));
       bias_rad = rad_for_v(pscurve, phase_base_v(n))
-      phase_ctrlv(n) = v_for_rad(pscurve, bias_rad + phis(n))
+      phase_ctrlv(n) = v_for_rad(pscurve, bias_rad + 2*phis(n))
     endfor
   else
     pscurve = self._properties.pscurve;
@@ -141,7 +141,7 @@ function self = build_pattern(self, blpattern ...
     # phase shifter の校正曲線を使って、rad から制御電圧への逆変換が
     # はいくらかずれる。多項式近似をしているためと思われる。
     # 変化分を計算し、位相0を与える電圧に足し合わせる。
-    dv = v_for_rad(pscurve, bias_rad(:) + phis(:)) ...
+    dv = v_for_rad(pscurve, bias_rad(:) + 2*phis(:)) ...
           - v_for_rad(pscurve, bias_rad(:));
     phase_ctrlv = phase_base_v(:) + dv;
   endif
