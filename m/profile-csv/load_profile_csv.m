@@ -29,11 +29,12 @@ function result = load_profile_csv(file_path)
   endif
   
   aline = deblank(fgetl(fid));
-  [S, E, TE, M, T, NM] = regexp(aline, "(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+");
+  [S, E, TE, M, T, NM] = regexp(aline,
+                                "(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+");
   result.time = cellfun(@str2num, T{1});
   
   aline = deblank(fgetl(fid));
-  [S, E, TE, M, T, NM] = regexp(aline, "ÅF(.+)$");
+  [S, E, TE, M, T, NM] = regexp(aline, "Ôºö(.+)$");
   result.name = T{1}{1};
   
   positions = __read_line_mat__(fid);

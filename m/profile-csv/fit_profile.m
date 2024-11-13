@@ -31,7 +31,7 @@ function varargout = fit_profile(filepath, plot_title, horv)
       pr.(horv)(n,2) = 0;
     endif
   endfor
-  xyplot(pr.(horv), "-@;;");
+  xyplot(pr.(horv), "-o;;");
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
   mean_value = fit_result_pr(3);
