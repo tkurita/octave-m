@@ -19,8 +19,9 @@ function plot_bpattern(varargin)
       tPoints = [tPoints; patternSet{i}.tPoints(:)];
       bPoints = [bPoints; patternSet{i}.bPoints(:)];
     endfor
-    argPlot = {argPlot{:},tLine,bLine,"",tPoints,bPoints,"@"};
+    argPlot = {argPlot{:}, tLine,bLine,"-", tPoints,bPoints,"*"};
   endfor
+  argPlot
   plot(argPlot{:});
   xlabel("time [ms]");
   ylabel(varargin{end});
