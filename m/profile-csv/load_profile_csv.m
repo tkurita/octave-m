@@ -23,17 +23,18 @@
 function result = load_profile_csv(file_path)
   pkg load "io";
   #file_path = "../0712/profile_data/SYN0712-190132.csv"
+  #[fid, msg] = fopen(file_path, "r", "n", "Shift-JIS");
   [fid, msg] = fopen(file_path, "r");
   if (fid == -1)
     error(msg);
   endif
   
-  aline = deblank(fgetl(fid));
+  aline = native2unicode(uint8(deblank(fgetl(fid))), "Shift-JIS");
   [S, E, TE, M, T, NM] = regexp(aline,
                                 "(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+(\\d+)\\D+");
   result.time = cellfun(@str2num, T{1});
   
-  aline = deblank(fgetl(fid));
+  aline = native2unicode(uint8(deblank(fgetl(fid))), "Shift-JIS");
   [S, E, TE, M, T, NM] = regexp(aline, "：(.+)$");
   result.name = T{1}{1};
   
