@@ -2,7 +2,7 @@
 ## @deftypefn {Function File} {@var{obj} =} cod("BPM1", @var{v1}, ...)
 ## @deftypefnx {Function File} {@var{obj} =} cod("BPMs", struct("BPM1", @var{bpm1},...) ) 
 ## make a cod object with positions measured with BPMs.
-## @deftypefnx {Function File} cod("kickers", {"kicker1, "kicker2", ...}, "kick_angles", @var{kick_angles})
+## @deftypefnx {Function File} cod("kickers", {"kicker1", "kicker2", ...}, "kick_angles", @var{kick_angles})
 ## make a cod object with kick angles.
 ## @deftypefnx {Function File} cod("template", @var{template})
 ## set a template for new cod objects.
