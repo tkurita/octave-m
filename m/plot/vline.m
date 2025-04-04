@@ -30,7 +30,6 @@ function result = vline(varargin)
   axlist = NA;
   if (length(varargin) > 1) && (! ischar(varargin{2}))
     if ishandle(varargin{1})
-      "ff"
       switch get(varargin{1}, "type")
         case "figure"
           axlist = find_axes(varargin{1});
