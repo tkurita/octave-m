@@ -23,21 +23,28 @@
 ## 2007-12-03
 ## * update for 2.9.14
 
-function varargout = fit_profile(filepath, plot_title, horv)
+function varargout = fit_profile(filepath, plot_title, horv, varargin)
+  opts = get_properties(varargin, {"ignore_bins", []});
   pr = load_profile_csv(filepath);
+
   valid_limit = 3275; #3276 だと satulate しているみたい
   for n = 1:rows(pr.(horv))
     if pr.(horv)(n,2) > valid_limit
-      pr.(horv)(n,2) = 0;
+      opts.ignore_bins(end + 1) = n;
     endif
   endfor
+
+  for n = opts.ignore_bins
+    pr.(horv)(n,:) = [];
+  endfor
+
   xyplot(pr.(horv), "-o;;");
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
   mean_value = fit_result_pr(3);
   vline(mean_value);
   gp = gravity_point(pr.(horv));
-  vline(gp);
+  vline(gp, "color", "blue");
 
   title(plot_title);
   xlabel("Position [mm]");
