@@ -9,7 +9,7 @@
 ## Output
 ## - yax : new y axes.
 ##
-## see also : multi_yplot
+## see also : multiy_plot
 
 function retval = append_yaxes(ax, offset, varargin)
   if ! nargin
