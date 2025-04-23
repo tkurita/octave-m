@@ -73,14 +73,15 @@ function retval = multiy_plot(varargin)
   endwhile
   
   if (pltindex == 1)
-    base_axes = axes();
+    #base_axes = axes();
+    base_axes = gca();
     set(get(base_axes, "ylabel"), "fontsize", ylabelfontsize);
     if ischar(ylabeltext)
       ylabel(base_axes, ylabeltext);
     endif
     pos = get(base_axes, "position");
     pos1 = pos(1);
-    pos(1) = spacing*nplot;
+    pos(1) = spacing * nplot;
     pos(3) = pos(3) - pos(1) + pos1;
     set(base_axes, "position", pos);
     retval = base_axes;
