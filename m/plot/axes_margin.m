@@ -20,7 +20,7 @@ function axes_margin(varargin)
                                    "bottom", NA;
                                    "top", NA});
   for ax = hax(:)'
-    pos = get(ax, "position")
+    pos = get(ax, "position");
     [lm, bm, w, h] = div_elem(pos);
     rm = 1 - (w + lm);
     tm = 1 - (h + bm);
@@ -42,8 +42,7 @@ function axes_margin(varargin)
       neetset = true;
     endif
     if needset
-      pos = [lm, bm, 1 - (lm + rm), 1 - (bm + tm)]
-      disp(pos)
+      pos = [lm, bm, 1 - (lm + rm), 1 - (bm + tm)];
       set(ax, "position", pos);
     endif
   endfor
