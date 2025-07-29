@@ -35,11 +35,11 @@ function axes_margin(varargin)
     endif    
     if ! isna(opts.right)
       rm = opts.right;
-      neetset = true;
+      needset = true;
     endif
     if ! isna(opts.top)
       tm = opts.top;
-      neetset = true;
+      needset = true;
     endif
     if needset
       pos = [lm, bm, 1 - (lm + rm), 1 - (bm + tm)];
