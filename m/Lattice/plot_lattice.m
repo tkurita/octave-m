@@ -56,9 +56,9 @@ function retval = plot_lattice(first_arg, varargin)
 
   elseif (iscell(first_arg))
     args = prepare_plot(first_arg{1}, varargin{:});
-    xyplot(args{1}.h, "-@;horizontal beta;", "linewidth", 2 ...
-      , args{1}.v, "-@;vertical beta;", "linewidth", 2 ...
-      , args{2}, "-@;dispersion;", "linewidth", 2);  
+    xyplot(args{1}.h, "-o;horizontal beta;", "linewidth", 2 ...
+      , args{1}.v, "-x;vertical beta;", "linewidth", 2 ...
+      , args{2}, "-*;dispersion;", "linewidth", 2);
     title(args{4});
     ylabel("dispersion,beta [m]");
     xlabel("Position [m]");    
@@ -97,15 +97,15 @@ endfunction
 ##    Names of lattice elements shown on x-axis are assign by visibleLabes.
 
 function retval = _plot_lattice(allElements,betaFunction,dispersion,elem_names,titleText,insertComment)
-  retval = xyplot(betaFunction.h, "-@;horizontal beta;", "linewidth", 2 ...
-    , betaFunction.v, "-@;vertical beta;", "linewidth", 2 ...
-    , dispersion, "-@;dispersion;", "linewidth", 2);  
+  retval = xyplot(betaFunction.h, "-o;horizontal beta;", "linewidth", 2 ...
+    , betaFunction.v, "-x;vertical beta;", "linewidth", 2 ...
+    , dispersion, "-*;dispersion;", "linewidth", 2);  
   if (!isempty(titleText))
     title(titleText);
   end
   ylabel("dispersion,beta [m]");
   xlabel("Position [m]");
-  text("Position", [0.05, 0.95]...
+  text("Position", [0.05, 0.9]...
     , "Units", "normalized"...
     , "String", insertComment);
   drawnow();grid on;
@@ -113,7 +113,7 @@ function retval = _plot_lattice(allElements,betaFunction,dispersion,elem_names,t
 endfunction
 
 function append_plot_lattice(beta_f, dispersion)
-  append_plot(beta_f.h, "-@;horizontal beta;", "linewidth", 2);
-  append_plot(beta_f.v, "-@;vertical beta;", "linewidth", 2);
-  append_plot(dispersion, "-@;dispersion;", "linewidth", 2);
+  append_plot(beta_f.h, "-o;horizontal beta;", "linewidth", 2);
+  append_plot(beta_f.v, "-x;vertical beta;", "linewidth", 2);
+  append_plot(dispersion, "-*;dispersion;", "linewidth", 2);
 end
