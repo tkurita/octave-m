@@ -79,7 +79,8 @@ function result = _vline(varargin)
     an_axes = _axes(n);
     if (length(_prop) == 0)
       _prop = {"handlevisibility", "off"};
-    elseif (!ismember("displayname", _prop))
+    elseif (!contain_str(_prop, "displayname"))
+      # ismemober("displayname", {"linewidth", 1}) がエラーになる 2026-01-23
       _prop = [_prop, {"handlevisibility", "off"}];
     endif
     result(end+1) = line(an_axes, [x x], ylim(), _prop{:});
