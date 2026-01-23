@@ -37,14 +37,19 @@ function varargout = fit_profile(filepath, plot_title, horv, varargin)
   for n = opts.ignore_bins
     pr.(horv)(n,:) = [];
   endfor
-
-  xyplot(pr.(horv), "-o;;");
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
+  x_pr = pr.(horv)(:,1)
+  bar(x_pr, pr.(horv)(:,2), 0.5);
+  x = linspace(x_pr(1), x_pr(end), 100);
   mean_value = fit_result_pr(3);
-  vline(mean_value);
+  y = gaussianx(x, fit_result_pr(1), fit_result_pr(2), mean_value);
+  hold on;
+  plot(x, y, "-r", "linewidth", 2);
+  hold off;
+  vline(mean_value, "color", "magenta", "linewidth", 1);
   gp = gravity_point(pr.(horv));
-  vline(gp, "color", "blue");
+  vline(gp, "color", "green", "linewidth", 1);
 
   title(plot_title);
   xlabel("Position [mm]");
