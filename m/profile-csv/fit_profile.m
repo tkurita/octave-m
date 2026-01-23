@@ -55,7 +55,7 @@ function varargout = fit_profile(filepath, plot_title, horv, varargin)
   xlabel("Position [mm]");
   ylabel("");
   axis("auto");
-
+  grid on;
   if (nargout > 0)
     varargout{1} = mean_value;
   endif
