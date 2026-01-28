@@ -44,7 +44,7 @@ function retval = werc_kickers(element)
     ## bl = iorB; #steerer の 1A あたりの BL 値を計算するときに使う
     ##日立の磁石特性データシートより
     retval = -8.5870e-4; #effective length 219mmくらい
-  elseif (findstr(a_name,"QD") == 1)
+  elseif (findstr(a_name,"QD") == 1) || (findstr(a_name,"QF") == 1)
     ##= QDに巻かれた backleg coil 
     # 	if (strcmp(a_name,"QD2") == 1)
     # 	  measurementFactor = 1/0.8;
