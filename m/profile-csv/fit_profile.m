@@ -15,6 +15,7 @@
 
 ##== History
 ## 2026-05-29
+## * add: support load_profile_csv supporting flags row
 ## * fix: ignoring multiple bins. rmoving small index bin causes invalid result
 ## 2008-07-02
 ## * use gaussianx instead of gaussian
@@ -28,21 +29,22 @@
 function varargout = fit_profile(filepath, plot_title, horv, varargin)
   opts = get_properties(varargin, {"ignore_bins", []});
   pr = load_profile_csv(filepath);
-
+  prxy = pr.(horv);
   valid_limit = 3275; #3276 だと satulate しているみたい
-  for n = 1:rows(pr.(horv))
-    if pr.(horv)(n,2) > valid_limit
+  for n = 1:rows(prxy)
+    if prxy(n,2) > valid_limit
       opts.ignore_bins(end + 1) = n;
     endif
   endfor
   
   for n = flip(sort(opts.ignore_bins))
-    pr.(horv)(n,:) = [];
+    prxy(n,:) = [];
   endfor
+  prxy(isnan(prxy(:,2)),:) = []; # remove NaN
   initial_values = [1000, 10, 0];
-  fit_result_pr = gaussian_fit(pr.(horv), initial_values);
-  x_pr = pr.(horv)(:,1);
-  bar(x_pr, pr.(horv)(:,2), 0.5);
+  fit_result_pr = gaussian_fit(prxy, initial_values);
+  x_pr = prxy(:,1);
+  bar(x_pr, prxy(:,2), 0.5);
   x = linspace(x_pr(1), x_pr(end), 100);
   mean_value = fit_result_pr(3);
   y = gaussianx(x, fit_result_pr(1), fit_result_pr(2), mean_value);
@@ -50,7 +52,7 @@ function varargout = fit_profile(filepath, plot_title, horv, varargin)
   plot(x, y, "-r", "linewidth", 2);
   hold off;
   vline(mean_value, "color", "magenta", "linewidth", 1);
-  gp = gravity_point(pr.(horv));
+  gp = gravity_point(prxy);
   vline(gp, "color", "green", "linewidth", 1);
 
   title(plot_title);
