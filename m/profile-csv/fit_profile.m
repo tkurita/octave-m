@@ -1,5 +1,5 @@
 ## Usage : [fit_center, gravity_point]
-##                  = fit_profile(filepath, plot_title, horv)
+##                  = fit_profile(filepath, plot_title, horv, [ignore_bins", [1, 10]])
 ##
 ##  Apply gaussian to Profile Hold Data and obtain mean value
 ##  (center of gaussian).
@@ -14,6 +14,8 @@
 ##  mean value of gaussian fit
 
 ##== History
+## 2026-05-29
+## * fix: ignoring multiple bins. rmoving small index bin causes invalid result
 ## 2008-07-02
 ## * use gaussianx instead of gaussian
 ##
@@ -33,13 +35,13 @@ function varargout = fit_profile(filepath, plot_title, horv, varargin)
       opts.ignore_bins(end + 1) = n;
     endif
   endfor
-
-  for n = opts.ignore_bins
+  
+  for n = flip(sort(opts.ignore_bins))
     pr.(horv)(n,:) = [];
   endfor
   initial_values = [1000, 10, 0];
   fit_result_pr = gaussian_fit(pr.(horv), initial_values);
-  x_pr = pr.(horv)(:,1)
+  x_pr = pr.(horv)(:,1);
   bar(x_pr, pr.(horv)(:,2), 0.5);
   x = linspace(x_pr(1), x_pr(end), 100);
   mean_value = fit_result_pr(3);
@@ -63,6 +65,11 @@ function varargout = fit_profile(filepath, plot_title, horv, varargin)
   if (nargout > 1)
     varargout{2} = gp;
   endif
+
+  if (nargout > 2)
+    varargout{3} = pr.name;
+  endif
+
 endfunction
 
 function gp = gravity_point(pr_data)
