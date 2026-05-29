@@ -12,6 +12,8 @@
 ##  .time
 
 ##== History
+## 2026-05-29
+## * add: flags row support
 ## 2013-06-14
 ## * use cellfun instead of map.
 ## * load "io"
@@ -39,18 +41,63 @@ function result = load_profile_csv(file_path)
   result.name = T{1}{1};
   
   positions = __read_line_mat__(fid);
-  values = __read_line_mat__(fid);
-  result.h = [positions(:), values(:)];
-  
-  positions = __read_line_mat__(fid);
-  values = __read_line_mat__(fid);
-  result.v = [positions(:), values(:)];
-  
+  vals = __read_line_mat__(fid);
+  aline = fgetl(fid);
+  if ! startsWith(aline, "Y");
+    flags = __parse_flags__(aline)
+    vals = __apply_flags__(vals, flags);
+    aline = fgetl(fid);
+  endif
+  result.h = [positions(:), vals(:)];
+
+  positions = __parse_line_mat__(aline);
+  vals = __read_line_mat__(fid);
+  aline = fgetl(fid);
+  if aline != -1
+    flags = __parse_flags__(aline);
+    vals = __apply_flags__(vals, flags);
+  endif
+  result.v = [positions(:), vals(:)];
   fclose(fid);
 endfunction
 
-function mat = __read_line_mat__(fid)
-  cells = csvexplode(deblank(fgetl(fid)));
+function vals = __apply_flags__(vals, flags)
+    lf = length(flags);
+    lv = length(vals);
+    if lf == lv
+      # pass
+    elseif lf > lv
+      flgas = flags(1:length(vals));
+    elseif lf < lv
+      flgas(lf+1:lv) = ones(1, lv - lf);
+    endif
+    flags(flags==0) = nan;
+    vals = vals .* flags;
+endfunction
+
+function mat = __parse_flags__(aline)
+  cells = csvexplode(deblank(aline));
+  for n = 1:length(cells)
+    s = cells{n};
+    if length(s) > 0
+      if all(isspace(s))
+        cells{n} = 1;
+      endif
+    else
+      cells{n} = 1;
+    endif
+  endfor
+  cells = cells(2:end);
+  mat = cell2mat(cells);  
+endfunction
+
+function mat = __parse_line_mat__(aline)
+  cells = csvexplode(deblank(aline));
   cells = cells(2:end);
   mat = cell2mat(cells);
+endfunction
+
+function mat = __read_line_mat__(fid)
+  aline = fgetl(fid);
+  mat = __parse_line_mat__(aline);
 endfunction
