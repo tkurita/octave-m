@@ -1,4 +1,6 @@
-## usage : [cod_FB, cod_FT] = doublelFitCOD(cod_FB, cod_FT);
+## usage : [cod_FB, cod_FT] = double_fit(cod_FB, cod_FT);
+##
+## フラットトップとフラットベースを同時に最小二乗法を適用する。
 ##
 ##= Parameters
 ## * codRecord (structure) 
@@ -51,6 +53,7 @@ function [cod_FB, cod_FT] = ...
   nrows_FT = rows(codMatStruct_FT.mat);
   brho_ratio = cod_FB.ring.brho/cod_FT.ring.brho;
   mat_FB = codMatStruct_FB.mat;
+  # なんで brho 比をかけるの？
   mat_FT = brho_ratio.*codMatStruct_FT.mat;
   
   if (use_kick_factors)

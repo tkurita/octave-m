@@ -1,6 +1,8 @@
 ## -- retval = ratio_to_fitting(cod_bpms, cod_fit)
 ##     計算値に対して、実際に発生した COD の割合を求める。
 ##     cod_fit で計算された COD に対する、cod_bpms.at_bpms の割合を計算する
+##     cod_bpms は、補正適用前後の差分を与える。
+##     この結果を見て current_factor を修正する
 ##
 ##  * Inputs *
 ##    arg1 : 
@@ -9,7 +11,10 @@
 ##    output of function
 ##    
 ##  * Exmaple *
-##
+##      cod_fit = fit(cod_fit);
+##      displacement_cod = subtract(bpms_after, cod_fit);
+##      ratio_to_fitting(displacement_cod, cod_fit);
+##      
 ##  See also: 
 
 function retval = ratio_to_fitting(cod_bpms, cod_fit)

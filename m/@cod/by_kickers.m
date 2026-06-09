@@ -20,6 +20,7 @@
 ## * ported from cod_list_with_kickers
 
 function cod_list = by_kickers(cod_obj, varargin)
+  #"start by_kickers"
   if ! nargin
     print_usage();
   endif
@@ -67,6 +68,7 @@ function cod_list = by_kickers(cod_obj, varargin)
   endif
   
   cod_list = [positionList, cod_list];
+  #"end by_kickers"
 endfunction
 
 %!test
