@@ -29,9 +29,9 @@ function cod_list = vs_positions(in)
     latticeElement = a_lattice{n};
     elementName = latticeElement.name;
     if (isfield(cod_at_bpm, elementName))
-      x = [x; cod_at_bpm.(elementName)];
-      s = [s; latticeElement.centerPosition];
+      x(end+1) = cod_at_bpm.(elementName);
+      s(end+1) = latticeElement.centerPosition;
     endif
   endfor
-  cod_list = [s,x];
+  cod_list = [s', x'];
 endfunction

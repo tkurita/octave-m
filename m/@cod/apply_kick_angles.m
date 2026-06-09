@@ -50,6 +50,7 @@
 ## * ported from applyKickAgles.
 
 function result = apply_kick_angles(cod_obj, cod_mat, varargin)
+  # "start apply_kick_angles"
   use_kicker_values = false;
   use_kickfactor = true;
   if (length(varargin) > 0) 
@@ -67,28 +68,28 @@ function result = apply_kick_angles(cod_obj, cod_mat, varargin)
   if (isna(cod_obj.kick_angles))
     use_kicker_values = true;
   endif
-
   if (use_kicker_values)
     value_list = cod_obj.kicker_values;
   else
     value_list = cod_obj.kick_angles;
   endif
-  
   ## sort cod_obj.kickAngles to match cod_mat
   kickAngles = [];
   for n = 1:length(cod_mat.kickers)
     target_kicker = cod_mat.kickers{n};
+    # target_kicker.name
     for m = 1:length(cod_obj.kickers)
       if (strcmp(target_kicker.name, cod_obj.kickers{m}))
         if (use_kicker_values)
-          kickAngles = [kickAngles;...
-                kick_angle(target_kicker, value_list(m), cod_obj.brho)];
+          kickAngles(end+1) = kick_angle(target_kicker, value_list(m), cod_obj.brho);
         else
-          kickAngles = [kickAngles; value_list(m)];
+          kickAngles(end+1) = value_list(m);
         endif
       endif
     endfor
   endfor
+  # "after last end for"
+  kickAngles = kickAngles';
   if (use_kickfactor && isfield(cod_obj ,"kick_factor"))
     kickAngles .*= cod_obj.kick_factor(:);
   endif

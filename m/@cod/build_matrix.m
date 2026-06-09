@@ -40,6 +40,8 @@
 ## @end deftypefn
 
 ##= History
+## 2026-06-05
+## * use end+1 instead of joining matrix
 ## 2013-11-27
 ## * ported from buildCODMatrix
 
@@ -57,17 +59,29 @@ function result = build_matrix(cod_obj, varargin);
   endif
   
   ## pick up steerer parameters
-  stBetaList = []; # beta function at center position of steerers
-  stPhaseList = []; # phase advance at center position of steerers
-  kickers = {};
+  nkickers = length(kicker_names);
+  stBetaList = NA(1, nkickers); # beta function at center position of steerers
+  stPhaseList = NA(1, nkickers); # phase advance at center position of steerers
+  kickers = cell(1, nkickers);
   for m = 1:length(lattice)
     currentElement = lattice{m};
-    for n = 1 : length(kicker_names)
-      if (strcmp(lattice{m}.name, kicker_names{n}))
-        stPhaseList = [stPhaseList, currentElement.centerPhase.(horv)];
-        stBetaList = [stBetaList, currentElement.centerBeta.(horv)];
-        kickers = {kickers{:}, lattice{m}};
+    for n = 1 : nkickers
+      kickername = kicker_names{n};
+      if (strcmp(currentElement.name, kickername))
+        stPhaseList(n) = currentElement.centerPhase.(horv);
+        stBetaList(n) = currentElement.centerBeta.(horv);
+        kickers(n) = lattice{m};
         break;
+      elseif strcmp([currentElement.name "U"], kickername)
+        # *U, *D indicate to insert kick at entrance or exit of the element
+        stPhaseList(n) = currentElement.entrancePhase.(horv);
+        stBetaList(n) = currentElement.entranceBeta.(horv);
+        kickers(n) = struct("name", kickername);
+      elseif strcmp([currentElement.name "D"], kickername)
+        # *U, *D indicate to insert kick at entrance or exit of the element
+        stPhaseList(n) = currentElement.exitPhase.(horv);
+        stBetaList(n) = currentElement.exitBeta.(horv);
+        kickers(n) = struct("name", kickername);
       endif
     endfor
   endfor
@@ -81,37 +95,39 @@ function result = build_matrix(cod_obj, varargin);
     positions = [];
     for n = 1:length(lattice)
       currentElement = lattice{n};
-      refPhaseList = [refPhaseList ...
-        , currentElement.centerPhase.(horv), currentElement.exitPhase.(horv)];
-      refBetaList = [refBetaList ...
-        , currentElement.centerBeta.(horv), currentElement.exitBeta.(horv)];
-      refDispersionList = [refDispersionList ...
-        ; currentElement.centerDispersion; currentElement.exitDispersion];
-      positions = [positions ...
-        ; currentElement.centerPosition; currentElement.exitPosition];
+      # add center
+      refPhaseList(end+1) = currentElement.centerPhase.(horv);
+      refBetaList(end+1) = currentElement.centerBeta.(horv);
+      refDispersionList(end+1) = currentElement.centerDispersion;
+      positions(end+1) = currentElement.centerPosition;
+      # add exit
+      refPhaseList(end+1) = currentElement.exitPhase.(horv);
+      refBetaList(end+1) = currentElement.exitBeta.(horv);
+      refDispersionList(end+1) = currentElement.exitDispersion;
+      positions(end+1) = currentElement.exitPosition;
     endfor
-    result.positions = positions;
+    result.positions = positions';
   else
     refCODList = [];
     for n = 1:length(lattice)
       currentElement = lattice{n};
       elementName = currentElement.name;
       if (isfield(cod_obj.at_bpms, elementName))
-        refPhaseList = [refPhaseList, currentElement.centerPhase.(horv)];
-        refBetaList = [refBetaList, currentElement.centerBeta.(horv)];
-        refDispersionList = [refDispersionList; currentElement.centerDispersion];
-        refCODList = [refCODList; cod_obj.at_bpms.(elementName)];
+        refPhaseList(end+1) = currentElement.centerPhase.(horv);
+        refBetaList(end+1) = currentElement.centerBeta.(horv);
+        refDispersionList(end+1) = currentElement.centerDispersion;
+        refCODList(end+1) = cod_obj.at_bpms.(elementName);
         refNameList{end+1} = elementName;
       endif
     endfor
-    result.refCOD = refCODList;
+    result.refCOD = refCODList';
   endif
   nst = length(stBetaList);
   nref = length(refBetaList);
   X = repmat(sqrt(refBetaList'),1,nst).* repmat(sqrt(stBetaList), nref, 1);
   cosX = cos(pi*tune.(horv) - abs(repmat(refPhaseList',1,nst) - repmat(stPhaseList,nref,1)));
   result.mat = X.*cosX/(2*sin(pi*tune.(horv)));
-  result.dispersion = refDispersionList;
+  result.dispersion = refDispersionList';
   result.kickers = kickers;
   result.monitors = refNameList;
 endfunction
