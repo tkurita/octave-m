@@ -21,8 +21,8 @@ function brho = BrhoAtTime(blPattern,t)
   endif
   
   bl = value_at_time(blPattern,t);
-  ## BL Ï‚ªoËƒGƒlƒ‹ƒM[‚Ì Brho ‚Æˆê’v‚µ‚È‚¢‚Ì‚ÅA
-  ## ˆê’v‚³‚¹‚é‚½‚ß‚ÉAfactor 1.01 ‚ÅŠ„‚éB
+  ## BL ç©ãŒå‡ºå°„ã‚¨ãƒãƒ«ã‚®ãƒ¼ã® Brho ã¨ä¸€è‡´ã—ãªã„ã®ã§ã€
+  ## ä¸€è‡´ã•ã›ã‚‹ãŸã‚ã«ã€factor 1.01 ã§å‰²ã‚‹ã€‚
   brho = bl/(pi/4)/1.01; 
   #brho = bl/(pi/4);
 endfunction
