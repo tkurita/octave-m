@@ -27,6 +27,9 @@
 ## @end deftypefn
 
 ##== History
+## 2026-10-29
+## * replace msec with ms
+##
 ## 2009-06-08
 ## * Use pcolor when "output" option is ommited.
 
@@ -40,17 +43,16 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
   endif
   
   opts = get_properties(varargin,...
-                      {"output", "xlabel"},...
-                      {NA, "{/Symbol n}"});
+                      {"output", NA; "xlabel", "{/Symbol n}"});
   tlen = length(frevtrace.t);
   flen = length(specdata.MHz);
   numat = func(repmat(specdata.MHz(:)',tlen ,1),...
              repmat(frevtrace.freq(:),1 , flen));
   
   if isna(opts.output)
-    pcolor(numat, repmat(specdata.msec(:), 1, flen), specdata.dBm);
+    pcolor(numat, repmat(specdata.ms(:), 1, flen), specdata.dBm);
     xlabel(opts.xlabel);
-    ylabel("[msec]");
+    ylabel("[ms]");
     shading("flat");
     view(0, -90);
     tics("z", [], []);
@@ -61,7 +63,7 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
     fprintf(fid, "%s\n", "set pm3d map");
     fprintf(fid, "%s\n", "set parametric");
     fprintf(fid, "%s \"%s\"\n", "set xlabel",opts.xlabel);
-    fprintf(fid, "%s\n", "set ylabel \"[msec]\"");
+    fprintf(fid, "%s\n", "set ylabel \"[ms]\"");
     fprintf(fid, "%s\n", "set yrange [*:*] reverse");
     fprintf(fid, "%s\n", "splot \"-\"");
     
@@ -69,7 +71,7 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
       # n = 1;
       # fid = stdout;
       outmat = [numat(n,:);
-                ones(1,flen)*specdata.msec(n);
+                ones(1,flen) * specdata.ms(n);
                 specdata.dBm(n,:)];
       outmat(:,any(isna(outmat),1)) = [];
       fprintf(fid, "%g\t%g\t%g\n",outmat);
