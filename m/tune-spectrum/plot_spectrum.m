@@ -10,16 +10,19 @@
 ## A field name of @var{specdata}. "MHz" or "Hz".
 ## The default is "MHz".
 ## @item "y"
-## A field name of @var{specdata} (ex. "msec") or "frame".
-## The default is "msec".
+## A field name of @var{specdata} (ex. "ms") or "frame".
+## The default is "ms".
 ## @item "gpscript"
-## A fiel name to output to a gnuplot script file instead of plot. 
+## A file name to output to a gnuplot script file instead of plot. 
 ## Because octave can't deal with uneven 3d data.
 ## @end table
 ##
 ## @end deftypefn
 
 ##== History
+## 2026-10-29
+## * use ms as a default y label instead of msec
+##
 ## 2009-06-08
 ## * add "usepcolor" option
 ## * add "frameindex" and "frametime" options.
@@ -32,10 +35,14 @@ function plot_spectrum(specdata, varargin);
   if (!nargin)
     print_usage();
   endif
+  ## opts = get_properties(varargin,...
+  ## {"x", "y", "gpscript", "frametime", "frameindex", "colorbar", "usepcolor"},...
+  ## {"MHz", "ms", NA, NA, NA, true, false});
   opts = get_properties(varargin,...
-  {"x", "y", "gpscript", "frametime", "frameindex", "colorbar", "usepcolor"},...
-  {"MHz", "msec", NA, NA, NA, true, false});
-                        
+                        {"x", "MHz"; "y", "ms"; "gpscript", NA; ...
+                         "frametime", NA; "frameindex", NA; ...
+                         "colorbar", true; "usepcolor", false});
+
   if (strcmp(opts.y, "frame"))
     [x, z] = getfields(specdata, opts.x, "dBm");
     y = 1:rows(z);    
