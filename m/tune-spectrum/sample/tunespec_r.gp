@@ -1,8 +1,8 @@
 set palette rgbformulae 22,13,-31
 set pm3d map
 set parametric
-set xlabel "{/Symbol n}"
-set ylabel "[msec]"
+set xlabel "\nu"
+set ylabel "[ms]"
 set yrange [*:*] reverse
 splot "-"
 2	30.08	-42.4118

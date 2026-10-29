@@ -2,7 +2,7 @@ set palette rgbformulae 22,13,-31
 set pm3d map
 set parametric
 set xlabel "[MHz]"
-set ylabel "[msec]"
+set ylabel "[ms]"
 set yrange [*:*] reverse
 splot "-"
 0	0	-59.3608
