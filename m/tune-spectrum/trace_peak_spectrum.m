@@ -40,6 +40,9 @@
 ## @end deftypefn
 
 ##== History
+## 2026-10-29
+## * replace msec with ms
+##
 ## 2009-06-06
 ## * improve algorithm to search peaks.
 ## * add "skipfreq" option.
@@ -52,10 +55,11 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
   #  fwidth = 0.01
   # varargin = {"starttime", 0, "endtime", 40}
   # specdata = specdata07_v;
-  opts = get_properties(varargin, {"starttime", "endtime", "skipfreq"},...
-                        {specdata.msec(1), specdata.msec(end), []});
-  sindex = find(specdata.msec >= opts.starttime)(1);
-  eindex = find(specdata.msec >= opts.endtime)(1);
+  opts = get_properties(varargin, {"starttime", specdata.ms(1);
+                                   "endtime", specdata.ms(end);
+                                   "skipfreq", []});
+  sindex = find(specdata.ms >= opts.starttime)(1);
+  eindex = find(specdata.ms >= opts.endtime)(1);
   flist = [];
   prey = NA;
   retval.freq = NA(eindex-sindex+1,1);
@@ -86,13 +90,13 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
       endif
     endwhile
     
-    retval.t(m) = specdata.msec(n);
+    retval.t(m) = specdata.ms(n);
     retval.frame(m) = n;
     if (isna(prey))
       prey = maxxy(2);
     else
       if (abs(maxxy(2)) < abs(prey*0.7))
-        #flist(end+1,:) = [NaN, specdata.msec(n), NaN, n];
+        #flist(end+1,:) = [NaN, specdata.ms(n), NaN, n];
         #continue;
         maxxy(1) = NA;
         printf("skip frame %d for to small peak.\n", n);
@@ -109,11 +113,11 @@ function retval = trace_peak_spectrum(specdata, f, fwidth, varargin)
       f = maxxy(1);
       prey = maxxy(2);
     endif
-    #flist(end+1,:) = [f, specdata.msec(n), yi, n];
+    #flist(end+1,:) = [f, specdata.ms(n), yi, n];
     retval.freq(m) = maxxy(1);
     retval.f_index(m) = yi;
     f = f+df;
-    m ++;
+    m++;
     # n++
   endfor
 endfunction
