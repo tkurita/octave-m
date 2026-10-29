@@ -15,6 +15,8 @@
 ## @item "gpscript"
 ## A file name to output to a gnuplot script file instead of plot. 
 ## Because octave can't deal with uneven 3d data.
+## @item "usepcolor"
+## use pcolor function instead of imamagesc for 2d plot
 ## @end table
 ##
 ## @end deftypefn
@@ -55,7 +57,7 @@ function plot_spectrum(specdata, varargin);
   #cblabel("dBm")
   #__gnuplot_raw__("set palette rgbformulae 30,13,-31\n");
   #contourMap3d(x, y, z);
-  if (isna(opts.gpscript))
+  if (!ischar(opts.gpscript))
     if (!isna(opts.frameindex))
       subplot(2,1,1);
       xyplot(frame_spectrum_at(specdata, "frame", opts.frameindex), "-");
@@ -74,7 +76,8 @@ function plot_spectrum(specdata, varargin);
       pcolor(x, y, z);
       shading("flat");
       view(0, -90);
-      tics("z", [], []);
+      set (gca(), "ztick", []);
+      set (gca(), "zticklabel", []);
     else
       imagesc(x, y, z);
     endif
