@@ -4,6 +4,9 @@
 ## @end deftypefn
 
 ##== History
+## 2026-10-29
+## * replace msec with ms
+##
 ## 2009-06-02
 ## * First Implementation
 
@@ -27,11 +30,11 @@ function retval = split_spectrum(specdata, tracedata)
   flen = length(tracedata.f_index);
   tlen = length(tracedata.t);
   specleft.MHz = specdata.MHz(1:findmax-1);
-  specleft.msec = tracedata.t;
+  specleft.ms = tracedata.t;
   specleft.dBm = NA(tlen, length(specleft.MHz));
   
   specright.MHz = specdata.MHz(findmin:end);
-  specright.msec = tracedata.t;
+  specright.ms = tracedata.t;
   specright.dBm = NA(tlen, length(specright.MHz));
   m = 1;
   for n = tracedata.frame(1):tracedata.frame(end)
