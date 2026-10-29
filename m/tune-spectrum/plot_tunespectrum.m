@@ -28,6 +28,8 @@
 
 ##== History
 ## 2026-10-29
+## * avoid to use tics
+## * default xlabel is "\\nu"
 ## * replace msec with ms
 ##
 ## 2009-06-08
@@ -55,7 +57,8 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
     ylabel("[ms]");
     shading("flat");
     view(0, -90);
-    tics("z", [], []);
+    set(gca(), "ztick", []);
+    set(gca(), "zticklabel", []);
   else
     fid = fopen(opts.output, "w");
     #set palette rgbformulae 30,13,-31
