@@ -21,7 +21,7 @@
 ## filename including data and gnuplot commands
 ## If this option is omitted, pcolor is used to plot.
 ## @item "xlabel"
-## The default is "{/Symbol n}".
+## The default is "\\nu".
 ## @end table
 ## 
 ## @end deftypefn
@@ -43,7 +43,7 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
   endif
   
   opts = get_properties(varargin,...
-                      {"output", NA; "xlabel", "{/Symbol n}"});
+                      {"output", NA; "xlabel", "\\nu"});
   tlen = length(frevtrace.t);
   flen = length(specdata.MHz);
   numat = func(repmat(specdata.MHz(:)',tlen ,1),...
