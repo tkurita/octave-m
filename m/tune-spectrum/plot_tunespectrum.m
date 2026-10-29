@@ -51,7 +51,7 @@ function plot_tunespectrum(specdata, frevtrace, func, varargin)
   numat = func(repmat(specdata.MHz(:)',tlen ,1),...
              repmat(frevtrace.freq(:),1 , flen));
   
-  if isna(opts.output)
+  if !ischar(opts.output)
     pcolor(numat, repmat(specdata.ms(:), 1, flen), specdata.dBm);
     xlabel(opts.xlabel);
     ylabel("[ms]");
