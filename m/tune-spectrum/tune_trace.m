@@ -48,12 +48,12 @@ classdef tune_trace < handle
       if isna(opts.starttime)
         self.starttime = self.spectrumdata.ms(1);
       else
-        self.starttime = opts.starttime
+        self.starttime = opts.starttime;
       endif
       if isna(opts.endtime)
         self.endtime = self.spectrumdata.ms(end);
       else
-        self.endtime = opts.endtime
+        self.endtime = opts.endtime;
       endif
       if !isna(opts.skipfreq); self.skipfreq = opts.skipfreq; endif
 
